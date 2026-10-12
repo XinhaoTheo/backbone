@@ -4,6 +4,7 @@ from datetime import date
 from typing import Literal
 
 from pydantic import BaseModel, Field
+from pydantic.json_schema import SkipJsonSchema
 
 ServiceType = Literal[
     "individual", "group", "family", "medication", "collateral", "coordination", "other"
@@ -30,7 +31,7 @@ class DocumentRecord(BaseModel):
 
 class Evidence(BaseModel):
     quotes: list[str]
-    sources: list[SourceRef] = Field(default_factory=list)
+    sources: SkipJsonSchema[list[SourceRef]] = Field(default_factory=list)
 
 
 class PatientIdentity(BaseModel):
@@ -84,6 +85,8 @@ class AssessmentClaim(Evidence):
     form_id: str | None
     item_nine: float | None
     is_copy: bool
+    score_alternatives: SkipJsonSchema[list[float]] = Field(default_factory=list)
+    item_nine_alternatives: SkipJsonSchema[list[float]] = Field(default_factory=list)
 
 
 class Observation(Evidence):
@@ -115,6 +118,10 @@ class ContactAlternative(BaseModel):
     intervals: list[TimeInterval]
     sources: list[SourceRef]
     choices: dict[str, str] = Field(default_factory=dict)
+    service_date: date | None = None
+    service_type: ServiceType | None = None
+    attendance: Attendance | None = None
+    patient_present: bool | None = None
 
 
 class Encounter(BaseModel):
