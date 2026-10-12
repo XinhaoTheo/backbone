@@ -396,3 +396,93 @@ def test_ledger_keeps_coupled_date_and_service_interpretations_together() -> Non
     assert "2027-02-09, individual" in bundle.text
     assert "2027-02-10, group" in bundle.text
     assert "alternatives for the same encounter" in bundle.text
+
+
+@pytest.mark.parametrize(
+    "question",
+    [
+        "Did Taylor meet the weekly therapy goal?",
+        "does taylor meet the weekly therapy goal?",
+        "For Taylor, how many therapy minutes were provided?",
+        "Summarize Taylor's symptom course during the episode.",
+        "Count Casey's therapy sessions for Taylor.",
+    ],
+)
+def test_unknown_explicit_patient_reference_never_defaults_to_single_patient(question: str) -> None:
+    with pytest.raises(QueryPlanningError, match="not present"):
+        plan_question(question, snapshot())
+
+
+def test_generic_subject_and_conjunctions_allow_implicit_single_patient() -> None:
+    plan = plan_question(
+        "For each week, did the delivered therapy meet the documented goal? "
+        "Show what conclusions can and cannot be supported.",
+        snapshot(),
+    )
+    assert plan.patient == "P1"
+    assert plan.operation == "weekly"
+
+
+def test_patient_identifier_without_organization_prefix_resolves_source_identity() -> None:
+    identified = ClinicalSnapshot(snapshot_id=8, patients=[patient(identifier="clinic::MRN8")])
+    plan = plan_question("Count MRN8's therapy sessions.", identified)
+    assert plan.patient == "clinic::MRN8"
+
+
+def test_pending_source_processing_prevents_negative_weekly_and_cohort_determinations() -> None:
+    pending = ClinicalSnapshot(
+        snapshot_id=8, patients=[clinical_patient()], pending_documents=["pending.txt"]
+    )
+    weekly = answer_question("Did each week meet Casey's therapy goal?", pending)
+    assert all(week.decision != "not_met" for week in weekly.metrics[0].weeks)
+    assert "pending.txt" in weekly.text
+    assert weekly.coverage_status == "failed_source_processing"
+    population = answer_question(
+        "Which patients had two consecutive weeks below their therapy requirements?", pending
+    )
+    assert population.cohort_results[0].membership == "analysis_incomplete"
+
+
+def dated_conflict_patient() -> PatientRecord:
+    record = clinical_patient()
+    original = record.assessments[0]
+    copied_source = evidence("DATED_COPY", "Form F1 completion date: February 22, 2027; score 18.")
+    copied = original.model_copy(
+        update={
+            "completed_date": date(2027, 2, 22),
+            "is_copy": True,
+            "quotes": [copied_source.quote],
+            "sources": [copied_source],
+        }
+    )
+    record.assessments = reconcile_assessments([*record.assessments, copied])
+    return record
+
+
+def test_same_form_date_conflict_does_not_create_measurement_or_established_progress() -> None:
+    bundle = answer_question(
+        "Summarize Casey's symptom course during the episode.",
+        ClinicalSnapshot(snapshot_id=8, patients=[dated_conflict_patient()]),
+    )
+    assert len(bundle.assessments) == 3
+    assert "2027-02-01 or 2027-02-22 (disputed)" in bundle.text
+    assert (
+        "conflicting completion dates prevent an established chronological sequence" in bundle.text
+    )
+    assert "numerical change -6" not in bundle.text
+    assert any("conflicting completion dates" in message for message in bundle.uncertainty)
+
+
+@pytest.mark.parametrize("operation", ["symptom assessments", "clinical timeline"])
+def test_assessment_scope_includes_noncanonical_date_and_qualifies_membership(
+    operation: str,
+) -> None:
+    bundle = answer_question(
+        f"Show Casey's {operation} from 2027-02-20 to 2027-02-22.",
+        ClinicalSnapshot(snapshot_id=8, patients=[dated_conflict_patient()]),
+    )
+    assert {value.form_id for value in bundle.assessments} == {"F1", "F20"}
+    assert "disputed period membership" in bundle.text
+    assert "possible; completion date disputed" in bundle.text
+    assert any("may fall outside" in message for message in bundle.uncertainty)
+    assert "DATED_COPY" in {value.document_id for value in bundle.sources}

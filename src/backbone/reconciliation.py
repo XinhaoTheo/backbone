@@ -21,6 +21,8 @@ from backbone.models import (
     TimeInterval,
 )
 
+RECONCILIATION_VERSION = "1"
+
 
 def merge_sources(groups: list[list[SourceRef]]) -> list[SourceRef]:
     references = {source.model_dump_json(): source for group in groups for source in group}
@@ -195,62 +197,51 @@ def duration_alternatives(
             for item in ordinary
             if item.service_date == claim.service_date and item.interval_kind == "group_activity"
         ]
-        breaks = [
-            interval
-            for item in ordinary
-            if item.service_date == claim.service_date
-            for interval in item.breaks
-        ]
-        intervals = claim.intervals
-        if claim.interval_kind == "patient_presence" and activities:
-            intervals = intersect_intervals(
-                intervals, [interval for item in activities for interval in item.intervals]
-            )
-        if claim.attendance in ("no_show", "cancelled"):
-            values: list[int | None] = [0]
-            intervals = []
-        elif claim.interval_kind in ("patient_contact", "patient_presence"):
-            minutes = delivered_minutes(intervals, breaks) if intervals else claim.stated_minutes
-            values = [minutes]
-            if (
-                claim.interval_kind == "patient_contact"
-                and claim.stated_minutes is not None
-                and claim.stated_minutes != minutes
-            ):
-                values.append(claim.stated_minutes)
-        else:
-            values = [None]
-            intervals = []
-        for value in values:
-            key = (
-                claim.service_date,
-                claim.service_type,
-                claim.attendance,
-                claim.patient_present,
-                value,
-            )
-            refs = merge_sources(
-                [
-                    claim.sources,
-                    *[item.sources for item in activities],
-                    *[
-                        item.sources
-                        for item in ordinary
-                        if item.breaks and item.service_date == claim.service_date
-                    ],
-                ]
-            )
-            if key in alternatives:
-                refs = merge_sources([alternatives[key].sources, refs])
-            alternatives[key] = ContactAlternative(
-                minutes=value,
-                intervals=intervals,
-                sources=refs,
-                service_date=claim.service_date,
-                service_type=claim.service_type,
-                attendance=claim.attendance,
-                patient_present=claim.patient_present,
-            )
+        contexts: list[ContactClaim | None] = list(activities) or [None]
+        for activity in contexts:
+            intervals = claim.intervals
+            breaks = claim.breaks + (activity.breaks if activity is not None else [])
+            if claim.interval_kind == "patient_presence" and activity is not None:
+                intervals = intersect_intervals(intervals, activity.intervals)
+            if claim.attendance in ("no_show", "cancelled"):
+                values: list[int | None] = [0]
+                intervals = []
+            elif claim.interval_kind in ("patient_contact", "patient_presence"):
+                minutes = (
+                    delivered_minutes(intervals, breaks) if intervals else claim.stated_minutes
+                )
+                values = [minutes]
+                if (
+                    claim.interval_kind == "patient_contact"
+                    and claim.stated_minutes is not None
+                    and claim.stated_minutes != minutes
+                ):
+                    values.append(claim.stated_minutes)
+            else:
+                values = [None]
+                intervals = []
+            for value in values:
+                key = (
+                    claim.service_date,
+                    claim.service_type,
+                    claim.attendance,
+                    claim.patient_present,
+                    value,
+                )
+                refs = merge_sources(
+                    [claim.sources, activity.sources if activity is not None else []]
+                )
+                if key in alternatives:
+                    refs = merge_sources([alternatives[key].sources, refs])
+                alternatives[key] = ContactAlternative(
+                    minutes=value,
+                    intervals=intervals,
+                    sources=refs,
+                    service_date=claim.service_date,
+                    service_type=claim.service_type,
+                    attendance=claim.attendance,
+                    patient_present=claim.patient_present,
+                )
     result = sorted(
         alternatives.values(),
         key=lambda option: (
@@ -336,11 +327,13 @@ def reconcile_plans(plans: list[PlanClaim]) -> list[PlanClaim]:
             grouped[key].quotes = sorted(set([*grouped[key].quotes, *plan.quotes]))
         else:
             grouped[key] = plan.model_copy(deep=True)
+            grouped[key].sources = merge_sources([plan.sources])
+            grouped[key].quotes = sorted(set(plan.quotes))
     return sorted(grouped.values(), key=lambda plan: plan.effective_start)
 
 
 def reconcile_assessments(assessments: list[AssessmentClaim]) -> list[AssessmentClaim]:
-    grouped: dict[tuple[str, str, date], AssessmentClaim] = {}
+    grouped: dict[tuple[str, str], AssessmentClaim] = {}
     for assessment in sorted(assessments, key=lambda item: item.is_copy):
         identifier = assessment.form_id
         if identifier is None and assessment.is_copy:
@@ -348,16 +341,19 @@ def reconcile_assessments(assessments: list[AssessmentClaim]) -> list[Assessment
                 key
                 for key in grouped
                 if key[0] == assessment.instrument.casefold()
-                and key[2] == assessment.completed_date
+                and assessment.completed_date in grouped[key].completed_date_alternatives
             ]
             if len(candidates) == 1:
                 identifier = candidates[0][1]
         if identifier is None:
             identifier = hashlib.sha256(assessment.model_dump_json().encode()).hexdigest()[:16]
-        key = (assessment.instrument.casefold(), identifier, assessment.completed_date)
+        key = (assessment.instrument.casefold(), identifier)
         if key not in grouped:
             grouped[key] = assessment.model_copy(deep=True)
+            grouped[key].sources = merge_sources([assessment.sources])
+            grouped[key].quotes = sorted(set(assessment.quotes))
             grouped[key].score_alternatives = [assessment.score]
+            grouped[key].completed_date_alternatives = [assessment.completed_date]
             grouped[key].item_nine_alternatives = (
                 [] if assessment.item_nine is None else [assessment.item_nine]
             )
@@ -367,6 +363,9 @@ def reconcile_assessments(assessments: list[AssessmentClaim]) -> list[Assessment
             existing.quotes = sorted(set([*existing.quotes, *assessment.quotes]))
             existing.score_alternatives = sorted(
                 set([*existing.score_alternatives, assessment.score])
+            )
+            existing.completed_date_alternatives = sorted(
+                set([*existing.completed_date_alternatives, assessment.completed_date])
             )
             if assessment.item_nine is not None:
                 existing.item_nine_alternatives = sorted(
@@ -388,6 +387,8 @@ def reconcile_observations(observations: list[Observation]) -> list[Observation]
             grouped[key].quotes = sorted(set([*grouped[key].quotes, *observation.quotes]))
         else:
             grouped[key] = observation.model_copy(deep=True)
+            grouped[key].sources = merge_sources([observation.sources])
+            grouped[key].quotes = sorted(set(observation.quotes))
     return sorted(grouped.values(), key=lambda observation: observation.observed_date)
 
 
@@ -434,12 +435,13 @@ def reconcile(evidences: list[DocumentEvidence]) -> list[PatientRecord]:
             reconcile_encounter(identifier, grouped)
             for identifier, grouped in sorted(contact_groups.items())
         ]
-        anonymous: dict[tuple[date, str], list[Encounter]] = defaultdict(list)
+        same_day: dict[tuple[date, str], list[Encounter]] = defaultdict(list)
         for encounter in encounters:
-            if encounter.encounter_id.startswith("unlinked:"):
-                anonymous[(encounter.service_date, encounter.service_type)].append(encounter)
-        for ambiguous in anonymous.values():
-            if len(ambiguous) > 1:
+            same_day[(encounter.service_date, encounter.service_type)].append(encounter)
+        for ambiguous in same_day.values():
+            if len(ambiguous) > 1 and any(
+                encounter.encounter_id.startswith("unlinked:") for encounter in ambiguous
+            ):
                 for encounter in ambiguous:
                     encounter.decisions.append(
                         Decision(

@@ -68,10 +68,114 @@ MONTHS: dict[str, int] = {
     "december": 12,
 }
 
+GENERIC_SUBJECTS: set[str] = {
+    "a",
+    "an",
+    "the",
+    "each",
+    "every",
+    "all",
+    "any",
+    "this",
+    "that",
+    "these",
+    "those",
+    "patient",
+    "patients",
+    "therapy",
+    "treatment",
+    "care",
+    "contact",
+    "contacts",
+    "session",
+    "sessions",
+    "day",
+    "days",
+    "week",
+    "weeks",
+    "goal",
+    "goals",
+    "requirement",
+    "requirements",
+    "count",
+    "counts",
+    "minutes",
+    "hours",
+    "symptom",
+    "symptoms",
+    "assessment",
+    "assessments",
+    "record",
+    "records",
+    "plan",
+    "plans",
+    "progress",
+    "evidence",
+    "sources",
+    "source",
+    "total",
+    "distinct",
+    "actual",
+    "delivered",
+    "documented",
+    "clinical",
+    "available",
+    "additional",
+    "individual",
+    "group",
+    "family",
+    "relevant",
+    "current",
+    "review",
+    "period",
+    "meet",
+    "met",
+    "attend",
+    "attended",
+    "receive",
+    "received",
+    "reported",
+    "their",
+    "his",
+    "her",
+    "it",
+    "they",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+    "phq-9",
+    "phq9",
+    "gad-7",
+    "gad7",
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "ten",
+    "no",
+    "and",
+    "or",
+    "not",
+    "cannot",
+    "be",
+}
+
 
 def patient_bounds(patient: PatientRecord) -> tuple[date, date]:
     observed = [encounter.service_date for encounter in patient.encounters]
-    observed.extend(assessment.completed_date for assessment in patient.assessments)
+    observed.extend(
+        value for assessment in patient.assessments for value in assessment_dates(assessment)
+    )
     observed.extend(observation.observed_date for observation in patient.observations)
     if not observed and (patient.episode_start is None or patient.episode_end is None):
         raise QueryPlanningError(f"No documented review period is available for {patient.name}.")
@@ -80,6 +184,15 @@ def patient_bounds(patient: PatientRecord) -> tuple[date, date]:
     if start > end:
         raise QueryPlanningError(f"The documented episode bounds for {patient.name} are invalid.")
     return start, end
+
+
+def patient_aliases(patient: PatientRecord) -> set[str]:
+    return {
+        patient.name,
+        patient.patient_id,
+        patient.patient_id.rsplit("::", 1)[-1],
+        *(part for part in patient.name.split() if len(part) > 1),
+    }
 
 
 def match_patient(question: str, snapshot: ClinicalSnapshot) -> PatientRecord | None:
@@ -94,10 +207,10 @@ def match_patient(question: str, snapshot: ClinicalSnapshot) -> PatientRecord | 
             matches.append(patient)
     if not matches:
         for patient in snapshot.patients:
-            name_parts = {part for part in patient.name.split() if len(part) > 1}
             if any(
                 re.search(rf"(?<!\w){re.escape(part)}(?!\w)", question, re.IGNORECASE)
-                for part in name_parts
+                for part in patient_aliases(patient)
+                if part
             ):
                 matches.append(patient)
     if len(matches) > 1:
@@ -105,6 +218,45 @@ def match_patient(question: str, snapshot: ClinicalSnapshot) -> PatientRecord | 
             "This query format supports one named patient or the whole cohort."
         )
     return matches[0] if matches else None
+
+
+def validate_patient_references(
+    question: str, snapshot: ClinicalSnapshot, selected: PatientRecord | None
+) -> None:
+    candidates = [selected] if selected is not None else snapshot.patients
+    known_spans = [
+        (match.start(), match.end())
+        for patient in candidates
+        for alias in patient_aliases(patient)
+        if alias
+        for match in re.finditer(rf"(?<!\w){re.escape(alias)}(?!\w)", question, re.IGNORECASE)
+    ]
+    instruments = {
+        value.instrument.casefold() for patient in candidates for value in patient.assessments
+    }
+    patterns: list[tuple[str, str]] = [
+        ("subject", r"(?i:\b(?:did|does|has|had|is|was|can|will))\s+([^\W\d_][\w.:'-]*)\b"),
+        ("possessive", r"\b([^\W\d_][\w.:'-]*)[’']s\b"),
+        ("scope", r"(?i:\b(?:for|about|of))\s+([^\W\d_][\w.:'-]*)\b"),
+        (
+            "scope",
+            r"(?i:\b(?:to|patient|summarize|show|review|reconstruct|compare))\s+([A-Z][\w.:'-]*)\b",
+        ),
+    ]
+    for kind, pattern in patterns:
+        for match in re.finditer(pattern, question):
+            subject = match.group(1).removesuffix("'s").removesuffix("’s")
+            subject_end = match.start(1) + len(subject)
+            if any(start <= match.start(1) and subject_end <= end for start, end in known_spans):
+                continue
+            folded = subject.casefold()
+            if folded in GENERIC_SUBJECTS or folded in instruments:
+                continue
+            if kind == "scope" and folded in MONTHS:
+                continue
+            raise QueryPlanningError(
+                f"Patient reference {subject} is not present in the selected scope."
+            )
 
 
 def default_scope(patients: list[PatientRecord]) -> DateScope:
@@ -240,17 +392,7 @@ def plan_question(question: str, snapshot: ClinicalSnapshot) -> QueryPlan:
     if not question.strip():
         raise QueryPlanningError("Question must not be empty.")
     patient = match_patient(question, snapshot)
-    if patient is None:
-        named = re.search(
-            r"\bdid\s+([A-Z][A-Za-z'-]+)\s+(?:attend|receive)|"
-            r"\b([A-Z][A-Za-z'-]+)[’']s\b|"
-            r"\bfor\s+([A-Z][A-Za-z'-]+)\b",
-            question,
-        )
-        if named is not None:
-            name = next(value for value in named.groups() if value is not None)
-            if name.lower() not in MONTHS:
-                raise QueryPlanningError(f"Patient {name} is not present in this snapshot.")
+    validate_patient_references(question, snapshot, patient)
     selected = [patient] if patient is not None else snapshot.patients
     scope = parse_date_scope(question, selected)
     operation = classify_operation(question, scope)
@@ -517,6 +659,41 @@ def assessment_scores(assessment: AssessmentClaim) -> list[float]:
     return sorted(set(assessment.score_alternatives or [assessment.score]))
 
 
+def assessment_dates(assessment: AssessmentClaim) -> list[date]:
+    return sorted(set(assessment.completed_date_alternatives or [assessment.completed_date]))
+
+
+def assessment_in_scope(
+    assessment: AssessmentClaim, start: date, end: date, selected_dates: list[date]
+) -> bool:
+    return any(
+        value in selected_dates if selected_dates else start <= value <= end
+        for value in assessment_dates(assessment)
+    )
+
+
+def assessment_certain_in_scope(
+    assessment: AssessmentClaim, start: date, end: date, selected_dates: list[date]
+) -> bool:
+    return all(
+        value in selected_dates if selected_dates else start <= value <= end
+        for value in assessment_dates(assessment)
+    )
+
+
+def select_assessments(
+    patient: PatientRecord, start: date, end: date, selected_dates: list[date]
+) -> list[AssessmentClaim]:
+    return sorted(
+        [
+            value
+            for value in patient.assessments
+            if assessment_in_scope(value, start, end, selected_dates)
+        ],
+        key=lambda value: (min(assessment_dates(value)), value.instrument, value.form_id or ""),
+    )
+
+
 def assessment_item_nine(assessment: AssessmentClaim) -> list[float]:
     if assessment.item_nine_alternatives:
         return sorted(set(assessment.item_nine_alternatives))
@@ -531,29 +708,62 @@ def display_assessment_values(values: list[float]) -> str:
 
 
 def render_symptoms(
-    assessments: list[AssessmentClaim], observations: list[Observation], catalog: list[SourceRef]
+    assessments: list[AssessmentClaim],
+    observations: list[Observation],
+    catalog: list[SourceRef],
+    start: date,
+    end: date,
+    selected_dates: list[date],
 ) -> list[str]:
     assessment_word = "assessment" if len(assessments) == 1 else "assessments"
-    lines = [
+    certain_count = sum(
+        assessment_certain_in_scope(value, start, end, selected_dates) for value in assessments
+    )
+    count_text = (
         f"The processed record contains **{len(assessments)} distinct symptom {assessment_word}** "
-        "in the requested period. Completion dates identify measurements; later imports "
+        "in the requested period."
+        if certain_count == len(assessments)
+        else f"The record establishes **{certain_count} distinct symptom assessments** "
+        f"in the requested period; **{len(assessments) - certain_count} additional forms** "
+        "have disputed period membership."
+    )
+    lines = [
+        count_text + " Completion dates identify measurements; later imports "
         "and reviews are provenance rather than additional measurements.",
         "",
-        "| Completed | Instrument | Score | Item 9 | Form | Sources |",
-        "| --- | --- | --- | --- | --- | --- |",
+        "| Completed | Instrument | Score | Item 9 | Form | Period membership | Sources |",
+        "| --- | --- | --- | --- | --- | --- | --- |",
     ]
     for assessment in assessments:
         score = display_assessment_values(assessment_scores(assessment))
         item_nine = display_assessment_values(assessment_item_nine(assessment))
+        dates = " or ".join(str(value) for value in assessment_dates(assessment))
+        if len(assessment_dates(assessment)) > 1:
+            dates += " (disputed)"
+        membership = (
+            "established"
+            if assessment_certain_in_scope(assessment, start, end, selected_dates)
+            else "possible; completion date disputed"
+        )
         lines.append(
-            f"| {assessment.completed_date} | {table_cell(assessment.instrument)} | "
+            f"| {dates} | {table_cell(assessment.instrument)} | "
             f"{score} | {item_nine} | {assessment.form_id or 'not documented'} | "
+            f"{membership} | "
             f"{source_labels(assessment.sources, catalog)} |"
         )
     instruments = sorted({assessment.instrument for assessment in assessments})
     for instrument in instruments:
         measured = [assessment for assessment in assessments if assessment.instrument == instrument]
         if len(measured) > 1:
+            if any(len(assessment_dates(value)) > 1 for value in measured):
+                lines.extend(
+                    [
+                        "",
+                        f"{instrument}: conflicting completion dates prevent an established "
+                        "chronological sequence or a single net-change conclusion.",
+                    ]
+                )
+                continue
             first, last = measured[0], measured[-1]
             first_scores = assessment_scores(first)
             last_scores = assessment_scores(last)
@@ -611,7 +821,7 @@ def answer_question(
     if plan.operation == "cohort":
         selected = [patient] if patient is not None else snapshot.patients
         cohort_results = cohort(selected, plan.start, plan.end, scenario_budget)
-        if snapshot.failed_documents:
+        if snapshot.unprocessed_documents:
             cohort_results = [
                 entry.model_copy(
                     update={
@@ -625,14 +835,7 @@ def answer_question(
     elif patient is None:
         raise QueryPlanningError("The selected patient is not present in this snapshot.")
     elif plan.operation == "symptoms":
-        assessments = sorted(
-            [
-                value
-                for value in patient.assessments
-                if plan.start <= value.completed_date <= plan.end
-            ],
-            key=lambda value: (value.completed_date, value.instrument, value.form_id or ""),
-        )
+        assessments = select_assessments(patient, plan.start, plan.end, [])
         observations = sorted(
             [
                 value
@@ -643,23 +846,11 @@ def answer_question(
         )
         sources.extend(source for value in assessments for source in value.sources)
         sources.extend(source for value in observations for source in value.sources)
-        for assessment in assessments:
-            label = assessment.form_id or f"{assessment.instrument} on {assessment.completed_date}"
-            if len(assessment_scores(assessment)) > 1:
-                uncertainty.append(
-                    f"Assessment {label} has unresolved score alternatives: "
-                    f"{display_assessment_values(assessment_scores(assessment))}."
-                )
-            if len(assessment_item_nine(assessment)) > 1:
-                uncertainty.append(
-                    f"Assessment {label} has unresolved item-nine alternatives: "
-                    f"{display_assessment_values(assessment_item_nine(assessment))}."
-                )
     elif plan.operation == "plan_change":
         comparison = compare_plans(patient, plan.start, plan.end, plan.change_date, scenario_budget)
         for result in (comparison.before, comparison.after):
             if result is not None:
-                metrics.append(apply_failed_coverage(result, snapshot.failed_documents))
+                metrics.append(apply_failed_coverage(result, snapshot.unprocessed_documents))
         comparison = comparison.model_copy(
             update={
                 "before": metrics[0] if comparison.before is not None else None,
@@ -678,10 +869,11 @@ def answer_question(
         for start, end in periods:
             metrics.append(
                 apply_failed_coverage(
-                    calculate(patient, start, end, scenario_budget), snapshot.failed_documents
+                    calculate(patient, start, end, scenario_budget), snapshot.unprocessed_documents
                 )
             )
         if plan.operation in ("day", "timeline"):
+            assessments = select_assessments(patient, plan.start, plan.end, plan.selected_dates)
             observations = sorted(
                 [
                     value
@@ -695,6 +887,27 @@ def answer_question(
                 key=lambda value: (value.observed_date, value.kind),
             )
             sources.extend(source for value in observations for source in value.sources)
+            sources.extend(source for value in assessments for source in value.sources)
+    for assessment in assessments:
+        label = assessment.form_id or f"{assessment.instrument} on {assessment.completed_date}"
+        if len(assessment_scores(assessment)) > 1:
+            uncertainty.append(
+                f"Assessment {label} has unresolved score alternatives: "
+                f"{display_assessment_values(assessment_scores(assessment))}."
+            )
+        if len(assessment_item_nine(assessment)) > 1:
+            uncertainty.append(
+                f"Assessment {label} has unresolved item-nine alternatives: "
+                f"{display_assessment_values(assessment_item_nine(assessment))}."
+            )
+        if len(assessment_dates(assessment)) > 1:
+            uncertainty.append(
+                f"Assessment {label} has conflicting completion dates: "
+                + " or ".join(str(value) for value in assessment_dates(assessment))
+                + ". Exact chronology is not established."
+            )
+        if not assessment_certain_in_scope(assessment, plan.start, plan.end, plan.selected_dates):
+            uncertainty.append(f"Assessment {label} may fall outside the requested period.")
     for result in metrics:
         sources.extend(metric_sources(result))
         uncertainty.extend(metric_uncertainty(result))
@@ -740,7 +953,11 @@ def answer_question(
                     ]
                 )
     elif plan.operation == "symptoms":
-        lines.extend(render_symptoms(assessments, observations, catalog))
+        lines.extend(
+            render_symptoms(
+                assessments, observations, catalog, plan.start, plan.end, plan.selected_dates
+            )
+        )
     else:
         if comparison is not None:
             lines.extend(
@@ -757,15 +974,22 @@ def answer_question(
             notes = reconciliation_notes(patient, metrics, catalog)
             if notes:
                 lines.extend(["Reconciliation decisions:", "", *notes, ""])
-        for observation in observations:
-            lines.append(
-                f"- {observation.observed_date}, {observation.kind.replace('_', ' ')}: "
-                f"{observation.text} {source_labels(observation.sources, catalog)}"
+        if assessments:
+            lines.extend(
+                render_symptoms(
+                    assessments, observations, catalog, plan.start, plan.end, plan.selected_dates
+                )
             )
-    if snapshot.failed_documents:
+        else:
+            for observation in observations:
+                lines.append(
+                    f"- {observation.observed_date}, {observation.kind.replace('_', ' ')}: "
+                    f"{observation.text} {source_labels(observation.sources, catalog)}"
+                )
+    if snapshot.unprocessed_documents:
         uncertainty.append(
             "Source processing is incomplete: "
-            + ", ".join(snapshot.failed_documents)
+            + ", ".join(snapshot.unprocessed_documents)
             + ". Reported totals describe the published processed records; additional care "
             "or plan evidence may be absent."
         )
@@ -787,6 +1011,6 @@ def answer_question(
         sources=catalog,
         uncertainty=uncertainty,
         coverage_status="failed_source_processing"
-        if snapshot.failed_documents
+        if snapshot.unprocessed_documents
         else "available_records",
     )

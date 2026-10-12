@@ -46,7 +46,7 @@ def main() -> None:
     for command in ("extract", "process"):
         extraction = commands.add_parser(command)
         extraction.add_argument("path")
-        extraction.add_argument("--model", default=os.environ.get("OPENAI_MODEL", "gpt-4.1-mini"))
+        extraction.add_argument("--model", default=os.environ.get("OPENAI_MODEL", "gpt-4.1"))
         extraction.add_argument(
             "--workers", type=int, default=int(os.environ.get("BACKBONE_WORKERS", "4"))
         )
@@ -60,6 +60,7 @@ def main() -> None:
         else:
             question_parser.add_argument("--output", default="artifacts")
     commands.add_parser("status")
+    commands.add_parser("rebuild")
     options = parser.parse_args(namespace=Options())
     store = Store(Path(options.db))
     store.initialize()
@@ -109,5 +110,9 @@ def main() -> None:
                 print(f"Saved {len(answers)} answers to {output}.")
         except QueryPlanningError as error:
             parser.error(str(error))
+    elif options.command == "rebuild":
+        from backbone.workflow import rebuild_saved
+
+        print(f"Published snapshot {rebuild_saved(store)} from saved evidence; model calls: 0.")
     else:
-        print(f"Documents: {len(store.documents())}; snapshot: {store.snapshot().snapshot_id}")
+        print(f"Documents: {store.document_count()}; snapshot: {store.latest_revision()}")

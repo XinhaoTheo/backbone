@@ -56,13 +56,24 @@ class ContactClaim(Evidence):
     attendance: Attendance
     patient_present: bool | None
     intervals: list[TimeInterval]
-    interval_kind: Literal["patient_contact", "patient_presence", "scheduled", "group_activity"]
+    interval_kind: Literal["patient_contact", "patient_presence", "scheduled", "group_activity"] = (
+        Field(
+            description="group_activity for facilitator group bounds when patient attendance "
+            "is elsewhere; patient_presence for actual arrival/departure; patient_contact "
+            "only for actual patient-contact bounds; scheduled for booking only"
+        )
+    )
     breaks: list[TimeInterval]
-    stated_minutes: int | None
+    stated_minutes: int | None = Field(
+        description="Only explicitly written patient duration; null for computed clock differences"
+    )
     record_status: RecordStatus
     correction_fields: list[Literal["arrival", "departure", "attendance", "duration", "intervals"]]
     is_copy: bool
-    note: str
+    note: str = Field(
+        description="Counting, provenance, correction, and exclusion context; "
+        "clinical symptom narrative belongs in observations"
+    )
 
 
 class PlanClaim(Evidence):
@@ -87,6 +98,7 @@ class AssessmentClaim(Evidence):
     is_copy: bool
     score_alternatives: SkipJsonSchema[list[float]] = Field(default_factory=list)
     item_nine_alternatives: SkipJsonSchema[list[float]] = Field(default_factory=list)
+    completed_date_alternatives: SkipJsonSchema[list[date]] = Field(default_factory=list)
 
 
 class Observation(Evidence):
@@ -101,9 +113,15 @@ class Observation(Evidence):
 class DocumentEvidence(BaseModel):
     patients: list[PatientIdentity]
     contacts: list[ContactClaim]
-    plans: list[PlanClaim]
+    plans: list[PlanClaim] = Field(
+        description="Explicit numeric participation goals; generic continue-treatment plans "
+        "produce no plan claim"
+    )
     assessments: list[AssessmentClaim]
-    observations: list[Observation]
+    observations: list[Observation] = Field(
+        description="Clinical symptom and function evidence, and explicit reasons for added "
+        "contacts, extracted independently of contact metadata"
+    )
 
 
 class Decision(BaseModel):
@@ -148,10 +166,19 @@ class PatientRecord(BaseModel):
     observations: list[Observation]
 
 
-class ClinicalSnapshot(BaseModel):
+class SourceCoverage(BaseModel):
+    failed_documents: list[str] = Field(default_factory=list)
+    pending_documents: list[str] = Field(default_factory=list)
+
+    @property
+    def unprocessed_documents(self) -> list[str]:
+        return sorted(set(self.failed_documents) | set(self.pending_documents))
+
+
+class ClinicalSnapshot(SourceCoverage):
     snapshot_id: int
     patients: list[PatientRecord]
-    failed_documents: list[str] = Field(default_factory=list)
+    reconciliation_version: str = "1"
 
 
 class ModelUsage(BaseModel):

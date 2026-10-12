@@ -13,6 +13,7 @@ from backbone.extraction import (
     OpenAIExtractor,
     attach_sources,
     locate_quote,
+    source_quantities,
 )
 from backbone.models import (
     ContactClaim,
@@ -20,6 +21,7 @@ from backbone.models import (
     DocumentRecord,
     ExtractionResult,
     PatientIdentity,
+    PlanClaim,
     SourceRef,
     TimeInterval,
 )
@@ -155,6 +157,100 @@ def test_invalid_contact_intervals_are_rejected(
         attach_sources(document, evidence)
 
 
+def test_service_date_datetimes_are_normalized_without_changing_source_quotes(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    evidence.contacts[0].intervals = [
+        TimeInterval(start="2030-02-04T09:00", end="2030-02-04T09:30:00")
+    ]
+    grounded: DocumentEvidence = attach_sources(document, evidence)
+    assert grounded.contacts[0].intervals == [TimeInterval(start="09:00", end="09:30")]
+    assert grounded.contacts[0].sources[1].quote == document.text.splitlines()[3]
+    assert evidence.contacts[0].intervals[0].start == "2030-02-04T09:00"
+
+
+def test_datetime_on_another_date_is_rejected(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    evidence.contacts[0].intervals = [
+        TimeInterval(start="2030-02-05T09:00", end="2030-02-05T09:30")
+    ]
+    with pytest.raises(ExtractionValidationError, match="must match the service date"):
+        attach_sources(document, evidence)
+
+
+def participation_plan(quote: str, days: int, minutes: int) -> PlanClaim:
+    return PlanClaim(
+        patient_id="TEST-P001",
+        effective_start=date(2030, 2, 4),
+        effective_end=None,
+        minimum_days=days,
+        minimum_minutes=minutes,
+        eligible_services=["individual", "group"],
+        week_start="Monday",
+        patient_present_required=True,
+        note="Documented weekly participation goal.",
+        quotes=[quote],
+    )
+
+
+@pytest.mark.parametrize(
+    "quote",
+    [
+        "Each week requires at least 3 therapy days and at least 150 minutes of therapy.",
+        "Each week requires three therapy days and one hundred and fifty minutes of therapy.",
+        "Each week requires three therapy days and one hundred\nand fifty minutes of therapy.",
+        "Each week requires three distinct therapy days and 2.5 hours of therapy.",
+        "Each week requires three therapy days and 150 mins of therapy.",
+        "Each week requires three therapy days and 2.5 hr of therapy.",
+    ],
+)
+def test_plan_thresholds_require_matching_quantities_and_units(
+    document: DocumentRecord, evidence: DocumentEvidence, quote: str
+) -> None:
+    document.text += quote + "\n"
+    evidence.plans = [participation_plan(quote, 3, 150)]
+    grounded: DocumentEvidence = attach_sources(document, evidence)
+    assert grounded.plans[0].minimum_days == 3
+    assert grounded.plans[0].minimum_minutes == 150
+
+
+def test_generic_plan_cannot_become_zero_participation_requirements(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    quote: str = "Continue scheduled treatment; participation goals will be documented separately."
+    document.text += quote + "\n"
+    evidence.plans = [participation_plan(quote, 0, 0)]
+    with pytest.raises(ExtractionValidationError, match="Omit plan claims"):
+        attach_sources(document, evidence)
+
+
+def test_plan_thresholds_cannot_use_another_number_from_the_record(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    quote: str = "At least three therapy days and one hundred fifty minutes each week."
+    document.text += quote + "\n"
+    evidence.plans = [participation_plan(quote, 3, 180)]
+    with pytest.raises(ExtractionValidationError, match="Plan thresholds must match"):
+        attach_sources(document, evidence)
+
+
+def test_computed_clock_difference_cannot_be_a_stated_duration(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    evidence.contacts[0].quotes[-1] = "Actual patient contact: 09:00–09:30"
+    with pytest.raises(ExtractionValidationError, match="explicit quoted duration"):
+        attach_sources(document, evidence)
+
+
+@pytest.mark.parametrize(
+    "quote,minutes",
+    [("30 min", 30.0), ("30mins", 30.0), ("1 hr", 60.0), ("1.5hrs", 90.0)],
+)
+def test_conventional_duration_abbreviations_preserve_units(quote: str, minutes: float) -> None:
+    assert source_quantities([quote]) == (set(), {minutes})
+
+
 class FormatRequest(BaseModel):
     type: str
     name: str
@@ -176,12 +272,20 @@ class ExtractionRequest(BaseModel):
 
 
 def mock_client(
-    evidence: DocumentEvidence, *, refuse: bool = False
+    evidence: DocumentEvidence,
+    *,
+    refuse: bool = False,
+    subsequent_evidence: DocumentEvidence | None = None,
 ) -> tuple[OpenAI, list[ExtractionRequest]]:
     requests: list[ExtractionRequest] = []
 
     def respond(request: httpx2.Request) -> httpx2.Response:
         requests.append(ExtractionRequest.model_validate_json(request.content))
+        emitted: DocumentEvidence = (
+            subsequent_evidence
+            if len(requests) > 1 and subsequent_evidence is not None
+            else evidence
+        )
         excluded: dict[str, dict[str, set[str]]] = {
             category: {"__all__": {"sources"}}
             for category in ("contacts", "plans", "assessments", "observations")
@@ -191,7 +295,7 @@ def mock_client(
             if refuse
             else {
                 "type": "output_text",
-                "text": evidence.model_dump_json(exclude=excluded),
+                "text": emitted.model_dump_json(exclude=excluded),
                 "annotations": [],
             }
         )
@@ -299,9 +403,31 @@ def test_invalid_completed_output_retains_spent_token_usage(
     assert failure.value.elapsed_seconds is not None
     assert failure.value.elapsed_seconds >= 0
     assert failure.value.usage is not None
-    assert failure.value.usage.input_tokens == 100
-    assert failure.value.usage.output_tokens == 50
-    assert failure.value.usage.cost_usd == pytest.approx(0.0006)
+    assert failure.value.usage.input_tokens == 200
+    assert failure.value.usage.output_tokens == 100
+    assert failure.value.usage.cost_usd == pytest.approx(0.0012)
+    assert len(requests) == 2
+
+
+def test_quote_validation_retry_recovers_and_counts_both_model_calls(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    invalid: DocumentEvidence = evidence.model_copy(deep=True)
+    invalid.contacts[0].quotes = ["Actual patient contact: 09:00-09:30, 30 minutes."]
+    client: OpenAI
+    requests: list[ExtractionRequest]
+    client, requests = mock_client(invalid, subsequent_evidence=evidence)
+    with client:
+        result: ExtractionResult = OpenAIExtractor(
+            client=client, input_rate_per_million=2.0, output_rate_per_million=8.0
+        ).extract(document)
+    assert len(requests) == 2
+    assert "not verbatim" in requests[1].instructions
+    assert requests[1].input == document.text
+    assert result.evidence.contacts[0].sources[1].quote == document.text.splitlines()[3]
+    assert result.usage.input_tokens == 200
+    assert result.usage.output_tokens == 100
+    assert result.usage.cost_usd == pytest.approx(0.0012)
 
 
 def test_local_provenance_is_absent_from_extraction_schema() -> None:

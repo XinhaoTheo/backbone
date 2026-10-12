@@ -103,3 +103,32 @@ def test_disconnected_segments_and_overlapping_breaks() -> None:
     intervals = [TimeInterval(start="10:15", end="11:15")]
     breaks = [TimeInterval(start="10:45", end="11:00"), TimeInterval(start="10:50", end="11:05")]
     assert delivered_minutes(intervals, breaks) == 40
+
+
+def test_conflicting_group_activity_breaks_remain_separate_interpretations() -> None:
+    presence = claim("attendance", "10:00", "11:30")
+    first = claim("activity-a", "10:00", "11:30")
+    first.interval_kind = "group_activity"
+    first.breaks = [TimeInterval(start="10:30", end="10:45")]
+    second = claim("activity-b", "10:00", "11:30")
+    second.interval_kind = "group_activity"
+    second.breaks = [TimeInterval(start="10:30", end="11:00")]
+    encounter = reconcile([evidence([presence, first, second])])[0].encounters[0]
+    assert [alternative.minutes for alternative in encounter.alternatives] == [60, 75]
+    assert {source.document_id for source in encounter.alternatives[0].sources} == {
+        "attendance",
+        "activity-b",
+    }
+    assert encounter.decisions[-1].status == "conflicting_evidence"
+
+
+def test_anonymous_description_may_duplicate_a_known_encounter() -> None:
+    known = claim("known", "10:00", "11:30")
+    anonymous = claim("unidentified", "10:00", "11:30")
+    anonymous.encounter_id = None
+    anonymous.appointment_id = None
+    encounters = reconcile([evidence([known, anonymous])])[0].encounters
+    assert all(
+        any(decision.field == "identity" for decision in encounter.decisions)
+        for encounter in encounters
+    )
