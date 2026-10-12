@@ -1,0 +1,105 @@
+from datetime import date
+
+from backbone.models import ContactClaim, DocumentEvidence, PatientIdentity, SourceRef, TimeInterval
+from backbone.reconciliation import delivered_minutes, reconcile
+
+
+def claim(
+    document_id: str, start: str, end: str, *, copy: bool = False, correction: bool = False
+) -> ContactClaim:
+    return ContactClaim(
+        patient_id="P1",
+        service_date=date(2026, 1, 19),
+        encounter_id="E1",
+        appointment_id="A1",
+        service_type="group",
+        attendance="attended",
+        patient_present=True,
+        intervals=[TimeInterval(start=start, end=end)],
+        interval_kind="patient_presence",
+        breaks=[],
+        stated_minutes=None,
+        record_status="correction" if correction else "final",
+        correction_fields=["departure"] if correction else [],
+        is_copy=copy,
+        note="",
+        quotes=[document_id],
+        sources=[
+            SourceRef(
+                content_hash=document_id,
+                document_id=document_id,
+                filename=document_id,
+                start_line=1,
+                end_line=1,
+                quote=document_id,
+            )
+        ],
+    )
+
+
+def evidence(contacts: list[ContactClaim]) -> DocumentEvidence:
+    return DocumentEvidence(
+        patients=[
+            PatientIdentity(
+                patient_id="P1",
+                name="Test Patient",
+                organization="Test Clinic",
+                episode_start=date(2026, 1, 1),
+                episode_end=date(2026, 1, 30),
+            )
+        ],
+        contacts=contacts,
+        plans=[],
+        assessments=[],
+        observations=[],
+    )
+
+
+def test_scoped_correction_survives_later_copy() -> None:
+    original = claim("original", "10:00", "11:30")
+    update = claim("correction", "10:00", "11:15", correction=True)
+    resend = claim("resend", "10:00", "11:30", copy=True)
+    activity = claim("activity", "10:00", "11:30")
+    activity.interval_kind = "group_activity"
+    activity.breaks = [TimeInterval(start="10:45", end="11:00")]
+    patient = reconcile([evidence([original, update, resend, activity])])[0]
+    assert len(patient.encounters) == 1
+    assert patient.encounters[0].alternatives[0].minutes == 60
+    assert {source.document_id for source in patient.encounters[0].sources} == {
+        "original",
+        "correction",
+        "resend",
+        "activity",
+    }
+
+
+def test_full_contact_conflict_is_not_clinician_time_or_two_visits() -> None:
+    first = claim("first", "09:00", "09:50")
+    second = claim("second", "09:10", "09:50")
+    first.service_type = second.service_type = "individual"
+    first.interval_kind = second.interval_kind = "patient_contact"
+    patient = reconcile([evidence([first, second])])[0]
+    assert len(patient.encounters) == 1
+    assert [option.minutes for option in patient.encounters[0].alternatives] == [40, 50]
+    assert patient.encounters[0].decisions[-1].status == "conflicting_evidence"
+
+
+def test_signed_no_show_overrides_unattested_draft() -> None:
+    draft = claim("draft", "10:00", "11:30")
+    draft.record_status = "draft"
+    draft.interval_kind = "scheduled"
+    roster = claim("roster", "10:00", "11:30")
+    roster.attendance = "no_show"
+    roster.patient_present = False
+    roster.intervals = []
+    patient = reconcile([evidence([draft, roster])])[0]
+    assert patient.encounters[0].attendance == "no_show"
+    assert patient.encounters[0].alternatives[0].minutes == 0
+
+
+def test_disconnected_segments_and_overlapping_breaks() -> None:
+    intervals = [TimeInterval(start="13:00", end="13:20"), TimeInterval(start="13:30", end="13:55")]
+    assert delivered_minutes(intervals, []) == 45
+    intervals = [TimeInterval(start="10:15", end="11:15")]
+    breaks = [TimeInterval(start="10:45", end="11:00"), TimeInterval(start="10:50", end="11:05")]
+    assert delivered_minutes(intervals, breaks) == 40

@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from backbone.extraction import ExtractionValidationError, Extractor
 from backbone.ingestion import ingest
 from backbone.models import DocumentRecord, ExtractionResult, IngestionReport
+from backbone.reconciliation import reconcile
 from backbone.storage import Store
 
 
@@ -85,4 +86,24 @@ def extract_documents(
         snapshot_id=store.snapshot().snapshot_id,
     )
     store.record_run("extraction", report.model_dump_json())
+    return report
+
+
+def process_documents(
+    store: Store, path: Path, extractor: Extractor, workers: int
+) -> ProcessingReport:
+    report = extract_documents(store, path, extractor, workers)
+    if report.failed_documents:
+        return report
+    evidences = store.active_evidence()
+    keys: dict[str, str] = {}
+    for document in store.documents():
+        if document.content_hash in report.ingestion.document_hashes:
+            key = extractor.cache_key(document)
+            result = store.extraction(key)
+            assert result is not None
+            evidences[document.content_hash] = result.evidence
+            keys[document.content_hash] = key
+    report.snapshot_id = store.publish(reconcile(list(evidences.values())), keys)
+    store.record_run("publication", report.model_dump_json())
     return report
