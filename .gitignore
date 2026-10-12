@@ -1,7 +1,5 @@
-# Operating system metadata
 .DS_Store
 
-# Local Python environments and caches
 .venv/
 venv/
 __pycache__/
@@ -15,12 +13,10 @@ dist/
 .coverage
 htmlcov/
 
-# Local configuration and credentials
 .env
 .env.*
 !.env.example
 
-# Local runtime state
 .backbone/
 *.db
 *.db-journal

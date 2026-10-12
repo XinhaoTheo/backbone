@@ -1,6 +1,14 @@
 from datetime import date
 
-from backbone.models import ContactClaim, DocumentEvidence, PatientIdentity, SourceRef, TimeInterval
+from backbone.calculation import calculate
+from backbone.models import (
+    ContactClaim,
+    DocumentEvidence,
+    PatientIdentity,
+    PlanClaim,
+    SourceRef,
+    TimeInterval,
+)
 from backbone.reconciliation import delivered_minutes, reconcile
 
 
@@ -132,3 +140,25 @@ def test_anonymous_description_may_duplicate_a_known_encounter() -> None:
         any(decision.field == "identity" for decision in encounter.decisions)
         for encounter in encounters
     )
+
+
+def test_signed_attendance_complements_timed_note_with_unspecified_attendance() -> None:
+    clinical = claim("contact-note", "10:00", "10:40")
+    clinical.interval_kind = "patient_contact"
+    clinical.service_type = "individual"
+    clinical.attendance = "unknown"
+    roster = claim("attested-roster", "10:00", "10:40")
+    roster.service_type = "individual"
+    record = reconcile([evidence([clinical, roster])])[0]
+    assert record.encounters[0].attendance == "attended"
+    record.plans = [PlanClaim(
+        patient_id=record.patient_id, effective_start=date(2026, 1, 1), effective_end=None,
+        minimum_days=1, minimum_minutes=30, eligible_services=["individual"],
+        week_start="Monday", patient_present_required=True,
+        note="Patient-present individual therapy.", quotes=["attested-roster"],
+        sources=roster.sources,
+    )]
+    metrics = calculate(record, date(2026, 1, 19), date(2026, 1, 25))
+    assert metrics.session_count.exact == 1
+    assert metrics.minutes.exact == 40
+    assert metrics.weeks[0].decision == "met"

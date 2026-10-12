@@ -8,13 +8,18 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import cast
 
+from pydantic import JsonValue, TypeAdapter
+
 from backbone.models import (
     ClinicalSnapshot,
     DocumentEvidence,
     DocumentRecord,
+    ExecutionRecord,
     ExtractionResult,
+    NonContactRecord,
     PatientRecord,
     SourceCoverage,
+    SourceRef,
 )
 
 
@@ -282,6 +287,58 @@ class Store:
             pending_documents=[str(row["document_id"]) for row in pending],
         )
 
+    def non_contact_records(
+        self, connection: sqlite3.Connection, revision_id: int
+    ) -> list[NonContactRecord]:
+        rows = fetch_rows(
+            connection.execute(
+                "SELECT d.*, e.result FROM revision_extractions r "
+                "JOIN (SELECT content_hash, MAX(revision_id) AS revision_id "
+                "FROM revision_extractions "
+                "WHERE revision_id <= ? GROUP BY content_hash) latest "
+                "USING (content_hash, revision_id) JOIN extractions e USING (cache_key) "
+                "JOIN documents d USING (content_hash) ORDER BY d.document_id",
+                (revision_id,),
+            )
+        )
+        records: list[NonContactRecord] = []
+        for row in rows:
+            evidence = ExtractionResult.model_validate_json(str(row["result"])).evidence
+            contact_ids = {claim.patient_id for claim in evidence.contacts}
+            patients = [
+                patient for patient in evidence.patients if patient.patient_id not in contact_ids
+            ]
+            if not patients:
+                continue
+            text = str(row["text"])
+            quote = text.rstrip("\n")
+            patient_ids = {patient.patient_id for patient in patients}
+            records.append(
+                NonContactRecord(
+                    patient_ids=[
+                        f"{patient.organization.strip().casefold()}::{patient.patient_id}"
+                        for patient in patients
+                    ],
+                    assessment_claims=sum(
+                        claim.patient_id in patient_ids
+                        for claim in evidence.assessments
+                    ),
+                    observation_claims=sum(
+                        claim.patient_id in patient_ids
+                        for claim in evidence.observations
+                    ),
+                    source=SourceRef(
+                        content_hash=str(row["content_hash"]),
+                        document_id=str(row["document_id"]),
+                        filename=str(row["filename"]),
+                        start_line=1,
+                        end_line=quote.count("\n") + 1,
+                        quote=quote,
+                    ),
+                )
+            )
+        return records
+
     def publish(
         self,
         patients: list[PatientRecord],
@@ -405,6 +462,7 @@ class Store:
                 reconciliation_version="unversioned"
                 if algorithm_row is None
                 else str(algorithm_row[0]),
+                non_contact_records=self.non_contact_records(connection, selected_id),
             )
 
     def record_run(self, kind: str, payload: str) -> None:
@@ -422,4 +480,15 @@ class Store:
                     Iterable[sqlite3.Row],
                     connection.execute("SELECT payload FROM runs ORDER BY id"),
                 )
+            ]
+
+    def execution_records(self) -> list[ExecutionRecord]:
+        with closing(self.connect()) as connection:
+            return [
+                ExecutionRecord(
+                    created_at=str(row["created_at"]),
+                    kind=str(row["kind"]),
+                    payload=TypeAdapter(JsonValue).validate_json(str(row["payload"])),
+                )
+                for row in fetch_rows(connection.execute("SELECT * FROM runs ORDER BY id"))
             ]

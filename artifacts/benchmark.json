@@ -1,0 +1,152 @@
+{
+  "measurement_kind": "measured",
+  "scope": "in_memory_query_only",
+  "snapshot_id": 2,
+  "patient_count": 1,
+  "document_count": 31,
+  "abstraction_bytes": 246745,
+  "repeats": 10,
+  "scenario_budget": 10000,
+  "query_runs": 60,
+  "elapsed_seconds": 0.08457079203799367,
+  "model_calls": 0,
+  "percentile_method": "Linear interpolation between sorted observations.",
+  "queries": [
+    {
+      "question": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.",
+      "operation": "counts",
+      "patient_id": "harbor grove behavioral health::HG-M042",
+      "answer_status": "evidence_uncertainty",
+      "reason": "2026-01-05 to 2026-01-30, therapy minutes: Values are discrete alternatives from consistent source interpretations.; Week of 2026-01-26: Supported interpretations disagree, duration is missing, or week coverage is incomplete.",
+      "latency_seconds": [
+        0.0026747919619083405,
+        0.0016043749637901783,
+        0.001494749914854765,
+        0.0016017081215977669,
+        0.0015152920968830585,
+        0.0014987499453127384,
+        0.001446958165615797,
+        0.0014471248723566532,
+        0.0014628749340772629,
+        0.0014929580502212048
+      ],
+      "p50_seconds": 0.0014967499300837517,
+      "p95_seconds": 0.0021931043127551664,
+      "stable_across_repeats": true
+    },
+    {
+      "question": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.",
+      "operation": "durations",
+      "patient_id": "harbor grove behavioral health::HG-M042",
+      "answer_status": "evidence_uncertainty",
+      "reason": "2026-01-05 to 2026-01-30, therapy minutes: Values are discrete alternatives from consistent source interpretations.; Week of 2026-01-26: Supported interpretations disagree, duration is missing, or week coverage is incomplete.",
+      "latency_seconds": [
+        0.0014056251384317875,
+        0.0013622920960187912,
+        0.0013825418427586555,
+        0.0013552089221775532,
+        0.001376624684780836,
+        0.0013603325933218002,
+        0.0013588331639766693,
+        0.0013551246374845505,
+        0.0013187499716877937,
+        0.001343666110187769
+      ],
+      "p50_seconds": 0.0013595828786492348,
+      "p95_seconds": 0.001395237655378878,
+      "stable_across_repeats": true
+    },
+    {
+      "question": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.",
+      "operation": "weekly",
+      "patient_id": "harbor grove behavioral health::HG-M042",
+      "answer_status": "evidence_uncertainty",
+      "reason": "2026-01-05 to 2026-01-30, therapy minutes: Values are discrete alternatives from consistent source interpretations.; Week of 2026-01-26: Supported interpretations disagree, duration is missing, or week coverage is incomplete.",
+      "latency_seconds": [
+        0.0013547921553254128,
+        0.001348624937236309,
+        0.0013587079010903835,
+        0.0013493751175701618,
+        0.0013672919012606144,
+        0.0013500410132110119,
+        0.0013426672667264938,
+        0.0013844999484717846,
+        0.0013482091017067432,
+        0.0013719997368752956
+      ],
+      "p50_seconds": 0.0013524165842682123,
+      "p95_seconds": 0.0013788748532533646,
+      "stable_across_repeats": true
+    },
+    {
+      "question": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?",
+      "operation": "day",
+      "patient_id": "harbor grove behavioral health::HG-M042",
+      "answer_status": "evidence_uncertainty",
+      "reason": "Week of 2026-01-19: Supported interpretations disagree, duration is missing, or week coverage is incomplete.",
+      "latency_seconds": [
+        0.0006854580715298653,
+        0.0005729999393224716,
+        0.0005621667951345444,
+        0.0005860407836735249,
+        0.0005588331259787083,
+        0.0005687498487532139,
+        0.0005579171702265739,
+        0.0005597090348601341,
+        0.0005602920427918434,
+        0.0005596252158284187
+      ],
+      "p50_seconds": 0.0005612294189631939,
+      "p95_seconds": 0.000640720291994512,
+      "stable_across_repeats": true
+    },
+    {
+      "question": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?",
+      "operation": "symptoms",
+      "patient_id": "harbor grove behavioral health::HG-M042",
+      "answer_status": "established",
+      "reason": null,
+      "latency_seconds": [
+        0.001079041976481676,
+        0.0009987079538404942,
+        0.0009849579073488712,
+        0.0009766658768057823,
+        0.0009739589877426624,
+        0.0010084998793900013,
+        0.0010167500004172325,
+        0.0009870417416095734,
+        0.0009734593331813812,
+        0.0010016253218054771
+      ],
+      "p50_seconds": 0.0009928748477250338,
+      "p95_seconds": 0.0010510105872526764,
+      "stable_across_repeats": true
+    },
+    {
+      "question": "Which patients had two consecutive weeks below their treatment requirements during January 5–30, 2026?",
+      "operation": "cohort",
+      "patient_id": null,
+      "answer_status": "established",
+      "reason": null,
+      "latency_seconds": [
+        0.0010012909770011902,
+        0.0009562917985022068,
+        0.0008847499266266823,
+        0.0008812081068754196,
+        0.0008822078816592693,
+        0.0008823331445455551,
+        0.000893167220056057,
+        0.00090441619977355,
+        0.0008942079730331898,
+        0.0008979998528957367
+      ],
+      "p50_seconds": 0.0008936875965446234,
+      "p95_seconds": 0.0009810413466766477,
+      "stable_across_repeats": true
+    }
+  ],
+  "limitations": [
+    "Measures offline planning, calculation, and rendering against a loaded snapshot; excludes extraction, ingestion, and database loading.",
+    "Percentiles describe these samples; few repeats do not establish tail latency or performance at a larger document count."
+  ]
+}

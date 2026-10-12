@@ -6,7 +6,14 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-from backbone.models import ContactAlternative, Encounter, PatientRecord, PlanClaim, SourceRef
+from backbone.models import (
+    Attendance,
+    ContactAlternative,
+    Encounter,
+    PatientRecord,
+    PlanClaim,
+    SourceRef,
+)
 
 ResultStatus = Literal[
     "established", "conflicting_evidence", "missing_evidence", "analysis_incomplete"
@@ -184,10 +191,13 @@ def merge_choices(left: dict[str, str], right: dict[str, str]) -> dict[str, str]
 
 
 def effective_encounter(encounter: Encounter, alternative: ContactAlternative) -> Encounter:
+    attendance: Attendance = alternative.attendance or encounter.attendance
+    if attendance == "unknown" and encounter.attendance != "unknown":
+        attendance = encounter.attendance
     return encounter.model_copy(update={
         "service_date": alternative.service_date or encounter.service_date,
         "service_type": alternative.service_type or encounter.service_type,
-        "attendance": alternative.attendance or encounter.attendance,
+        "attendance": attendance,
         "patient_present": (
             alternative.patient_present if alternative.patient_present is not None
             else encounter.patient_present
@@ -680,8 +690,14 @@ def compare_plans(
 ) -> PlanComparison:
     if start > end:
         raise ValueError("Review start must not follow review end.")
-    changes = sorted({plan.effective_start for plan in patient.plans
-                      if start < plan.effective_start <= end})
+    plan_starts = sorted({plan.effective_start for plan in patient.plans})
+    changes = [day for day in plan_starts[1:] if start < day <= end]
+    if change_date is not None and change_date not in plan_starts[1:]:
+        return PlanComparison(
+            patient_id=patient.patient_id, change_date=None, candidate_change_dates=changes,
+            before=None, after=None,
+            reason="The requested date is not a documented change from an earlier plan.",
+        )
     if change_date is None and len(changes) != 1:
         return PlanComparison(
             patient_id=patient.patient_id, change_date=None, candidate_change_dates=changes,

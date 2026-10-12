@@ -156,6 +156,49 @@ def test_unknown_attendance_exposes_uncertain_counts() -> None:
     assert result.contributions[0].inclusion == "uncertain"
 
 
+def test_omitted_alternative_attendance_uses_established_complementary_attestation() -> None:
+    event = encounter("one", START, [50])
+    event.alternatives[0].attendance = "unknown"
+    record = patient([event], plans=[plan(minimum_minutes=30)], episode_end=date(2026, 1, 11))
+    result = calculate(record, START, date(2026, 1, 11))
+    assert result.session_count.exact == 1
+    assert result.minutes.exact == 50
+    assert result.weeks[0].decision == "met"
+
+
+def test_explicit_absence_alternative_is_not_overridden_by_canonical_attendance() -> None:
+    event = encounter("one", START, [50, 0])
+    event.alternatives[0].attendance = "attended"
+    event.alternatives[1].attendance = "no_show"
+    event.alternatives[1].patient_present = False
+    record = patient([event], plans=[plan(minimum_minutes=30)], episode_end=date(2026, 1, 11))
+    result = calculate(record, START, date(2026, 1, 11))
+    assert result.session_count.values == [0, 1]
+    assert result.minutes.values == [0, 50]
+    assert result.weeks[0].decision == "indeterminate"
+
+
+def test_initial_plan_start_is_not_a_change_when_review_begins_before_episode() -> None:
+    record = patient([encounter("one", START, [110])])
+    comparison = compare_plans(record, date(2026, 1, 1), END)
+    assert comparison.change_date is None
+    assert comparison.candidate_change_dates == []
+    assert comparison.before is None and comparison.after is None
+    explicit = compare_plans(record, date(2026, 1, 1), END, change_date=START)
+    assert explicit.before is None and explicit.after is None
+    assert "not a documented change" in explicit.reason
+
+
+def test_known_prior_plan_establishes_change_at_episode_start() -> None:
+    prior = plan(effective_start=date(2026, 1, 1))
+    revised = plan(minimum_minutes=150, effective_start=START)
+    record = patient([encounter("one", START, [110])], plans=[prior, revised])
+    comparison = compare_plans(record, date(2026, 1, 1), END)
+    assert comparison.change_date == START
+    assert comparison.before is not None and comparison.after is not None
+    assert comparison.before.end == date(2026, 1, 4)
+
+
 def test_changed_plan_uses_effective_week_and_explicit_comparison_windows() -> None:
     change = date(2026, 1, 12)
     record = patient([

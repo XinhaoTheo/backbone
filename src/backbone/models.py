@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import date
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, JsonValue
 from pydantic.json_schema import SkipJsonSchema
 
 ServiceType = Literal[
@@ -175,16 +175,30 @@ class SourceCoverage(BaseModel):
         return sorted(set(self.failed_documents) | set(self.pending_documents))
 
 
+class NonContactRecord(BaseModel):
+    patient_ids: list[str]
+    assessment_claims: int
+    observation_claims: int
+    source: SourceRef
+
+
 class ClinicalSnapshot(SourceCoverage):
     snapshot_id: int
     patients: list[PatientRecord]
     reconciliation_version: str = "1"
+    non_contact_records: list[NonContactRecord] = Field(default_factory=list)
 
 
 class ModelUsage(BaseModel):
     input_tokens: int = 0
     output_tokens: int = 0
     cost_usd: float | None = None
+
+
+class ExecutionRecord(BaseModel):
+    created_at: str
+    kind: str
+    payload: JsonValue
 
 
 class ExtractionResult(BaseModel):

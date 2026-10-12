@@ -1,5 +1,8 @@
 # Clinical Review Prototype Implementation Plan
 
+All seven stages are implemented. See the commit history and README for execution
+and verification instructions.
+
 Implement a minimal, complete prototype in seven functional commits. Each commit
 should add an executable capability and relevant verification. Commit 5 completes
 the question-to-answer path; commit 6 completes update and reuse behavior; commit

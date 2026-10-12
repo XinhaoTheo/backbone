@@ -1,0 +1,64 @@
+{
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "python": "3.12.12",
+  "model": "gpt-4.1-2025-04-14",
+  "requested_model": "gpt-4.1",
+  "temperature": 0.0,
+  "max_output_tokens": 12000,
+  "workers": 4,
+  "snapshot_id": 2,
+  "document_count": 31,
+  "patient_count": 1,
+  "saved_abstraction_bytes": 361096,
+  "compact_abstraction_bytes": 246745,
+  "database_bytes": 860160,
+  "initial_processing_seconds": 28.774163082242012,
+  "snapshot_load_seconds": [
+    0.005983375012874603,
+    0.0018527093343436718,
+    0.001805041916668415,
+    0.0017782081849873066,
+    0.0017368332482874393,
+    0.001730416901409626,
+    0.0016111661680042744,
+    0.001695042010396719,
+    0.0016801250167191029,
+    0.0015977909788489342
+  ],
+  "stages": [
+    {
+      "stage": "cold_ingestion_and_extraction",
+      "elapsed_seconds": 28.638057166244835,
+      "document_count": 31,
+      "input_tokens": 117058,
+      "output_tokens": 22716,
+      "scope": "31 new records, source validation and persisted extraction results"
+    },
+    {
+      "stage": "cached_ingestion_reconciliation_and_publication",
+      "elapsed_seconds": 0.13610591599717736,
+      "document_count": 31,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "scope": "31 cached records; no API calls"
+    }
+  ],
+  "standard_uncached_cost": {
+    "measurement_kind": "estimate",
+    "input_rate_per_million": 2.0,
+    "output_rate_per_million": 8.0,
+    "usd": 0.415844,
+    "source_url": "https://developers.openai.com/api/docs/models/gpt-4.1",
+    "checked_date": "2026-10-12",
+    "exclusions": [
+      "Actual billing and provider prompt-cache discounts were not captured.",
+      "Development experiments and focused model comparisons are excluded."
+    ]
+  },
+  "benchmark_file": "benchmark.json",
+  "limitations": [
+    "Initial processing is the sum of separately timed extraction and cached publication stages, not a single end-to-end invocation.",
+    "Query benchmarks cover one patient and 31 source documents; they do not measure capacity at 500K or one million documents.",
+    "Snapshot loading currently decodes published patient JSON and cached source records; query-only latency excludes it."
+  ]
+}

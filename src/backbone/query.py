@@ -817,6 +817,14 @@ def answer_question(
     observations: list[Observation] = []
     sources: list[SourceRef] = []
     uncertainty: list[str] = []
+    non_contacts = [
+        record
+        for record in snapshot.non_contact_records
+        if patient is not None
+        and patient.patient_id in record.patient_ids
+        and plan.operation == "counts"
+    ]
+    sources.extend(record.source for record in non_contacts)
     lines = [f"Snapshot: {snapshot.snapshot_id}. Question: {question}", ""]
     if plan.operation == "cohort":
         selected = [patient] if patient is not None else snapshot.patients
@@ -986,6 +994,16 @@ def answer_question(
                     f"- {observation.observed_date}, {observation.kind.replace('_', ' ')}: "
                     f"{observation.text} {source_labels(observation.sources, catalog)}"
                 )
+    if non_contacts:
+        lines.extend(["", "Records with no extracted care contact:", ""])
+        for record in non_contacts:
+            lines.append(
+                f"- {record.source.document_id}: {record.assessment_claims} assessment claims and "
+                f"{record.observation_claims} observations; no additional session is counted. "
+                "Administrative quantities and measure reviews do not establish "
+                "delivered contacts. "
+                f"{source_labels([record.source], catalog)}"
+            )
     if snapshot.unprocessed_documents:
         uncertainty.append(
             "Source processing is incomplete: "
