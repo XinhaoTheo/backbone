@@ -22,6 +22,7 @@ from backbone.models import (
     ExtractionResult,
     PatientIdentity,
     PlanClaim,
+    PlanGrounding,
     SourceRef,
     TimeInterval,
 )
@@ -68,6 +69,7 @@ def evidence(document: DocumentRecord) -> DocumentEvidence:
                 interval_kind="patient_contact",
                 breaks=[],
                 stated_minutes=30,
+                stated_minutes_quote=document.text.splitlines()[3],
                 record_status="final",
                 correction_fields=[],
                 is_copy=False,
@@ -239,6 +241,7 @@ def test_computed_clock_difference_cannot_be_a_stated_duration(
     document: DocumentRecord, evidence: DocumentEvidence
 ) -> None:
     evidence.contacts[0].quotes[-1] = "Actual patient contact: 09:00–09:30"
+    evidence.contacts[0].stated_minutes_quote = "Actual patient contact: 09:00–09:30"
     with pytest.raises(ExtractionValidationError, match="explicit quoted duration"):
         attach_sources(document, evidence)
 
@@ -249,6 +252,125 @@ def test_computed_clock_difference_cannot_be_a_stated_duration(
 )
 def test_conventional_duration_abbreviations_preserve_units(quote: str, minutes: float) -> None:
     assert source_quantities([quote]) == (set(), {minutes})
+
+
+def field_grounded_plan(document: DocumentRecord) -> PlanClaim:
+    text: str = (
+        "Previous minimum: 2 therapy days and 120 minutes per week.\n"
+        "New minimum: 3 therapy days and 150 minutes per week.\n"
+        "The new plan applies from February 4, 2030 through February 28, 2030."
+    )
+    document.text += text + "\n"
+    plan: PlanClaim = participation_plan(text, 3, 150)
+    plan.effective_end = date(2030, 2, 28)
+    plan.grounding = PlanGrounding(
+        minimum_days_quote="New minimum: 3 therapy days",
+        minimum_minutes_quote="150 minutes per week.",
+        effective_start_quote="from February 4, 2030",
+        effective_end_quote="through February 28, 2030.",
+    )
+    return plan
+
+
+def test_plan_fields_bind_to_their_own_goals_and_dates(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    evidence.plans = [field_grounded_plan(document)]
+    grounded: DocumentEvidence = attach_sources(document, evidence, require_field_grounding=True)
+    plan: PlanClaim = grounded.plans[0]
+    assert plan.minimum_days == 3
+    assert plan.minimum_minutes == 150
+    assert {source.quote for source in plan.sources} >= {
+        "New minimum: 3 therapy days",
+        "150 minutes per week.",
+        "from February 4, 2030",
+        "through February 28, 2030.",
+    }
+
+
+def test_superseded_goal_cannot_match_a_current_goal_field(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    plan: PlanClaim = field_grounded_plan(document)
+    plan.minimum_minutes = 120
+    evidence.plans = [plan]
+    with pytest.raises(ExtractionValidationError, match="Plan thresholds must match"):
+        attach_sources(document, evidence, require_field_grounding=True)
+
+
+def test_broad_old_and_new_goal_quote_is_rejected_as_ambiguous(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    plan: PlanClaim = field_grounded_plan(document)
+    assert plan.grounding is not None
+    plan.grounding.minimum_minutes_quote = plan.quotes[0]
+    evidence.plans = [plan]
+    with pytest.raises(ExtractionValidationError, match="competing quantities"):
+        attach_sources(document, evidence, require_field_grounding=True)
+
+
+def test_plan_field_quote_must_be_verbatim(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    plan: PlanClaim = field_grounded_plan(document)
+    assert plan.grounding is not None
+    plan.grounding.effective_start_quote = "effective from February 4, 2030"
+    evidence.plans = [plan]
+    with pytest.raises(ExtractionValidationError, match="not verbatim"):
+        attach_sources(document, evidence, require_field_grounding=True)
+
+
+def test_plan_end_requires_corresponding_end_evidence(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    plan: PlanClaim = field_grounded_plan(document)
+    assert plan.grounding is not None
+    plan.grounding.effective_end_quote = None
+    evidence.plans = [plan]
+    with pytest.raises(ExtractionValidationError, match="documented together"):
+        attach_sources(document, evidence, require_field_grounding=True)
+
+
+def test_new_extraction_requires_grounding_while_legacy_claims_remain_readable(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    quote: str = "At least 3 therapy days and 150 minutes per week."
+    document.text += quote + "\n"
+    plan: PlanClaim = participation_plan(quote, 3, 150)
+    legacy: PlanClaim = PlanClaim.model_validate_json(plan.model_dump_json(exclude={"grounding"}))
+    evidence.plans = [legacy]
+    assert legacy.grounding is None
+    assert attach_sources(document, evidence).plans[0].minimum_minutes == 150
+    with pytest.raises(ExtractionValidationError, match="field-specific grounding"):
+        attach_sources(document, evidence, require_field_grounding=True)
+
+
+def test_therapist_time_cannot_substitute_patient_present_duration(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    passage: str = "Therapist duration: 60 minutes. Patient-present duration: 30 minutes."
+    document.text += passage + "\n"
+    contact: ContactClaim = evidence.contacts[0]
+    contact.service_type = "family"
+    contact.quotes.append(passage)
+    contact.stated_minutes_quote = "Patient-present duration: 30 minutes."
+    contact.stated_minutes = 60
+    with pytest.raises(ExtractionValidationError, match="explicit quoted duration"):
+        attach_sources(document, evidence, require_field_grounding=True)
+    contact.stated_minutes = 30
+    assert (
+        attach_sources(document, evidence, require_field_grounding=True).contacts[0].stated_minutes
+        == 30
+    )
+
+
+def test_new_stated_duration_requires_its_own_quote(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    evidence.contacts[0].stated_minutes_quote = None
+    assert attach_sources(document, evidence).contacts[0].stated_minutes == 30
+    with pytest.raises(ExtractionValidationError, match="patient-duration field quote"):
+        attach_sources(document, evidence, require_field_grounding=True)
 
 
 class FormatRequest(BaseModel):
@@ -380,9 +502,10 @@ def test_refused_response_fails_without_caching_empty_evidence(
     client: OpenAI
     requests: list[ExtractionRequest]
     client, requests = mock_client(evidence, refuse=True)
-    with client, pytest.raises(
-        ExtractionValidationError, match="completed parsed evidence"
-    ) as failure:
+    with (
+        client,
+        pytest.raises(ExtractionValidationError, match="completed parsed evidence") as failure,
+    ):
         OpenAIExtractor(client=client).extract(document)
     assert failure.value.usage is not None
     assert failure.value.usage.input_tokens == 100
@@ -407,6 +530,24 @@ def test_invalid_completed_output_retains_spent_token_usage(
     assert failure.value.usage.output_tokens == 100
     assert failure.value.usage.cost_usd == pytest.approx(0.0012)
     assert len(requests) == 2
+
+
+def test_live_extraction_retries_missing_field_grounding_and_retains_usage(
+    document: DocumentRecord, evidence: DocumentEvidence
+) -> None:
+    evidence.contacts[0].stated_minutes_quote = None
+    client: OpenAI
+    requests: list[ExtractionRequest]
+    client, requests = mock_client(evidence)
+    with (
+        client,
+        pytest.raises(ExtractionValidationError, match="patient-duration field quote") as failure,
+    ):
+        OpenAIExtractor(client=client).extract(document)
+    assert len(requests) == 2
+    assert "stated_minutes_quote" in requests[1].instructions
+    assert failure.value.usage is not None
+    assert failure.value.usage.input_tokens == 200
 
 
 def test_quote_validation_retry_recovers_and_counts_both_model_calls(

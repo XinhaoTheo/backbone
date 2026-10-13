@@ -3,7 +3,8 @@
 A Python CLI that extracts source-linked claims, reconciles encounters, and
 calculates therapy counts, minutes, weekly goals, cohorts, plan comparisons, and
 symptom timelines. SQLite retains immutable sources, extraction caches, and
-published patient revisions. Questions use saved evidence without model calls.
+published patient revisions. One structured LLM call plans each new question;
+code calculates answers from saved evidence. Saved plans execute without model calls.
 
 ## Run
 
@@ -19,10 +20,12 @@ Set `OPENAI_API_KEY` in `.env`, then:
 ```sh
 uv run backbone process documents --model gpt-4.1 --workers 4
 uv run backbone answer-file questions.json --output artifacts
-uv run backbone ask "How many therapy minutes did Rowan receive on January 21, 2026?"
+uv run backbone ask "How many therapy minutes did Rowan receive on January 21, 2026?" \
+  --save-plan .backbone/query-plan.json
 uv run backbone ask "Which patients had two consecutive weeks below their treatment requirements?"
 uv run backbone export questions.json --output artifacts
-uv run backbone benchmark artifacts/benchmark_questions.json --repeats 10
+uv run backbone benchmark artifacts/benchmark_questions.json \
+  --plans artifacts/benchmark_plans.json --repeats 10
 ```
 
 Process a new file or directory with the same `process` command. Unchanged files
@@ -37,20 +40,39 @@ subcommand and selects a separate database.
 To reproduce the submitted answers without an API key or database:
 
 ```sh
-uv run backbone replay artifacts/abstraction.json questions.json --output .backbone/replay
+uv run backbone replay artifacts/abstraction.json questions.json \
+  --plans artifacts/plans.json --output .backbone/replay
 ```
 
-The offline planner accepts the supported question families, patient names or
-IDs, ISO or English dates, and explicit before/after change dates. Unsupported
-or ambiguous requests return an error. Cohort and plan-change behavior also has
-synthetic multi-patient tests.
+`OPENAI_QUERY_MODEL` selects the query model, falling back to `OPENAI_MODEL`.
+The planner receives patient IDs, names, organizations, documented date anchors,
+and optional previous-plan context; it does not receive clinical passages.
+It supports multiple patients/tasks, whole months, relative periods, and a
+requested positive count of consecutive below-goal weeks. Code binds patient
+references, resolves date arithmetic, validates supported tasks, and executes them.
+Ambiguous or unsupported requests return an actionable error.
+
+Use `ask --plan PATH` for one saved plan or `--context PATH` for a previous plan.
+Batch commands accept `--plans PATH`; export writes `plans.json`. A saved plan
+must match the exact question and snapshot. Replay requires saved plans and
+makes no API calls. The submitted plans were migrated from the initial rule-based
+run; they are not represented as fresh LLM outputs.
+
+No vector RAG is implemented. Numerical questions require complete scoped event
+sets. Symptom answers use saved assessments and attributed observations. Semantic
+retrieval can support source enrichment when a new question needs missing fields.
+A model-generated plan still needs review: schema validation cannot establish
+that the question was interpreted correctly.
 
 ## Evidence and uncertainty
 
 Content hashes deduplicate identical files. Document IDs and exact quotation
 line ranges identify sources. Encounter/appointment IDs link complementary
 records; unresolved identity stays explicit. Scoped corrections affect only
-their named fields, and later copies do not undo them.
+their named fields, and later copies do not undo them. New extractions require
+separate source quotes for plan thresholds/effective dates and stated patient
+minutes. Numeric checks use the relevant field quote. Legacy caches remain
+readable; changed extraction settings use a new cache key.
 
 Code intersects patient attendance with group activity, removes nontherapeutic
 breaks and connection gaps, and applies effective participation rules. Conflicting
@@ -68,9 +90,11 @@ no patient-specific rules or answers.
 | File | Contents |
 | --- | --- |
 | [answers.md](artifacts/answers.md) / [answers.json](artifacts/answers.json) | Five development answers, calculations, exclusions, uncertainty, and source passages. |
+| [plans.json](artifacts/plans.json) / [benchmark_plans.json](artifacts/benchmark_plans.json) | Saved query tasks for offline execution. |
 | [abstraction.json](artifacts/abstraction.json) | Published patient records and source coverage. |
 | [extractions.jsonl](artifacts/extractions.jsonl) | Validated model claims before reconciliation. |
 | [execution.jsonl](artifacts/execution.jsonl) | Processing and query execution logs. |
+| [query_planning_checks.json](artifacts/query_planning_checks.json) | Synthetic live-API intent and field-grounding checks, including the observed failure and retry. |
 | [benchmark.json](artifacts/benchmark.json) / [performance.json](artifacts/performance.json) | Measured timings, sizes, token usage, and labeled cost estimates. |
 
 ## Measurements and model
@@ -79,14 +103,20 @@ The final 31-record extraction used `gpt-4.1` (returned snapshot
 `gpt-4.1-2025-04-14`), Responses structured outputs, temperature 0,
 12,000 maximum output tokens, and four workers. Each failed local validation
 gets one retry with its specific error. Exact quotation locations are attached
-by code, outside the model schema.
+by code, outside the model schema. Query planning uses Responses structured
+outputs with 5,000 maximum output tokens; each saved plan records the returned
+model, tokens, planning time, and logical model calls. Query sampling uses the
+provider default. Costs are null when no rate was configured. The implementation
+follows [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs).
 
 Initial ingestion and extraction took 28.638 seconds and used 117,058 input and
 22,716 output tokens. Cached reconciliation/publication took 0.136 seconds.
 These are separate measured stages. The final run's standard uncached token
 estimate is $0.416 at [$2 input / $8 output per million tokens](https://developers.openai.com/api/docs/models/gpt-4.1).
 Actual billing and prompt-cache discounts were not captured; development probes
-are additional. Offline query latency and abstraction size are in the benchmark.
+are additional. Saved-plan execution latency and current abstraction size are in the benchmark.
+Initial extraction figures above describe the earlier extraction run. Query
+planning time, tokens, and model calls are reported separately from execution.
 
 A seven-record comparison found that `gpt-4.1-mini` repeatedly generated a
 non-verbatim quotation and misclassified group timing. Clearer field descriptions
@@ -103,6 +133,13 @@ on additional records and compare error rates before changing the schema or mode
 OpenAI Codex and collaborating coding agents assisted implementation and review.
 No coding-assistant sampling settings were configured in the repository.
 
+Ten synthetic live query-planning checks initially passed nine cases. Average
+session duration incorrectly triggered a date clarification; capability-priority
+instructions made the targeted retry return unsupported. Two synthetic live
+extraction checks passed old/new plan goals and patient-versus-therapist duration.
+The check artifact records returned models and token usage. These checks are not
+an accuracy estimate on a broader question distribution.
+
 ## Scale
 
 The first expected cold-processing bottleneck at one million documents is model
@@ -110,7 +147,9 @@ token volume and rate limits in `workflow.extract_documents`. Use bounded queue
 workers, persistent jobs, batch requests, and incremental source discovery.
 Current ingestion and futures are held in memory; they need streaming batches.
 
-Queries currently load patient JSON and cached source contexts through
+Query planning currently sends the patient catalog to the model; at larger
+patient counts, retrieve entity candidates and resolve cohort scopes in the
+database before planning. Queries currently load patient JSON and cached source contexts through
 `Store.snapshot`; collection-wide queries run scenarios for every selected
 patient in memory. Normalize events and
 patient-week aggregates, index date/patient filters, and invalidate affected
@@ -130,4 +169,6 @@ uv run ruff check src tests
 Tests include exact source grounding, the five reference answers, scoped
 corrections, duplicates, conflicting times/dates, unknown attendance, coupled
 scenarios, cohort membership, plan changes, retries, revisions, and CLI restart
-and replay behavior. All authored project content is English.
+and replay behavior. Planner tests cover compound tasks, relative dates, missing
+context, disputed anchors, unsupported requests, SDK failures, and saved-plan
+validation. All authored project content is English.

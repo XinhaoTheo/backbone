@@ -4872,7 +4872,8 @@
           ],
           "week_start": "Monday",
           "patient_present_required": true,
-          "note": "Medication management, collateral-only contacts, and care coordination do not count toward the participation goal."
+          "note": "Medication management, collateral-only contacts, and care coordination do not count toward the participation goal.",
+          "grounding": null
         }
       ],
       "assessments": [

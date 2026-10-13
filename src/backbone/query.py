@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import re
 from datetime import date
 from typing import Literal
 
@@ -21,27 +20,17 @@ from backbone.models import (
     ClinicalSnapshot,
     Observation,
     PatientRecord,
+    QueryMetric,
     QueryPlan,
+    QueryTask,
     SourceRef,
 )
+from backbone.planning import QueryPlanner, QueryPlanningError, plan_question, validate_plan
+
+__all__ = ["AnswerBundle", "QueryPlanningError", "answer_question", "plan_question"]
 
 
-class QueryPlanningError(ValueError):
-    pass
-
-
-class DateScope(BaseModel):
-    start: date
-    end: date
-    dates: list[date] = Field(default_factory=list)
-    explicit: bool = False
-    contiguous: bool = False
-
-
-class AnswerBundle(BaseModel):
-    question: str
-    plan: QueryPlan
-    snapshot_id: int
+class AnswerData(BaseModel):
     text: str
     metrics: list[PatientMetrics] = Field(default_factory=list)
     cohort_results: list[CohortResult] = Field(default_factory=list)
@@ -53,381 +42,15 @@ class AnswerBundle(BaseModel):
     coverage_status: Literal["available_records", "failed_source_processing"]
 
 
-MONTHS: dict[str, int] = {
-    "january": 1,
-    "february": 2,
-    "march": 3,
-    "april": 4,
-    "may": 5,
-    "june": 6,
-    "july": 7,
-    "august": 8,
-    "september": 9,
-    "october": 10,
-    "november": 11,
-    "december": 12,
-}
-
-GENERIC_SUBJECTS: set[str] = {
-    "a",
-    "an",
-    "the",
-    "each",
-    "every",
-    "all",
-    "any",
-    "this",
-    "that",
-    "these",
-    "those",
-    "patient",
-    "patients",
-    "therapy",
-    "treatment",
-    "care",
-    "contact",
-    "contacts",
-    "session",
-    "sessions",
-    "day",
-    "days",
-    "week",
-    "weeks",
-    "goal",
-    "goals",
-    "requirement",
-    "requirements",
-    "count",
-    "counts",
-    "minutes",
-    "hours",
-    "symptom",
-    "symptoms",
-    "assessment",
-    "assessments",
-    "record",
-    "records",
-    "plan",
-    "plans",
-    "progress",
-    "evidence",
-    "sources",
-    "source",
-    "total",
-    "distinct",
-    "actual",
-    "delivered",
-    "documented",
-    "clinical",
-    "available",
-    "additional",
-    "individual",
-    "group",
-    "family",
-    "relevant",
-    "current",
-    "review",
-    "period",
-    "meet",
-    "met",
-    "attend",
-    "attended",
-    "receive",
-    "received",
-    "reported",
-    "their",
-    "his",
-    "her",
-    "it",
-    "they",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-    "phq-9",
-    "phq9",
-    "gad-7",
-    "gad7",
-    "zero",
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-    "ten",
-    "no",
-    "and",
-    "or",
-    "not",
-    "cannot",
-    "be",
-}
+class TaskAnswer(AnswerData):
+    task: QueryTask
 
 
-def patient_bounds(patient: PatientRecord) -> tuple[date, date]:
-    observed = [encounter.service_date for encounter in patient.encounters]
-    observed.extend(
-        value for assessment in patient.assessments for value in assessment_dates(assessment)
-    )
-    observed.extend(observation.observed_date for observation in patient.observations)
-    if not observed and (patient.episode_start is None or patient.episode_end is None):
-        raise QueryPlanningError(f"No documented review period is available for {patient.name}.")
-    start = patient.episode_start if patient.episode_start is not None else min(observed)
-    end = patient.episode_end if patient.episode_end is not None else max(observed)
-    if start > end:
-        raise QueryPlanningError(f"The documented episode bounds for {patient.name} are invalid.")
-    return start, end
-
-
-def patient_aliases(patient: PatientRecord) -> set[str]:
-    return {
-        patient.name,
-        patient.patient_id,
-        patient.patient_id.rsplit("::", 1)[-1],
-        *(part for part in patient.name.split() if len(part) > 1),
-    }
-
-
-def match_patient(question: str, snapshot: ClinicalSnapshot) -> PatientRecord | None:
-    matches: list[PatientRecord] = []
-    for patient in snapshot.patients:
-        identifiers = {patient.name, patient.patient_id}
-        if any(
-            re.search(rf"(?<!\w){re.escape(identifier)}(?!\w)", question, re.IGNORECASE)
-            for identifier in identifiers
-            if identifier
-        ):
-            matches.append(patient)
-    if not matches:
-        for patient in snapshot.patients:
-            if any(
-                re.search(rf"(?<!\w){re.escape(part)}(?!\w)", question, re.IGNORECASE)
-                for part in patient_aliases(patient)
-                if part
-            ):
-                matches.append(patient)
-    if len(matches) > 1:
-        raise QueryPlanningError(
-            "This query format supports one named patient or the whole cohort."
-        )
-    return matches[0] if matches else None
-
-
-def validate_patient_references(
-    question: str, snapshot: ClinicalSnapshot, selected: PatientRecord | None
-) -> None:
-    candidates = [selected] if selected is not None else snapshot.patients
-    known_spans = [
-        (match.start(), match.end())
-        for patient in candidates
-        for alias in patient_aliases(patient)
-        if alias
-        for match in re.finditer(rf"(?<!\w){re.escape(alias)}(?!\w)", question, re.IGNORECASE)
-    ]
-    instruments = {
-        value.instrument.casefold() for patient in candidates for value in patient.assessments
-    }
-    patterns: list[tuple[str, str]] = [
-        ("subject", r"(?i:\b(?:did|does|has|had|is|was|can|will))\s+([^\W\d_][\w.:'-]*)\b"),
-        ("possessive", r"\b([^\W\d_][\w.:'-]*)[’']s\b"),
-        ("scope", r"(?i:\b(?:for|about|of))\s+([^\W\d_][\w.:'-]*)\b"),
-        (
-            "scope",
-            r"(?i:\b(?:to|patient|summarize|show|review|reconstruct|compare))\s+([A-Z][\w.:'-]*)\b",
-        ),
-    ]
-    for kind, pattern in patterns:
-        for match in re.finditer(pattern, question):
-            subject = match.group(1).removesuffix("'s").removesuffix("’s")
-            subject_end = match.start(1) + len(subject)
-            if any(start <= match.start(1) and subject_end <= end for start, end in known_spans):
-                continue
-            folded = subject.casefold()
-            if folded in GENERIC_SUBJECTS or folded in instruments:
-                continue
-            if kind == "scope" and folded in MONTHS:
-                continue
-            raise QueryPlanningError(
-                f"Patient reference {subject} is not present in the selected scope."
-            )
-
-
-def default_scope(patients: list[PatientRecord]) -> DateScope:
-    if not patients:
-        raise QueryPlanningError(
-            "The snapshot has no patients; build the clinical abstraction first."
-        )
-    bounds = [patient_bounds(patient) for patient in patients]
-    return DateScope(start=min(value[0] for value in bounds), end=max(value[1] for value in bounds))
-
-
-def parse_date_scope(question: str, patients: list[PatientRecord]) -> DateScope:
-    defaults = default_scope(patients)
-    normalized = question.lower().replace("–", "-").replace("—", "-")
-    located_dates: list[tuple[int, date]] = []
-    month_names = "|".join(MONTHS)
-    date_prefix = rf"(?:\d{{4}}-|(?:{month_names})\s+\d)"
-    contiguous = bool(re.search(rf"\b(?:from|between|through|to)\s+{date_prefix}", normalized))
-    if re.search(r"\d{4}-\d{2}-\d{2}\s*-\s*\d{4}-\d{2}-\d{2}", normalized):
-        contiguous = True
-    for match in re.finditer(r"(?<!\d)(\d{4}-\d{2}-\d{2})(?!\d)", normalized):
-        try:
-            located_dates.append((match.start(), date.fromisoformat(match.group(1))))
-        except ValueError as error:
-            raise QueryPlanningError(f"Invalid date: {match.group(1)}.") from error
-    pattern = (
-        rf"\b({month_names})\s+(\d{{1,2}})(?!\d)"
-        r"(?:\s*-\s*(\d{1,2})(?!\d))?(?:\s*,?\s*(\d{4})(?!\d))?"
-    )
-    month_specs: list[tuple[int, int, list[int], int | None]] = []
-    for match in re.finditer(pattern, normalized):
-        explicit_year = match.group(4)
-        month = MONTHS[match.group(1)]
-        day_numbers = [int(match.group(2))]
-        if match.group(3) is not None:
-            day_numbers.append(int(match.group(3)))
-            contiguous = True
-        else:
-            tail = normalized[match.end() :]
-            list_match = re.match(r"\s+and\s+(\d{1,2})\b(?:\s*,?\s*(\d{4})(?!\d))?", tail)
-            if list_match is not None:
-                day_numbers.append(int(list_match.group(1)))
-                if list_match.group(2) is not None:
-                    explicit_year = list_match.group(2)
-        month_specs.append(
-            (
-                match.start(),
-                month,
-                day_numbers,
-                int(explicit_year) if explicit_year is not None else None,
-            )
-        )
-    provided_years = {value.year for _, value in located_dates}
-    provided_years.update(year for _, _, _, year in month_specs if year is not None)
-    shared_year = next(iter(provided_years)) if len(provided_years) == 1 else None
-    if not provided_years and defaults.start.year == defaults.end.year:
-        shared_year = defaults.start.year
-    for position, month, day_numbers, explicit_year_number in month_specs:
-        year = explicit_year_number if explicit_year_number is not None else shared_year
-        if year is None:
-            raise QueryPlanningError(
-                "Specify a year for each date when the question or review period spans years."
-            )
-        for offset, day_number in enumerate(day_numbers):
-            try:
-                located_dates.append((position + offset, date(year, month, day_number)))
-            except ValueError as error:
-                raise QueryPlanningError(
-                    f"Invalid date: {year}-{month:02d}-{day_number:02d}."
-                ) from error
-    if not located_dates:
-        return defaults
-    found = [value for _, value in sorted(located_dates, key=lambda value: value[0])]
-    if contiguous and found[0] > found[-1]:
-        raise QueryPlanningError("The requested review start follows the requested review end.")
-    dates = sorted(set(found))
-    return DateScope(
-        start=min(dates), end=max(dates), dates=dates, explicit=True, contiguous=contiguous
-    )
-
-
-def classify_operation(
-    question: str, scope: DateScope
-) -> Literal[
-    "counts", "durations", "weekly", "day", "timeline", "symptoms", "cohort", "plan_change"
-]:
-    normalized = question.lower()
-    if re.search(
-        r"\bpercent(?:age)?\b|\bproportion\b|\baverage\b|\bmean\b|\bmedian\b|\bratio\b", normalized
-    ):
-        raise QueryPlanningError(
-            "This planner does not support ratios, averages, or percent calculations."
-        )
-    cohort = bool(re.search(r"\bconsecutive\s+(?:calendar\s+)?weeks?\b", normalized))
-    plan_change = bool(
-        re.search(r"\bbefore\b", normalized)
-        and re.search(r"\bafter\b", normalized)
-        and re.search(r"\bplan\b|\bchange\b", normalized)
-    )
-    symptoms = bool(
-        re.search(r"\bsymptoms?\b|\bassessments?\b|\bphq[ -]?9\b|\bprogress\b", normalized)
-    )
-    weekly = bool(re.search(r"\bgoals?\b|\brequirements?\b|\bthresholds?\b|\bmeet\b", normalized))
-    durations = bool(re.search(r"\bminutes?\b|\bhours?\b|\bdurations?\b", normalized))
-    counts = bool(re.search(r"\bhow many\b|\bcounts?\b|\bnumber of\b", normalized))
-    timeline = bool(re.search(r"\breconstruct\b|\btimeline\b|\bwhat happened\b", normalized))
-    if symptoms and (cohort or plan_change or weekly):
-        raise QueryPlanningError("Ask symptom and treatment-goal questions separately.")
-    if cohort:
-        return "cohort"
-    if plan_change:
-        return "plan_change"
-    if symptoms:
-        return "symptoms"
-    if weekly:
-        return "weekly"
-    dated_contact = bool(re.search(r"\bon\s+(?:\d{4}-|" + "|".join(MONTHS) + r")", normalized))
-    if scope.explicit and not scope.contiguous and (timeline or dated_contact):
-        return "day"
-    if durations:
-        return "durations"
-    if counts:
-        return "counts"
-    if timeline:
-        return "timeline"
-    raise QueryPlanningError(
-        "Unsupported question. Ask for session counts, contact minutes, weekly goals, "
-        "a dated reconstruction, symptoms, a timeline, consecutive weeks, or a plan comparison."
-    )
-
-
-def plan_question(question: str, snapshot: ClinicalSnapshot) -> QueryPlan:
-    if not question.strip():
-        raise QueryPlanningError("Question must not be empty.")
-    patient = match_patient(question, snapshot)
-    validate_patient_references(question, snapshot, patient)
-    selected = [patient] if patient is not None else snapshot.patients
-    scope = parse_date_scope(question, selected)
-    operation = classify_operation(question, scope)
-    if operation != "cohort" and patient is None:
-        if len(snapshot.patients) != 1:
-            raise QueryPlanningError("Name a patient for an individual-patient question.")
-        patient = snapshot.patients[0]
-    if (
-        operation == "symptoms"
-        and not scope.contiguous
-        and re.search(r"\b(?:during|throughout)\s+(?:the\s+)?episode\b", question, re.IGNORECASE)
-    ):
-        scope = default_scope([patient] if patient is not None else selected)
-    change_date: date | None = None
-    if operation == "plan_change":
-        if patient is None:
-            raise QueryPlanningError("Name a patient for a plan comparison.")
-        all_changes = sorted({plan.effective_start for plan in patient.plans})[1:]
-        changes = [value for value in all_changes if scope.start < value <= scope.end]
-        requested = [value for value in scope.dates if value in all_changes]
-        if not scope.contiguous and len(scope.dates) == 1 and len(requested) == 1:
-            change_date = requested[0]
-            scope = default_scope([patient])
-        elif len(changes) == 1:
-            change_date = changes[0]
-        elif len(changes) > 1:
-            raise QueryPlanningError("Specify which documented plan change to compare.")
-    return QueryPlan(
-        operation=operation,
-        patient=patient.patient_id if patient is not None else None,
-        start=scope.start,
-        end=scope.end,
-        change_date=change_date,
-        selected_dates=scope.dates if operation == "day" else [],
-    )
+class AnswerBundle(AnswerData):
+    question: str
+    plan: QueryPlan
+    snapshot_id: int
+    task_answers: list[TaskAnswer]
 
 
 def source_key(source: SourceRef) -> tuple[str, int, int, str]:
@@ -542,22 +165,33 @@ def render_ledger(rows: list[Contribution], catalog: list[SourceRef]) -> list[st
     return lines
 
 
-def render_metrics(metrics: PatientMetrics, catalog: list[SourceRef]) -> list[str]:
+def render_metrics(
+    metrics: PatientMetrics,
+    catalog: list[SourceRef],
+    requested: list[QueryMetric],
+) -> list[str]:
+    enabled = set(requested or ["sessions", "distinct_days", "minutes", "service_mix"])
+    summary: list[str] = []
+    if "sessions" in enabled:
+        summary.append(f"Eligible sessions: **{display_integer(metrics.session_count)}**.")
+    if "distinct_days" in enabled:
+        summary.append(f"Distinct therapy days: **{display_integer(metrics.distinct_days)}**.")
+    if "minutes" in enabled:
+        summary.append(
+            f"Therapy minutes: **{display_integer(metrics.minutes)}** "
+            f"(**{display_hours(metrics.minutes)} hours**, rounded to 3 decimals)."
+        )
     lines = [
         f"Review window: {metrics.start} through {metrics.end}, inclusive.",
         "",
-        f"Eligible sessions: **{display_integer(metrics.session_count)}**. "
-        f"Distinct therapy days: **{display_integer(metrics.distinct_days)}**. "
-        f"Therapy minutes: **{display_integer(metrics.minutes)}** "
-        f"(**{display_hours(metrics.minutes)} hours**, rounded to 3 decimals).",
-        "",
-        "| Service | Eligible sessions |",
-        "| --- | --- |",
+        " ".join(summary),
     ]
-    lines.extend(
-        f"| {service} | {display_integer(value)} |"
-        for service, value in sorted(metrics.session_counts.items())
-    )
+    if "service_mix" in enabled:
+        lines.extend(["", "| Service | Eligible sessions |", "| --- | --- |"])
+        lines.extend(
+            f"| {service} | {display_integer(value)} |"
+            for service, value in sorted(metrics.session_counts.items())
+        )
     lines.extend(
         [
             "",
@@ -803,12 +437,9 @@ def render_symptoms(
     return lines
 
 
-def answer_question(
-    question: str, snapshot: ClinicalSnapshot, scenario_budget: int = 10_000
-) -> AnswerBundle:
-    plan = plan_question(question, snapshot)
-    if plan.start is None or plan.end is None:
-        raise QueryPlanningError("A supported query must have explicit resolved date bounds.")
+def answer_task(
+    question: str, snapshot: ClinicalSnapshot, plan: QueryTask, scenario_budget: int
+) -> TaskAnswer:
     patient = next((entry for entry in snapshot.patients if entry.patient_id == plan.patient), None)
     metrics: list[PatientMetrics] = []
     cohort_results: list[CohortResult] = []
@@ -827,8 +458,10 @@ def answer_question(
     sources.extend(record.source for record in non_contacts)
     lines = [f"Snapshot: {snapshot.snapshot_id}. Question: {question}", ""]
     if plan.operation == "cohort":
-        selected = [patient] if patient is not None else snapshot.patients
-        cohort_results = cohort(selected, plan.start, plan.end, scenario_budget)
+        selected = [entry for entry in snapshot.patients if entry.patient_id in plan.patient_ids]
+        cohort_results = cohort(
+            selected, plan.start, plan.end, scenario_budget, plan.consecutive_weeks
+        )
         if snapshot.unprocessed_documents:
             cohort_results = [
                 entry.model_copy(
@@ -843,12 +476,16 @@ def answer_question(
     elif patient is None:
         raise QueryPlanningError("The selected patient is not present in this snapshot.")
     elif plan.operation == "symptoms":
-        assessments = select_assessments(patient, plan.start, plan.end, [])
+        assessments = select_assessments(patient, plan.start, plan.end, plan.selected_dates)
         observations = sorted(
             [
                 value
                 for value in patient.observations
-                if plan.start <= value.observed_date <= plan.end
+                if (
+                    value.observed_date in plan.selected_dates
+                    if plan.selected_dates
+                    else plan.start <= value.observed_date <= plan.end
+                )
             ],
             key=lambda value: (value.observed_date, value.kind),
         )
@@ -871,7 +508,7 @@ def answer_question(
     else:
         periods = (
             [(value, value) for value in plan.selected_dates]
-            if plan.operation == "day"
+            if plan.selected_dates
             else [(plan.start, plan.end)]
         )
         for start, end in periods:
@@ -976,7 +613,7 @@ def answer_question(
                 ]
             )
         for result in metrics:
-            lines.extend(render_metrics(result, catalog))
+            lines.extend(render_metrics(result, catalog, plan.metrics))
             lines.append("")
         if patient is not None:
             notes = reconciliation_notes(patient, metrics, catalog)
@@ -1016,10 +653,8 @@ def answer_question(
         lines.extend(["", "Unresolved conclusions and limitations:", ""])
         lines.extend(f"- {message}" for message in uncertainty)
     lines.extend(["", "Source passages:", "", render_sources(catalog)])
-    return AnswerBundle(
-        question=question,
-        plan=plan,
-        snapshot_id=snapshot.snapshot_id,
+    return TaskAnswer(
+        task=plan,
         text="\n".join(lines),
         metrics=metrics,
         cohort_results=cohort_results,
@@ -1028,6 +663,54 @@ def answer_question(
         observations=observations,
         sources=catalog,
         uncertainty=uncertainty,
+        coverage_status="failed_source_processing"
+        if snapshot.unprocessed_documents
+        else "available_records",
+    )
+
+
+def answer_question(
+    question: str,
+    snapshot: ClinicalSnapshot,
+    scenario_budget: int = 10_000,
+    *,
+    plan: QueryPlan | None = None,
+    planner: QueryPlanner | None = None,
+    context: QueryPlan | None = None,
+) -> AnswerBundle:
+    resolved = (
+        plan
+        if plan is not None
+        else plan_question(question, snapshot, planner=planner, context=context)
+    )
+    validate_plan(resolved, question, snapshot)
+    answers = [answer_task(question, snapshot, task, scenario_budget) for task in resolved.tasks]
+    names = {patient.patient_id: patient.name for patient in snapshot.patients}
+    text = (
+        answers[0].text
+        if len(answers) == 1
+        else "\n\n".join(
+            f"Task {index}: {answer.task.operation}; "
+            f"patients {', '.join(names[value] for value in answer.task.patient_ids)}.\n\n"
+            f"{answer.text}"
+            for index, answer in enumerate(answers, start=1)
+        )
+    )
+    return AnswerBundle(
+        question=question,
+        plan=resolved,
+        snapshot_id=snapshot.snapshot_id,
+        text=text,
+        task_answers=answers,
+        metrics=[entry for answer in answers for entry in answer.metrics],
+        cohort_results=[entry for answer in answers for entry in answer.cohort_results],
+        plan_comparison=answers[0].plan_comparison if len(answers) == 1 else None,
+        assessments=[entry for answer in answers for entry in answer.assessments],
+        observations=[entry for answer in answers for entry in answer.observations],
+        sources=unique_sources([source for answer in answers for source in answer.sources]),
+        uncertainty=list(
+            dict.fromkeys(message for answer in answers for message in answer.uncertainty)
+        ),
         coverage_status="failed_source_processing"
         if snapshot.unprocessed_documents
         else "available_records",

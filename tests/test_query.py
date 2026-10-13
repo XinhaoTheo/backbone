@@ -11,9 +11,12 @@ from backbone.models import (
     Observation,
     PatientRecord,
     PlanClaim,
+    QueryOperation,
+    QueryPlan,
+    QueryTask,
     SourceRef,
 )
-from backbone.query import QueryPlanningError, answer_question, plan_question, render_sources
+from backbone.query import AnswerBundle, answer_question, render_sources
 from backbone.reconciliation import reconcile_assessments
 
 
@@ -29,10 +32,6 @@ def patient(name: str = "Casey", identifier: str = "P1") -> PatientRecord:
         assessments=[],
         observations=[],
     )
-
-
-def snapshot() -> ClinicalSnapshot:
-    return ClinicalSnapshot(snapshot_id=7, patients=[patient()])
 
 
 def evidence(identifier: str, quote: str) -> SourceRef:
@@ -142,65 +141,31 @@ def clinical_patient() -> PatientRecord:
     return record
 
 
-def test_new_patient_and_iso_range_are_not_development_question_specific() -> None:
-    plan = plan_question(
-        "How many therapy sessions did Casey attend from 2027-02-03 to 2027-02-17?",
-        snapshot(),
+def answer_for_operation(
+    question: str,
+    snapshot: ClinicalSnapshot,
+    *,
+    operation: QueryOperation,
+    start: date = date(2027, 2, 1),
+    end: date = date(2027, 2, 28),
+    selected_dates: list[date] | None = None,
+    change_date: date | None = None,
+    scenario_budget: int = 10_000,
+) -> AnswerBundle:
+    dates = selected_dates if selected_dates is not None else []
+    task = QueryTask(
+        operation=operation,
+        patient=None if operation == "cohort" else "P1",
+        patient_ids=[record.patient_id for record in snapshot.patients]
+        if operation == "cohort"
+        else ["P1"],
+        start=min(dates) if dates else start,
+        end=max(dates) if dates else end,
+        selected_dates=dates,
+        change_date=change_date,
     )
-    assert plan.operation == "counts"
-    assert plan.patient == "P1"
-    assert plan.start == date(2027, 2, 3)
-    assert plan.end == date(2027, 2, 17)
-
-
-def test_discrete_dates_exclude_intervening_day() -> None:
-    plan = plan_question("Reconstruct Casey's care on February 9 and February 11.", snapshot())
-    assert plan.operation == "day"
-    assert plan.selected_dates == [date(2027, 2, 9), date(2027, 2, 11)]
-
-
-def test_omitted_range_uses_documented_episode() -> None:
-    plan = plan_question("Did each week's therapy meet Casey's treatment goal?", snapshot())
-    assert plan.operation == "weekly"
-    assert plan.start == date(2027, 2, 1)
-    assert plan.end == date(2027, 2, 28)
-
-
-def test_english_range_with_explicit_year() -> None:
-    plan = plan_question("For February 3–17, 2027, count Casey's sessions.", snapshot())
-    assert plan.operation == "counts"
-    assert plan.start == date(2027, 2, 3)
-    assert plan.end == date(2027, 2, 17)
-    assert plan.selected_dates == []
-
-
-def test_cohort_scope_does_not_select_first_patient() -> None:
-    cohort_snapshot = ClinicalSnapshot(snapshot_id=7, patients=[patient(), patient("Morgan", "P2")])
-    plan = plan_question(
-        "Which patients had two consecutive weeks below their treatment requirements?",
-        cohort_snapshot,
-    )
-    assert plan.operation == "cohort"
-    assert plan.patient is None
-
-
-def test_ambiguous_and_unsupported_questions_are_rejected() -> None:
-    with pytest.raises(QueryPlanningError, match="Unsupported"):
-        plan_question("What medication should Casey take?", snapshot())
-    with pytest.raises(QueryPlanningError, match="separately"):
-        plan_question("Compare Casey's symptoms and weekly treatment goals.", snapshot())
-    with pytest.raises(QueryPlanningError, match="not present"):
-        plan_question("How many sessions did Taylor attend?", snapshot())
-    with pytest.raises(QueryPlanningError, match="ratios"):
-        plan_question("What percentage of Casey's therapy sessions were individual?", snapshot())
-    with pytest.raises(QueryPlanningError, match="Unsupported"):
-        plan_question("Why did Casey miss therapy sessions?", snapshot())
-
-
-def test_missing_patient_is_not_silently_selected_in_multi_patient_snapshot() -> None:
-    cohort_snapshot = ClinicalSnapshot(snapshot_id=7, patients=[patient(), patient("Morgan", "P2")])
-    with pytest.raises(QueryPlanningError, match="Name a patient"):
-        plan_question("How many therapy minutes were delivered?", cohort_snapshot)
+    plan = QueryPlan(question=question, snapshot_id=snapshot.snapshot_id, tasks=[task])
+    return answer_question(question, snapshot, scenario_budget, plan=plan)
 
 
 def test_source_rendering_retains_precise_original_passage_and_deduplicates() -> None:
@@ -219,9 +184,10 @@ def test_source_rendering_retains_precise_original_passage_and_deduplicates() ->
 
 
 def test_answer_preserves_discrete_duration_alternatives_and_reconciliation_evidence() -> None:
-    bundle = answer_question(
+    bundle = answer_for_operation(
         "How many therapy minutes did Casey receive?",
         ClinicalSnapshot(snapshot_id=8, patients=[clinical_patient()]),
+        operation="durations",
     )
     assert bundle.snapshot_id == 8
     assert bundle.metrics[0].session_count.exact == 3
@@ -233,9 +199,11 @@ def test_answer_preserves_discrete_duration_alternatives_and_reconciliation_evid
 
 
 def test_day_answer_does_not_include_care_between_named_dates() -> None:
-    bundle = answer_question(
+    bundle = answer_for_operation(
         "Reconstruct Casey's care on February 9 and February 11.",
         ClinicalSnapshot(snapshot_id=8, patients=[clinical_patient()]),
+        operation="day",
+        selected_dates=[date(2027, 2, 9), date(2027, 2, 11)],
     )
     assert [result.start for result in bundle.metrics] == [date(2027, 2, 9), date(2027, 2, 11)]
     assert [result.session_count.exact for result in bundle.metrics] == [1, 1]
@@ -243,13 +211,14 @@ def test_day_answer_does_not_include_care_between_named_dates() -> None:
 
 
 def test_symptom_episode_scope_is_not_narrowed_to_additional_contact_date() -> None:
-    bundle = answer_question(
+    bundle = answer_for_operation(
         "Summarize Casey's symptom course during the episode and the reason for "
         "the additional contact on February 9.",
         ClinicalSnapshot(snapshot_id=8, patients=[clinical_patient()]),
+        operation="symptoms",
     )
     assert len(bundle.assessments) == 3
-    assert bundle.plan.start == date(2027, 2, 1)
+    assert bundle.plan.tasks[0].start == date(2027, 2, 1)
     assert "18 on 2027-02-01 to 12 on 2027-02-20" in bundle.text
     assert "reported work-related stressor" in bundle.text
 
@@ -258,60 +227,29 @@ def test_failed_processing_does_not_establish_negative_weekly_or_cohort_conclusi
     incomplete = ClinicalSnapshot(
         snapshot_id=8, patients=[clinical_patient()], failed_documents=["unprocessed.txt"]
     )
-    weekly = answer_question("Did each week meet Casey's therapy goal?", incomplete)
+    weekly = answer_for_operation(
+        "Did each week meet Casey's therapy goal?", incomplete, operation="weekly"
+    )
     assert all(week.decision != "not_met" for week in weekly.metrics[0].weeks)
     assert weekly.coverage_status == "failed_source_processing"
     assert "unprocessed.txt" in weekly.text
-    cohort_bundle = answer_question(
-        "Which patients had two consecutive weeks below their therapy requirements?", incomplete
+    cohort_bundle = answer_for_operation(
+        "Which patients had two consecutive weeks below their therapy requirements?",
+        incomplete,
+        operation="cohort",
     )
     assert cohort_bundle.cohort_results[0].membership == "analysis_incomplete"
 
 
 def test_analysis_budget_exhaustion_is_reported_as_execution_limitation() -> None:
-    bundle = answer_question(
+    bundle = answer_for_operation(
         "How many therapy minutes did Casey receive?",
         ClinicalSnapshot(snapshot_id=8, patients=[clinical_patient()]),
         scenario_budget=1,
+        operation="durations",
     )
     assert bundle.metrics[0].analysis_status == "analysis_incomplete"
     assert "scenario_budget_exceeded" in bundle.text
-
-
-def test_discrete_dates_can_share_a_written_year() -> None:
-    plan = plan_question("Reconstruct Casey's care on February 9 and 11, 2028.", snapshot())
-    assert plan.selected_dates == [date(2028, 2, 9), date(2028, 2, 11)]
-
-
-def test_repeated_month_names_can_share_trailing_year() -> None:
-    plan = plan_question("Reconstruct care on February 9 and February 11, 2028.", snapshot())
-    assert plan.selected_dates == [date(2028, 2, 9), date(2028, 2, 11)]
-
-
-def test_mixed_date_notation_preserves_requested_range_order() -> None:
-    plan = plan_question("Count Casey's sessions from February 3, 2027 to 2027-02-17.", snapshot())
-    assert plan.start == date(2027, 2, 3)
-    assert plan.end == date(2027, 2, 17)
-
-
-def test_reversed_requested_range_is_rejected() -> None:
-    with pytest.raises(QueryPlanningError, match="start follows"):
-        plan_question("Count Casey's sessions from 2027-02-17 to 2027-02-03.", snapshot())
-
-
-def test_first_name_is_resolved_from_documented_full_name() -> None:
-    full_name = ClinicalSnapshot(snapshot_id=8, patients=[patient("Casey Morgan", "P1")])
-    plan = plan_question("How many therapy sessions did Casey attend?", full_name)
-    assert plan.patient == "P1"
-
-
-def test_full_name_disambiguates_shared_first_name() -> None:
-    shared = ClinicalSnapshot(
-        snapshot_id=8, patients=[patient("Casey Morgan", "P1"), patient("Casey Taylor", "P2")]
-    )
-    assert plan_question("Count Casey Taylor's sessions.", shared).patient == "P2"
-    with pytest.raises(QueryPlanningError, match="one named patient"):
-        plan_question("Count Casey's sessions.", shared)
 
 
 def test_plan_comparison_keeps_explicit_window_and_documented_change_boundary() -> None:
@@ -330,9 +268,13 @@ def test_plan_comparison_keeps_explicit_window_and_documented_change_boundary() 
             }
         )
     )
-    bundle = answer_question(
+    bundle = answer_for_operation(
         "Compare Casey's care before and after the plan change from 2027-02-03 to 2027-02-20.",
         ClinicalSnapshot(snapshot_id=8, patients=[record]),
+        operation="plan_change",
+        start=date(2027, 2, 3),
+        end=date(2027, 2, 20),
+        change_date=date(2027, 2, 15),
     )
     comparison = bundle.plan_comparison
     assert comparison is not None
@@ -357,9 +299,10 @@ def test_same_assessment_form_conflicts_render_once_without_selecting_anchor_sco
         }
     )
     record.assessments = reconcile_assessments([original, conflicting_copy])
-    bundle = answer_question(
+    bundle = answer_for_operation(
         "Summarize Casey's documented symptom assessments during the episode.",
         ClinicalSnapshot(snapshot_id=8, patients=[record]),
+        operation="symptoms",
     )
     assert len(bundle.assessments) == 1
     assert "1 distinct symptom assessment" in bundle.text
@@ -373,9 +316,10 @@ def test_same_assessment_form_conflicts_render_once_without_selecting_anchor_sco
 def test_disputed_endpoint_score_does_not_render_single_net_change() -> None:
     record = clinical_patient()
     record.assessments[0].score_alternatives = [18.0, 20.0]
-    bundle = answer_question(
+    bundle = answer_for_operation(
         "Summarize Casey's symptom course during the episode.",
         ClinicalSnapshot(snapshot_id=8, patients=[record]),
+        operation="symptoms",
     )
     assert "A single numerical change is not established" in bundle.text
     assert "numerical change -6" not in bundle.text
@@ -386,9 +330,10 @@ def test_ledger_keeps_coupled_date_and_service_interpretations_together() -> Non
     record.encounters = [record.encounters[0]]
     record.encounters[0].alternatives[1].service_date = date(2027, 2, 10)
     record.encounters[0].alternatives[1].service_type = "group"
-    bundle = answer_question(
+    bundle = answer_for_operation(
         "How many therapy minutes did Casey receive?",
         ClinicalSnapshot(snapshot_id=8, patients=[record]),
+        operation="durations",
     )
     row = bundle.metrics[0].contributions[0]
     assert row.service_dates == [date(2027, 2, 9), date(2027, 2, 10)]
@@ -398,47 +343,20 @@ def test_ledger_keeps_coupled_date_and_service_interpretations_together() -> Non
     assert "alternatives for the same encounter" in bundle.text
 
 
-@pytest.mark.parametrize(
-    "question",
-    [
-        "Did Taylor meet the weekly therapy goal?",
-        "does taylor meet the weekly therapy goal?",
-        "For Taylor, how many therapy minutes were provided?",
-        "Summarize Taylor's symptom course during the episode.",
-        "Count Casey's therapy sessions for Taylor.",
-    ],
-)
-def test_unknown_explicit_patient_reference_never_defaults_to_single_patient(question: str) -> None:
-    with pytest.raises(QueryPlanningError, match="not present"):
-        plan_question(question, snapshot())
-
-
-def test_generic_subject_and_conjunctions_allow_implicit_single_patient() -> None:
-    plan = plan_question(
-        "For each week, did the delivered therapy meet the documented goal? "
-        "Show what conclusions can and cannot be supported.",
-        snapshot(),
-    )
-    assert plan.patient == "P1"
-    assert plan.operation == "weekly"
-
-
-def test_patient_identifier_without_organization_prefix_resolves_source_identity() -> None:
-    identified = ClinicalSnapshot(snapshot_id=8, patients=[patient(identifier="clinic::MRN8")])
-    plan = plan_question("Count MRN8's therapy sessions.", identified)
-    assert plan.patient == "clinic::MRN8"
-
-
 def test_pending_source_processing_prevents_negative_weekly_and_cohort_determinations() -> None:
     pending = ClinicalSnapshot(
         snapshot_id=8, patients=[clinical_patient()], pending_documents=["pending.txt"]
     )
-    weekly = answer_question("Did each week meet Casey's therapy goal?", pending)
+    weekly = answer_for_operation(
+        "Did each week meet Casey's therapy goal?", pending, operation="weekly"
+    )
     assert all(week.decision != "not_met" for week in weekly.metrics[0].weeks)
     assert "pending.txt" in weekly.text
     assert weekly.coverage_status == "failed_source_processing"
-    population = answer_question(
-        "Which patients had two consecutive weeks below their therapy requirements?", pending
+    population = answer_for_operation(
+        "Which patients had two consecutive weeks below their therapy requirements?",
+        pending,
+        operation="cohort",
     )
     assert population.cohort_results[0].membership == "analysis_incomplete"
 
@@ -460,9 +378,10 @@ def dated_conflict_patient() -> PatientRecord:
 
 
 def test_same_form_date_conflict_does_not_create_measurement_or_established_progress() -> None:
-    bundle = answer_question(
+    bundle = answer_for_operation(
         "Summarize Casey's symptom course during the episode.",
         ClinicalSnapshot(snapshot_id=8, patients=[dated_conflict_patient()]),
+        operation="symptoms",
     )
     assert len(bundle.assessments) == 3
     assert "2027-02-01 or 2027-02-22 (disputed)" in bundle.text
@@ -477,12 +396,80 @@ def test_same_form_date_conflict_does_not_create_measurement_or_established_prog
 def test_assessment_scope_includes_noncanonical_date_and_qualifies_membership(
     operation: str,
 ) -> None:
-    bundle = answer_question(
+    bundle = answer_for_operation(
         f"Show Casey's {operation} from 2027-02-20 to 2027-02-22.",
         ClinicalSnapshot(snapshot_id=8, patients=[dated_conflict_patient()]),
+        operation="symptoms" if operation == "symptom assessments" else "timeline",
+        start=date(2027, 2, 20),
+        end=date(2027, 2, 22),
     )
     assert {value.form_id for value in bundle.assessments} == {"F1", "F20"}
     assert "disputed period membership" in bundle.text
     assert "possible; completion date disputed" in bundle.text
     assert any("may fall outside" in message for message in bundle.uncertainty)
     assert "DATED_COPY" in {value.document_id for value in bundle.sources}
+
+
+def test_composite_answer_links_each_patient_operation_to_its_own_results() -> None:
+    first = clinical_patient()
+    second = clinical_patient().model_copy(deep=True)
+    second.patient_id = "P2"
+    second.name = "Alex"
+    second.encounters = []
+    second.observations = []
+    for assessment, score in zip(second.assessments, [8.0, 6.0, 4.0], strict=True):
+        assessment.patient_id = "P2"
+        assessment.score = score
+    view = ClinicalSnapshot(snapshot_id=8, patients=[first, second])
+    question = "Count Casey's sessions and summarize Alex's symptom course."
+    tasks = [
+        QueryTask(
+            operation="counts",
+            patient="P1",
+            patient_ids=["P1"],
+            start=date(2027, 2, 1),
+            end=date(2027, 2, 28),
+            metrics=["sessions"],
+        ),
+        QueryTask(
+            operation="symptoms",
+            patient="P2",
+            patient_ids=["P2"],
+            start=date(2027, 2, 1),
+            end=date(2027, 2, 28),
+        ),
+    ]
+    plan = QueryPlan(question=question, snapshot_id=view.snapshot_id, tasks=tasks)
+    bundle = answer_question(question, view, plan=plan)
+    assert len(bundle.task_answers) == 2
+    count_answer, symptom_answer = bundle.task_answers
+    assert count_answer.task == tasks[0]
+    assert count_answer.metrics[0].patient_id == "P1"
+    assert count_answer.metrics[0].session_count.exact == 3
+    assert not count_answer.assessments
+    assert symptom_answer.task == tasks[1]
+    assert not symptom_answer.metrics
+    assert [assessment.score for assessment in symptom_answer.assessments] == [8, 6, 4]
+    assert all(assessment.patient_id == "P2" for assessment in symptom_answer.assessments)
+    assert len(bundle.metrics) == 1
+    assert len(bundle.assessments) == 3
+
+
+def test_discrete_duration_task_excludes_intervening_therapy() -> None:
+    view = ClinicalSnapshot(snapshot_id=8, patients=[clinical_patient()])
+    question = "Total only the February 9 and February 11 therapy minutes."
+    task = QueryTask(
+        operation="durations",
+        patient="P1",
+        patient_ids=["P1"],
+        start=date(2027, 2, 9),
+        end=date(2027, 2, 11),
+        selected_dates=[date(2027, 2, 9), date(2027, 2, 11)],
+        metrics=["minutes"],
+    )
+    bundle = answer_question(
+        question, view, plan=QueryPlan(question=question, snapshot_id=8, tasks=[task])
+    )
+    assert [result.start for result in bundle.metrics] == [date(2027, 2, 9), date(2027, 2, 11)]
+    assert [result.minutes.values for result in bundle.metrics] == [[40, 50], [30]]
+    assert "E10" not in bundle.text

@@ -68,6 +68,12 @@ CONTACT CLAIMS
   patient contact/presence; otherwise null. Preserve conflicting stated durations in source claims.
   A clock interval is not a stated duration. Do not calculate stated_minutes from clocks, remove
   a break, substitute the scheduled duration, or assume whole-group duration equals patient contact.
+- When stated_minutes is present, stated_minutes_quote must be a short exact passage identifying
+  that patient's duration. Select the patient-present duration, not total therapist time, a
+  partner-only portion, or a scheduled duration. This field quote must contain one applicable
+  duration quantity; do not combine different durations in it. Use null for stated_minutes_quote
+  when stated_minutes is null. The quoted number and unit must support the duration in minutes;
+  hours can be converted to minutes, but clock differences cannot supply a stated duration.
 - note explains counting, correction, copy, participation, and exclusion context. Put symptom and
   function narratives in observations, not only in note.
 - Telehealth disconnection/reconnection segments under one original encounter/appointment are
@@ -106,6 +112,16 @@ PLANS
   appointment template. Do not invent thresholds, partial-week proration, or plan amendments.
   If numerical participation requirements are absent, plans must be []; never substitute zero
   days or zero minutes. The quoted source must explicitly support both numerical thresholds.
+- Every plan must include grounding. Bind minimum_days_quote and minimum_minutes_quote to short
+  exact passages for the applicable weekly goals, each with one quantity for its respective unit.
+  Include the wording establishing the goal's meaning. When a record compares previous and new
+  requirements, extract separate dated plans when documented and select each plan's own goal
+  passages; a paragraph containing both old and new quantities is not a field-specific quote.
+  Do not use authorization limits, observed attendance, or another plan's thresholds as goals.
+- grounding.effective_start_quote identifies the passage establishing when this plan applies,
+  including any necessary date context. grounding.effective_end_quote identifies the documented
+  end when effective_end is present; otherwise use null. Normalize dates using the source's
+  context, not receipt/signature dates. Every grounding quote is exact contiguous source text.
 
 ASSESSMENTS AND OBSERVATIONS
 - Extract every documented scored assessment, including an intake score inside a therapy note.

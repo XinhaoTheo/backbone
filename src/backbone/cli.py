@@ -10,8 +10,9 @@ from pydantic import BaseModel, TypeAdapter
 
 from backbone.benchmarking import ReviewQuestion, benchmark, export_submission
 from backbone.ingestion import ingest
-from backbone.models import ClinicalSnapshot
-from backbone.query import AnswerBundle, QueryPlanningError, answer_question
+from backbone.models import ClinicalSnapshot, ModelUsage, QueryPlan
+from backbone.planning import OpenAIQueryPlanner
+from backbone.query import AnswerBundle, answer_question
 from backbone.storage import Store
 
 __all__ = ["ReviewQuestion", "ReviewAnswer", "main"]
@@ -25,9 +26,10 @@ class ReviewAnswer(BaseModel):
 class QueryExecution(BaseModel):
     snapshot_id: int
     question: str
-    operation: str
+    operations: list[str]
     elapsed_seconds: float
     model_calls: int = 0
+    planning_usage: ModelUsage
 
 
 class Options(argparse.Namespace):
@@ -44,10 +46,20 @@ class Options(argparse.Namespace):
     output: str
     abstraction: str
     repeats: int
+    plans: str | None
+    plan: str | None
+    save_plan: str | None
+    context: str | None
 
 
 def read_questions(path: str) -> list[ReviewQuestion]:
     return TypeAdapter(list[ReviewQuestion]).validate_json(Path(path).read_text(encoding="utf-8"))
+
+
+def read_plans(path: str | None) -> list[QueryPlan] | None:
+    if path is None:
+        return None
+    return TypeAdapter(list[QueryPlan]).validate_json(Path(path).read_bytes())
 
 
 def main() -> None:
@@ -69,12 +81,21 @@ def main() -> None:
         question_parser.add_argument("question" if command == "ask" else "questions")
         question_parser.add_argument("--snapshot", type=int)
         question_parser.add_argument("--scenario-budget", type=int, default=10000)
+        question_parser.add_argument(
+            "--model",
+            default=os.environ.get("OPENAI_QUERY_MODEL", os.environ.get("OPENAI_MODEL", "gpt-4.1")),
+        )
         if command == "ask":
             question_parser.add_argument("--json", action="store_true")
+            question_parser.add_argument("--plan")
+            question_parser.add_argument("--save-plan")
+            question_parser.add_argument("--context")
         elif command == "benchmark":
+            question_parser.add_argument("--plans")
             question_parser.add_argument("--output", default="artifacts/benchmark.json")
             question_parser.add_argument("--repeats", type=int, default=3)
         else:
+            question_parser.add_argument("--plans")
             question_parser.add_argument("--output", default="artifacts")
     commands.add_parser("status")
     commands.add_parser("rebuild")
@@ -83,6 +104,7 @@ def main() -> None:
     replay.add_argument("questions")
     replay.add_argument("--output", default=".backbone/replay")
     replay.add_argument("--scenario-budget", type=int, default=10000)
+    replay.add_argument("--plans", required=True)
     options = parser.parse_args(namespace=Options())
     if options.command == "replay":
         snapshot = ClinicalSnapshot.model_validate_json(Path(options.abstraction).read_bytes())
@@ -92,8 +114,9 @@ def main() -> None:
                 read_questions(options.questions),
                 Path(options.output),
                 options.scenario_budget,
+                plans=read_plans(options.plans),
             )
-        except QueryPlanningError as error:
+        except ValueError as error:
             parser.error(str(error))
         print(result.model_dump_json(indent=2))
         return
@@ -117,13 +140,38 @@ def main() -> None:
         try:
             if options.command == "ask":
                 started = perf_counter()
-                answer = answer_question(options.question, snapshot, options.scenario_budget)
+                saved = (
+                    QueryPlan.model_validate_json(Path(options.plan).read_bytes())
+                    if options.plan
+                    else None
+                )
+                context = (
+                    QueryPlan.model_validate_json(Path(options.context).read_bytes())
+                    if options.context
+                    else None
+                )
+                answer = answer_question(
+                    options.question,
+                    snapshot,
+                    options.scenario_budget,
+                    plan=saved,
+                    planner=OpenAIQueryPlanner(options.model) if saved is None else None,
+                    context=context,
+                )
+                if options.save_plan:
+                    target = Path(options.save_plan)
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_text(
+                        answer.plan.model_dump_json(indent=2) + "\n", encoding="utf-8"
+                    )
                 store.record_run(
                     "query",
                     QueryExecution(
                         snapshot_id=snapshot.snapshot_id,
                         question=options.question,
-                        operation=answer.plan.operation,
+                        operations=[task.operation for task in answer.plan.tasks],
+                        model_calls=0 if saved is not None else answer.plan.planner_model_calls,
+                        planning_usage=answer.plan.planner_usage if saved is None else ModelUsage(),
                         elapsed_seconds=perf_counter() - started,
                     ).model_dump_json(),
                 )
@@ -135,6 +183,8 @@ def main() -> None:
                     options.repeats,
                     document_count=store.document_count(),
                     scenario_budget=options.scenario_budget,
+                    plans=read_plans(options.plans),
+                    planner=OpenAIQueryPlanner(options.model) if options.plans is None else None,
                 )
                 output = Path(options.output)
                 output.parent.mkdir(parents=True, exist_ok=True)
@@ -146,7 +196,12 @@ def main() -> None:
             else:
                 output = Path(options.output)
                 result = export_submission(
-                    snapshot, read_questions(options.questions), output, options.scenario_budget
+                    snapshot,
+                    read_questions(options.questions),
+                    output,
+                    options.scenario_budget,
+                    plans=read_plans(options.plans),
+                    planner=OpenAIQueryPlanner(options.model) if options.plans is None else None,
                 )
                 if options.command == "export":
                     (output / "extractions.jsonl").write_text(
@@ -163,7 +218,7 @@ def main() -> None:
                         encoding="utf-8",
                     )
                 print(f"Saved {result.answer_count} answers to {output}.")
-        except QueryPlanningError as error:
+        except ValueError as error:
             parser.error(str(error))
     elif options.command == "rebuild":
         from backbone.workflow import rebuild_saved

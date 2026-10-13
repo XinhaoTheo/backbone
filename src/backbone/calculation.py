@@ -616,22 +616,35 @@ def calculate(
     )
 
 
-def consecutive_pair(
-    weeks: list[WeekWitness], possible: bool = False
+def consecutive_window(
+    weeks: list[WeekWitness], count: int, possible: bool = False
 ) -> list[WeekWitness]:
-    for left, right in zip(weeks, weeks[1:]):
-        if right.week_start - left.week_start != timedelta(days=7):
+    if count < 1:
+        raise ValueError("Consecutive week count must be positive.")
+    for index in range(len(weeks) - count + 1):
+        window = weeks[index:index + count]
+        if any(right.week_start - left.week_start != timedelta(days=7)
+               for left, right in zip(window, window[1:])):
             continue
-        decisions = (left.decision, right.decision)
+        decisions = [week.decision for week in window]
         if (all(decision != "met" for decision in decisions) if possible
                 else all(decision == "not_met" for decision in decisions)):
-            return [left, right]
+            return window
     return []
 
 
+def consecutive_pair(
+    weeks: list[WeekWitness], possible: bool = False
+) -> list[WeekWitness]:
+    return consecutive_window(weeks, 2, possible)
+
+
 def cohort(
-    patients: list[PatientRecord], start: date, end: date, scenario_budget: int = 10_000
+    patients: list[PatientRecord], start: date, end: date, scenario_budget: int = 10_000,
+    consecutive_weeks: int = 2,
 ) -> list[CohortResult]:
+    if consecutive_weeks < 1:
+        raise ValueError("Consecutive week count must be positive.")
     results: list[CohortResult] = []
     for patient in patients:
         candidates, scenarios = prepare(patient, start, end, scenario_budget)
@@ -652,26 +665,35 @@ def cohort(
                     decision=weekly_decision(entries, week.goal, week.complete_episode_coverage),
                     encounter_ids=[entry.encounter.encounter_id for entry in entries],
                 ))
-            pair = consecutive_pair(witnesses)
-            if pair:
-                definite.append((scenario, pair))
-            elif consecutive_pair(witnesses, possible=True):
+            window = consecutive_window(witnesses, consecutive_weeks)
+            if window:
+                definite.append((scenario, window))
+            elif consecutive_window(witnesses, consecutive_weeks, possible=True):
                 unresolved = True
         membership: Literal["confirmed", "possible", "excluded", "analysis_incomplete"]
         if not scenarios.complete:
             membership, reason = "analysis_incomplete", scenarios.reason
         elif definite and len(definite) == len(scenarios.scenarios):
             membership = "confirmed"
-            reason = "Every consistent interpretation has two below-goal weeks."
+            reason = (
+                f"Every consistent interpretation has {consecutive_weeks} "
+                "consecutive below-goal weeks."
+            )
         elif definite:
             membership = "possible"
-            reason = "A consistent source interpretation establishes a pair."
+            reason = (
+                f"A consistent source interpretation establishes {consecutive_weeks} "
+                "consecutive below-goal weeks."
+            )
         elif unresolved:
             membership = "analysis_incomplete"
             reason = "missing_evidence_or_unspecified_plan_policy"
         else:
             membership = "excluded"
-            reason = "No consistent interpretation has two below-goal weeks."
+            reason = (
+                f"No consistent interpretation has {consecutive_weeks} "
+                "consecutive below-goal weeks."
+            )
         scenario, witness = definite[0] if definite else (Scenario([], {}), [])
         results.append(CohortResult(
             patient_id=patient.patient_id, membership=membership, reason=reason,

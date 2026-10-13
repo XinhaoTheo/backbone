@@ -9,8 +9,8 @@
   "snapshot_id": 2,
   "document_count": 31,
   "patient_count": 1,
-  "saved_abstraction_bytes": 361096,
-  "compact_abstraction_bytes": 246745,
+  "saved_abstraction_bytes": 361125,
+  "compact_abstraction_bytes": 246762,
   "database_bytes": 860160,
   "initial_processing_seconds": 28.774163082242012,
   "snapshot_load_seconds": [
@@ -60,5 +60,6 @@
     "Initial processing is the sum of separately timed extraction and cached publication stages, not a single end-to-end invocation.",
     "Query benchmarks cover one patient and 31 source documents; they do not measure capacity at 500K or one million documents.",
     "Snapshot loading currently decodes published patient JSON and cached source records; query-only latency excludes it."
-  ]
+  ],
+  "size_measurement_context": "Current export after query-plan migration; initial processing times and token usage describe the earlier extraction run."
 }

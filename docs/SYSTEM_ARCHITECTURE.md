@@ -71,7 +71,9 @@ before calculation. The calculation module returns results with contributions,
 exclusions, applicable rules, and unresolved dependencies. The answer service
 uses that result and relevant observations to produce English output with sources.
 
-A new question reuses saved claims and reconciled data. Targeted passage checks
+A new question makes one planning call and reuses saved claims and reconciled data.
+Saved query plans reproduce execution without model calls. Planning metadata and
+execution latency are measured separately. Targeted passage checks
 or narrowly scoped enrichment can address information absent from the current
 abstraction without rebuilding the collection.
 
@@ -167,10 +169,10 @@ when decisions differ or evidence is insufficient. An exact duration can remain
 unresolved while the goal decision is established.
 
 For collection questions, preserve correlations across weeks. The condition
-"has two consecutive weeks below requirements" must be evaluated within each
+"has N consecutive weeks below requirements" must be evaluated within each
 consistent interpretation. Established membership means every interpretation
-contains some adjacent failing pair; the pair need not be identical across all
-interpretations. Independent weekly labels can lose that information.
+contains some consecutive failing window; the window need not be identical across
+all interpretations. Independent weekly labels can lose that information.
 
 Analyze uncertainty in connected dependency groups and use sound bounds when
 they prove the outcome. Avoid enumerating unrelated alternatives together. If
@@ -191,8 +193,10 @@ grouping, service filters, applicable plan rules, and comparison windows. The
 prototype needs a small set of composable operations for counts, durations, plan
 evaluation, timelines, symptom observations, and cohort conditions.
 
-Natural-language interpretation may use a model, but the resulting plan must be
-validated. Execution invokes known calculation operations; generated language
+Natural-language interpretation uses one structured model call. `planning.py`
+resolves typed patient/time intents into a multi-task `QueryPlan`; code validates
+patient IDs, date bounds, documented anchors, and supported operations. A saved
+plan pins the question and snapshot and runs without another model call. Execution invokes known calculation operations; generated language
 does not perform the arithmetic or determine which evidence wins.
 
 For symptom questions, retrieve distinct assessments and attributed observations

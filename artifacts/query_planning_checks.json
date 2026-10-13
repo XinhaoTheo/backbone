@@ -1,0 +1,522 @@
+{
+  "checked_date": "2026-10-13",
+  "data_kind": "Fully synthetic patients, plans, and source records; no supplied clinical records sent.",
+  "initial_planning_passed": 9,
+  "initial_planning_total": 10,
+  "initial_planning": [
+    {
+      "label": "whole_month",
+      "passed": true,
+      "plan": {
+        "question": "How much therapy time did Casey Example receive in February 2027?",
+        "snapshot_id": 100,
+        "tasks": [
+          {
+            "operation": "durations",
+            "patient": "SYNTHETIC-P1",
+            "patient_ids": [
+              "SYNTHETIC-P1"
+            ],
+            "start": "2027-02-01",
+            "end": "2027-02-28",
+            "change_date": null,
+            "selected_dates": [],
+            "metrics": [
+              "minutes"
+            ],
+            "consecutive_weeks": 1
+          }
+        ],
+        "planner_model": "gpt-4.1-mini-2025-04-14",
+        "planner_usage": {
+          "input_tokens": 1597,
+          "output_tokens": 117,
+          "cost_usd": null
+        },
+        "planner_elapsed_seconds": 2.950229708570987,
+        "planner_model_calls": 1
+      },
+      "error": null,
+      "usage": {
+        "input_tokens": 1597,
+        "output_tokens": 117,
+        "cost_usd": null
+      },
+      "model_calls": 1
+    },
+    {
+      "label": "relative_weeks",
+      "passed": true,
+      "plan": {
+        "question": "Count the sessions Casey Example received during the first two weeks of the treatment episode.",
+        "snapshot_id": 100,
+        "tasks": [
+          {
+            "operation": "counts",
+            "patient": "SYNTHETIC-P1",
+            "patient_ids": [
+              "SYNTHETIC-P1"
+            ],
+            "start": "2027-02-01",
+            "end": "2027-02-14",
+            "change_date": null,
+            "selected_dates": [],
+            "metrics": [
+              "sessions"
+            ],
+            "consecutive_weeks": 1
+          }
+        ],
+        "planner_model": "gpt-4.1-mini-2025-04-14",
+        "planner_usage": {
+          "input_tokens": 1599,
+          "output_tokens": 114,
+          "cost_usd": null
+        },
+        "planner_elapsed_seconds": 2.4011931670829654,
+        "planner_model_calls": 1
+      },
+      "error": null,
+      "usage": {
+        "input_tokens": 1599,
+        "output_tokens": 114,
+        "cost_usd": null
+      },
+      "model_calls": 1
+    },
+    {
+      "label": "since_change",
+      "passed": true,
+      "plan": {
+        "question": "How much therapy time did Casey Example receive since the plan changed?",
+        "snapshot_id": 100,
+        "tasks": [
+          {
+            "operation": "durations",
+            "patient": "SYNTHETIC-P1",
+            "patient_ids": [
+              "SYNTHETIC-P1"
+            ],
+            "start": "2027-02-15",
+            "end": "2027-02-28",
+            "change_date": null,
+            "selected_dates": [],
+            "metrics": [
+              "minutes"
+            ],
+            "consecutive_weeks": 1
+          }
+        ],
+        "planner_model": "gpt-4.1-mini-2025-04-14",
+        "planner_usage": {
+          "input_tokens": 1596,
+          "output_tokens": 117,
+          "cost_usd": null
+        },
+        "planner_elapsed_seconds": 3.1296540829353034,
+        "planner_model_calls": 1
+      },
+      "error": null,
+      "usage": {
+        "input_tokens": 1596,
+        "output_tokens": 117,
+        "cost_usd": null
+      },
+      "model_calls": 1
+    },
+    {
+      "label": "three_weeks",
+      "passed": true,
+      "plan": {
+        "question": "Which patients missed their treatment targets for three consecutive weeks?",
+        "snapshot_id": 100,
+        "tasks": [
+          {
+            "operation": "cohort",
+            "patient": null,
+            "patient_ids": [
+              "SYNTHETIC-P1",
+              "SYNTHETIC-P2"
+            ],
+            "start": "2027-02-01",
+            "end": "2027-02-28",
+            "change_date": null,
+            "selected_dates": [],
+            "metrics": [
+              "sessions"
+            ],
+            "consecutive_weeks": 3
+          }
+        ],
+        "planner_model": "gpt-4.1-mini-2025-04-14",
+        "planner_usage": {
+          "input_tokens": 1594,
+          "output_tokens": 98,
+          "cost_usd": null
+        },
+        "planner_elapsed_seconds": 1.5393934161402285,
+        "planner_model_calls": 1
+      },
+      "error": null,
+      "usage": {
+        "input_tokens": 1594,
+        "output_tokens": 98,
+        "cost_usd": null
+      },
+      "model_calls": 1
+    },
+    {
+      "label": "multiple_patients",
+      "passed": true,
+      "plan": {
+        "question": "Count therapy sessions for both Casey Example and Morgan Example.",
+        "snapshot_id": 100,
+        "tasks": [
+          {
+            "operation": "counts",
+            "patient": "SYNTHETIC-P1",
+            "patient_ids": [
+              "SYNTHETIC-P1"
+            ],
+            "start": "2027-02-01",
+            "end": "2027-02-28",
+            "change_date": null,
+            "selected_dates": [],
+            "metrics": [
+              "sessions"
+            ],
+            "consecutive_weeks": 1
+          },
+          {
+            "operation": "counts",
+            "patient": "SYNTHETIC-P2",
+            "patient_ids": [
+              "SYNTHETIC-P2"
+            ],
+            "start": "2027-02-01",
+            "end": "2027-02-28",
+            "change_date": null,
+            "selected_dates": [],
+            "metrics": [
+              "sessions"
+            ],
+            "consecutive_weeks": 1
+          }
+        ],
+        "planner_model": "gpt-4.1-mini-2025-04-14",
+        "planner_usage": {
+          "input_tokens": 1594,
+          "output_tokens": 116,
+          "cost_usd": null
+        },
+        "planner_elapsed_seconds": 1.698768291156739,
+        "planner_model_calls": 1
+      },
+      "error": null,
+      "usage": {
+        "input_tokens": 1594,
+        "output_tokens": 116,
+        "cost_usd": null
+      },
+      "model_calls": 1
+    },
+    {
+      "label": "compound",
+      "passed": true,
+      "plan": {
+        "question": "Count Casey Example's therapy sessions and summarize the documented symptom course during the episode.",
+        "snapshot_id": 100,
+        "tasks": [
+          {
+            "operation": "counts",
+            "patient": "SYNTHETIC-P1",
+            "patient_ids": [
+              "SYNTHETIC-P1"
+            ],
+            "start": "2027-02-01",
+            "end": "2027-02-28",
+            "change_date": null,
+            "selected_dates": [],
+            "metrics": [
+              "sessions"
+            ],
+            "consecutive_weeks": 2
+          },
+          {
+            "operation": "symptoms",
+            "patient": "SYNTHETIC-P1",
+            "patient_ids": [
+              "SYNTHETIC-P1"
+            ],
+            "start": "2027-02-01",
+            "end": "2027-02-28",
+            "change_date": null,
+            "selected_dates": [],
+            "metrics": [],
+            "consecutive_weeks": 2
+          }
+        ],
+        "planner_model": "gpt-4.1-mini-2025-04-14",
+        "planner_usage": {
+          "input_tokens": 1599,
+          "output_tokens": 197,
+          "cost_usd": null
+        },
+        "planner_elapsed_seconds": 2.1462317910045385,
+        "planner_model_calls": 1
+      },
+      "error": null,
+      "usage": {
+        "input_tokens": 1599,
+        "output_tokens": 197,
+        "cost_usd": null
+      },
+      "model_calls": 1
+    },
+    {
+      "label": "unknown_patient",
+      "passed": true,
+      "plan": null,
+      "error": "clarification_required: Patient name 'Taylor Unknown' not found in the catalog. Please provide a valid patient name from the catalog or specify the correct patient.",
+      "usage": {
+        "input_tokens": 1591,
+        "output_tokens": 41,
+        "cost_usd": null
+      },
+      "model_calls": 1
+    },
+    {
+      "label": "missing_context",
+      "passed": true,
+      "plan": null,
+      "error": "clarification_required: Please specify which patient you mean by 'that patient.' The available patients are Casey Example and Morgan Example.",
+      "usage": {
+        "input_tokens": 1592,
+        "output_tokens": 35,
+        "cost_usd": null
+      },
+      "model_calls": 1
+    },
+    {
+      "label": "unavailable_anchor",
+      "passed": true,
+      "plan": null,
+      "error": "clarification_required: The intake date (first encounter) for Casey Example is not available in the catalog. Please provide the intake date or specify an alternative time anchor for the calendar week to analyze.",
+      "usage": {
+        "input_tokens": 1595,
+        "output_tokens": 48,
+        "cost_usd": null
+      },
+      "model_calls": 1
+    },
+    {
+      "label": "unsupported_average",
+      "passed": false,
+      "plan": null,
+      "error": "clarification_required: Do you want the average session duration for Casey Example during the entire episode in February 2027, or for a different specific time period?",
+      "usage": {
+        "input_tokens": 1593,
+        "output_tokens": 42,
+        "cost_usd": null
+      },
+      "model_calls": 1
+    }
+  ],
+  "capability_priority_retry": [
+    {
+      "label": "unsupported_average",
+      "passed": true,
+      "plan": null,
+      "error": "unsupported: Average session duration is not a supported metric. Supported metrics include sessions, distinct_days, minutes, and service_mix.",
+      "usage": {
+        "input_tokens": 1702,
+        "output_tokens": 35,
+        "cost_usd": null
+      },
+      "model_calls": 1
+    }
+  ],
+  "extraction_checks": [
+    {
+      "label": "synthetic_plan",
+      "passed": true,
+      "result": {
+        "evidence": {
+          "patients": [
+            {
+              "patient_id": "SYNTHETIC-P1",
+              "name": "Casey Example",
+              "organization": "Synthetic Test Clinic",
+              "episode_start": "2032-03-01",
+              "episode_end": "2032-03-31"
+            }
+          ],
+          "contacts": [],
+          "plans": [
+            {
+              "quotes": [
+                "New signed treatment plan: effective 2032-03-01 through 2032-03-31.",
+                "New goal: at least 3 therapy days and at least 150 minutes of patient-present therapy per Monday-Sunday week.",
+                "Individual, group and family psychotherapy qualify. The patient must be present. Medication, collateral and coordination do not qualify."
+              ],
+              "sources": [
+                {
+                  "content_hash": "89e8538f83a2646ef753ee49e99bce32c3154031cdf7430c889d1b354c0b01f9",
+                  "document_id": "synthetic_plan",
+                  "filename": "synthetic_plan.txt",
+                  "start_line": 7,
+                  "end_line": 7,
+                  "quote": "New signed treatment plan: effective 2032-03-01 through 2032-03-31."
+                },
+                {
+                  "content_hash": "89e8538f83a2646ef753ee49e99bce32c3154031cdf7430c889d1b354c0b01f9",
+                  "document_id": "synthetic_plan",
+                  "filename": "synthetic_plan.txt",
+                  "start_line": 8,
+                  "end_line": 8,
+                  "quote": "New goal: at least 3 therapy days and at least 150 minutes of patient-present therapy per Monday-Sunday week."
+                },
+                {
+                  "content_hash": "89e8538f83a2646ef753ee49e99bce32c3154031cdf7430c889d1b354c0b01f9",
+                  "document_id": "synthetic_plan",
+                  "filename": "synthetic_plan.txt",
+                  "start_line": 9,
+                  "end_line": 9,
+                  "quote": "Individual, group and family psychotherapy qualify. The patient must be present. Medication, collateral and coordination do not qualify."
+                }
+              ],
+              "patient_id": "SYNTHETIC-P1",
+              "effective_start": "2032-03-01",
+              "effective_end": "2032-03-31",
+              "minimum_days": 3,
+              "minimum_minutes": 150,
+              "eligible_services": [
+                "individual",
+                "group",
+                "family"
+              ],
+              "week_start": "Monday",
+              "patient_present_required": true,
+              "note": "Medication, collateral and coordination do not qualify.",
+              "grounding": {
+                "minimum_days_quote": "New goal: at least 3 therapy days and at least 150 minutes of patient-present therapy per Monday-Sunday week.",
+                "minimum_minutes_quote": "New goal: at least 3 therapy days and at least 150 minutes of patient-present therapy per Monday-Sunday week.",
+                "effective_start_quote": "New signed treatment plan: effective 2032-03-01 through 2032-03-31.",
+                "effective_end_quote": "New signed treatment plan: effective 2032-03-01 through 2032-03-31."
+              }
+            }
+          ],
+          "assessments": [],
+          "observations": []
+        },
+        "model": "gpt-4.1-mini-2025-04-14",
+        "usage": {
+          "input_tokens": 4033,
+          "output_tokens": 325,
+          "cost_usd": null
+        },
+        "elapsed_seconds": 3.409934916999191
+      },
+      "error": null,
+      "usage": {
+        "input_tokens": 4033,
+        "output_tokens": 325,
+        "cost_usd": null
+      }
+    },
+    {
+      "label": "synthetic_duration",
+      "passed": true,
+      "result": {
+        "evidence": {
+          "patients": [
+            {
+              "patient_id": "SYNTHETIC-P1",
+              "name": "Casey Example",
+              "organization": "Synthetic Test Clinic",
+              "episode_start": null,
+              "episode_end": null
+            }
+          ],
+          "contacts": [
+            {
+              "quotes": [
+                "Full therapist time: 09:00-10:30, 90 minutes.",
+                "The partner attended alone from 09:00 to 10:00. The patient joined at 10:00 and participated until 10:30.",
+                "Actual patient-present family therapy: 10:00-10:30, 30 minutes."
+              ],
+              "sources": [
+                {
+                  "content_hash": "891bcec25ae9e2514f42ae1b340bf3328921066602f409fe30686a388f890d99",
+                  "document_id": "synthetic_duration",
+                  "filename": "synthetic_duration.txt",
+                  "start_line": 5,
+                  "end_line": 5,
+                  "quote": "Full therapist time: 09:00-10:30, 90 minutes."
+                },
+                {
+                  "content_hash": "891bcec25ae9e2514f42ae1b340bf3328921066602f409fe30686a388f890d99",
+                  "document_id": "synthetic_duration",
+                  "filename": "synthetic_duration.txt",
+                  "start_line": 6,
+                  "end_line": 6,
+                  "quote": "The partner attended alone from 09:00 to 10:00. The patient joined at 10:00 and participated until 10:30."
+                },
+                {
+                  "content_hash": "891bcec25ae9e2514f42ae1b340bf3328921066602f409fe30686a388f890d99",
+                  "document_id": "synthetic_duration",
+                  "filename": "synthetic_duration.txt",
+                  "start_line": 7,
+                  "end_line": 7,
+                  "quote": "Actual patient-present family therapy: 10:00-10:30, 30 minutes."
+                }
+              ],
+              "patient_id": "SYNTHETIC-P1",
+              "service_date": "2032-03-02",
+              "encounter_id": "SYNTHETIC-E1",
+              "appointment_id": null,
+              "service_type": "family",
+              "attendance": "attended",
+              "patient_present": true,
+              "intervals": [
+                {
+                  "start": "10:00",
+                  "end": "10:30"
+                }
+              ],
+              "interval_kind": "patient_contact",
+              "breaks": [],
+              "stated_minutes": 30,
+              "stated_minutes_quote": "Actual patient-present family therapy: 10:00-10:30, 30 minutes.",
+              "record_status": "final",
+              "correction_fields": [],
+              "is_copy": false,
+              "note": "Therapist time 09:00-10:30 includes partner-only attendance 09:00-10:00; patient present only 10:00-10:30."
+            }
+          ],
+          "plans": [],
+          "assessments": [],
+          "observations": []
+        },
+        "model": "gpt-4.1-mini-2025-04-14",
+        "usage": {
+          "input_tokens": 3992,
+          "output_tokens": 290,
+          "cost_usd": null
+        },
+        "elapsed_seconds": 3.0913716251961887
+      },
+      "error": null,
+      "usage": {
+        "input_tokens": 3992,
+        "output_tokens": 290,
+        "cost_usd": null
+      }
+    }
+  ],
+  "limitations": [
+    "Small functional checks, not an intent-accuracy estimate on unseen data.",
+    "Initial planning used provider-default sampling. The unsupported-average failure led to an explicit capability-priority instruction and one targeted retry.",
+    "Token usage is measured; prices and actual billing were not captured."
+  ]
+}

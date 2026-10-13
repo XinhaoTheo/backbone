@@ -1,6 +1,14 @@
 from datetime import date
 
-from backbone.calculation import calculate, cohort, compare_plans
+import pytest
+
+from backbone.calculation import (
+    WeekWitness,
+    calculate,
+    cohort,
+    compare_plans,
+    consecutive_window,
+)
 from backbone.models import (
     Attendance,
     ContactAlternative,
@@ -142,6 +150,91 @@ def test_unknown_duration_does_not_invent_cohort_witness() -> None:
     assert result.membership == "analysis_incomplete"
     assert result.reason == "missing_evidence_or_unspecified_plan_policy"
     assert result.witness == []
+
+
+def test_one_week_cohort_uses_requested_count() -> None:
+    confirmed = patient([encounter("one", START, [50])], identifier="confirmed")
+    possible = patient([encounter("one", START, [50, 150])], identifier="possible")
+    excluded = patient([encounter("one", START, [150])], identifier="excluded")
+    results = cohort(
+        [confirmed, possible, excluded], START, date(2026, 1, 11), consecutive_weeks=1,
+    )
+    assert [result.membership for result in results] == ["confirmed", "possible", "excluded"]
+    assert [len(result.witness) for result in results] == [1, 1, 0]
+    assert results[0].witness[0].minutes == 50
+
+
+def test_three_week_cohort_retains_complete_witness() -> None:
+    third_week = date(2026, 1, 19)
+    end = date(2026, 1, 25)
+    confirmed = patient([
+        encounter("one", START, [50]),
+        encounter("two", date(2026, 1, 12), [50]),
+        encounter("three", third_week, [50]),
+    ], episode_end=end, identifier="confirmed")
+    possible = patient([
+        encounter("one", START, [50, 150]),
+        encounter("two", date(2026, 1, 12), [50]),
+        encounter("three", third_week, [50]),
+    ], episode_end=end, identifier="possible")
+    results = cohort([confirmed, possible], START, end, consecutive_weeks=3)
+    assert [result.membership for result in results] == ["confirmed", "possible"]
+    for result in results:
+        assert len(result.witness) == 3
+        assert [week.minutes for week in result.witness] == [50, 50, 50]
+        assert [week.encounter_ids for week in result.witness] == [["one"], ["two"], ["three"]]
+        assert all(week.decision == "not_met" for week in result.witness)
+
+
+def test_three_week_cohort_does_not_stitch_disagreeing_scenarios() -> None:
+    end = date(2026, 1, 25)
+    record = patient([
+        encounter("one", START, [50, 150], choices=[{"revision": "A"}, {"revision": "B"}]),
+        encounter("two", date(2026, 1, 12), [50]),
+        encounter("three", date(2026, 1, 19), [150, 50],
+                  choices=[{"revision": "A"}, {"revision": "B"}]),
+    ], episode_end=end)
+    assert cohort([record], START, end)[0].membership == "confirmed"
+    result = cohort([record], START, end, consecutive_weeks=3)[0]
+    assert result.membership == "excluded"
+    assert result.witness == []
+
+
+def test_three_week_missing_duration_remains_unresolved() -> None:
+    end = date(2026, 1, 25)
+    record = patient([
+        encounter("one", START, [50]),
+        encounter("two", date(2026, 1, 12), [None]),
+        encounter("three", date(2026, 1, 19), [50]),
+    ], episode_end=end)
+    result = cohort([record], START, end, consecutive_weeks=3)[0]
+    assert result.membership == "analysis_incomplete"
+    assert result.reason == "missing_evidence_or_unspecified_plan_policy"
+    assert result.witness == []
+
+
+def test_requested_week_count_longer_than_episode_is_excluded() -> None:
+    record = patient([
+        encounter("one", START, [50]), encounter("two", date(2026, 1, 12), [50]),
+    ])
+    assert cohort([record], START, END, consecutive_weeks=3)[0].membership == "excluded"
+
+
+@pytest.mark.parametrize("count", [0, -1])
+def test_consecutive_week_count_must_be_positive(count: int) -> None:
+    with pytest.raises(ValueError, match="Consecutive week count must be positive"):
+        cohort([], START, END, consecutive_weeks=count)
+    with pytest.raises(ValueError, match="Consecutive week count must be positive"):
+        consecutive_window([], count)
+
+
+def test_consecutive_window_rejects_calendar_gaps() -> None:
+    weeks = [WeekWitness(
+        week_start=day, distinct_days=1, minutes=50, known_minutes=50,
+        decision="not_met", encounter_ids=[],
+    ) for day in [START, date(2026, 1, 12), date(2026, 1, 26)]]
+    assert consecutive_window(weeks, 3) == []
+    assert len(consecutive_window(weeks, 2)) == 2
 
 
 def test_unknown_attendance_exposes_uncertain_counts() -> None:

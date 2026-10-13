@@ -6,7 +6,7 @@ from pydantic import BaseModel, TypeAdapter
 from backbone.calculation import calculate
 from backbone.extraction import evidence_claims
 from backbone.ingestion import read_document
-from backbone.models import ClinicalSnapshot, ExtractionResult
+from backbone.models import ClinicalSnapshot, ExtractionResult, QueryOperation, QueryPlan, QueryTask
 from backbone.query import answer_question
 from backbone.reconciliation import reconcile
 
@@ -42,6 +42,26 @@ def development_questions() -> list[DevelopmentQuestion]:
     return adapter.validate_json((PROJECT_ROOT / "questions.json").read_text(encoding="utf-8"))
 
 
+def development_plan(question: DevelopmentQuestion, snapshot: ClinicalSnapshot) -> QueryPlan:
+    operations: dict[str, QueryOperation] = {
+        "DEV-01": "counts",
+        "DEV-02": "durations",
+        "DEV-03": "weekly",
+        "DEV-04": "day",
+        "DEV-05": "symptoms",
+    }
+    dates = [date(2026, 1, 19), date(2026, 1, 21)] if question.id == "DEV-04" else []
+    task = QueryTask(
+        operation=operations[question.id],
+        patient=snapshot.patients[0].patient_id,
+        patient_ids=[snapshot.patients[0].patient_id],
+        start=min(dates) if dates else REVIEW_START,
+        end=max(dates) if dates else REVIEW_END,
+        selected_dates=dates,
+    )
+    return QueryPlan(question=question.question, snapshot_id=snapshot.snapshot_id, tasks=[task])
+
+
 def test_reference_evidence_has_verbatim_source_locations() -> None:
     for result in reference_results():
         assert result.evidence.patients
@@ -61,7 +81,12 @@ def test_reference_pipeline_answers_all_development_questions() -> None:
     assert len(snapshot.patients) == 1
     questions = development_questions()
     assert len(questions) == 5
-    answers = {question.id: answer_question(question.question, snapshot) for question in questions}
+    answers = {
+        question.id: answer_question(
+            question.question, snapshot, plan=development_plan(question, snapshot)
+        )
+        for question in questions
+    }
     for answer in answers.values():
         assert answer.snapshot_id == snapshot.snapshot_id
         assert answer.coverage_status == "available_records"
@@ -131,7 +156,8 @@ def test_exported_abstraction_preserves_records_without_delivered_contacts() -> 
     )
     records = {record.source.document_id: record for record in snapshot.non_contact_records}
     assert {"BH-D001", "BH-D013", "BH-D014"}.issubset(records)
-    answer = answer_question(development_questions()[0].question, snapshot)
+    question = development_questions()[0]
+    answer = answer_question(question.question, snapshot, plan=development_plan(question, snapshot))
     assert all(identifier in answer.text for identifier in ("BH-D001", "BH-D013", "BH-D014"))
     assert answer.metrics[0].session_count.exact == 12
     for record in records.values():

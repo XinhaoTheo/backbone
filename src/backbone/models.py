@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import date
 from typing import Literal
 
-from pydantic import BaseModel, Field, JsonValue
+from pydantic import BaseModel, ConfigDict, Field, JsonValue
 from pydantic.json_schema import SkipJsonSchema
 
 ServiceType = Literal[
@@ -67,6 +67,7 @@ class ContactClaim(Evidence):
     stated_minutes: int | None = Field(
         description="Only explicitly written patient duration; null for computed clock differences"
     )
+    stated_minutes_quote: str | None = None
     record_status: RecordStatus
     correction_fields: list[Literal["arrival", "departure", "attendance", "duration", "intervals"]]
     is_copy: bool
@@ -74,6 +75,13 @@ class ContactClaim(Evidence):
         description="Counting, provenance, correction, and exclusion context; "
         "clinical symptom narrative belongs in observations"
     )
+
+
+class PlanGrounding(BaseModel):
+    minimum_days_quote: str
+    minimum_minutes_quote: str
+    effective_start_quote: str
+    effective_end_quote: str | None
 
 
 class PlanClaim(Evidence):
@@ -86,6 +94,7 @@ class PlanClaim(Evidence):
     week_start: Literal["Monday"]
     patient_present_required: bool
     note: str
+    grounding: PlanGrounding | None = None
 
 
 class AssessmentClaim(Evidence):
@@ -215,12 +224,33 @@ class IngestionReport(BaseModel):
     document_hashes: list[str]
 
 
-class QueryPlan(BaseModel):
-    operation: Literal[
-        "counts", "durations", "weekly", "day", "timeline", "symptoms", "cohort", "plan_change"
-    ]
+QueryOperation = Literal[
+    "counts", "durations", "weekly", "day", "timeline", "symptoms", "cohort", "plan_change"
+]
+QueryMetric = Literal["sessions", "distinct_days", "minutes", "service_mix"]
+
+
+class QueryTask(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    operation: QueryOperation
     patient: str | None
-    start: date | None
-    end: date | None
+    patient_ids: list[str] = Field(default_factory=list)
+    start: date
+    end: date
     change_date: date | None = None
     selected_dates: list[date] = Field(default_factory=list)
+    metrics: list[QueryMetric] = Field(default_factory=list)
+    consecutive_weeks: int = Field(default=2, ge=1)
+
+
+class QueryPlan(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    question: str
+    snapshot_id: int
+    tasks: list[QueryTask] = Field(min_length=1)
+    planner_model: str | None = None
+    planner_usage: ModelUsage = Field(default_factory=ModelUsage)
+    planner_elapsed_seconds: float = 0.0
+    planner_model_calls: int = 0

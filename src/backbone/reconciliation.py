@@ -321,7 +321,7 @@ def reconcile_encounter(identifier: str, claims: list[ContactClaim]) -> Encounte
 def reconcile_plans(plans: list[PlanClaim]) -> list[PlanClaim]:
     grouped: dict[str, PlanClaim] = {}
     for plan in plans:
-        key = plan.model_dump_json(exclude={"quotes", "sources", "note"})
+        key = plan.model_dump_json(exclude={"quotes", "sources", "note", "grounding"})
         if key in grouped:
             grouped[key].sources = merge_sources([grouped[key].sources, plan.sources])
             grouped[key].quotes = sorted(set([*grouped[key].quotes, *plan.quotes]))

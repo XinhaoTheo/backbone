@@ -25,7 +25,7 @@ from backbone.models import (
     TimeInterval,
 )
 
-EXTRACTION_VERSION: str = "1"
+EXTRACTION_VERSION: str = "2"
 NUMBER_VALUES: dict[str, int] = {
     "zero": 0,
     "one": 1,
@@ -185,18 +185,38 @@ def source_quantities(quotes: list[str]) -> tuple[set[float], set[float]]:
     return days, minutes
 
 
-def validate_plan_thresholds(plan: PlanClaim) -> None:
+def validate_plan_thresholds(plan: PlanClaim, *, require_field_grounding: bool = False) -> None:
     days: set[float]
     minutes: set[float]
-    days, minutes = source_quantities(plan.quotes)
-    if plan.minimum_days not in days or plan.minimum_minutes not in minutes:
+    if plan.grounding is None:
+        if require_field_grounding:
+            raise ExtractionValidationError("Plan claims must include field-specific grounding.")
+        days, minutes = source_quantities(plan.quotes)
+        valid: bool = plan.minimum_days in days and plan.minimum_minutes in minutes
+    else:
+        days = source_quantities([plan.grounding.minimum_days_quote])[0]
+        minutes = source_quantities([plan.grounding.minimum_minutes_quote])[1]
+        valid = days == {float(plan.minimum_days)} and minutes == {float(plan.minimum_minutes)}
+    if not valid:
         raise ExtractionValidationError(
-            "Plan thresholds must match explicit day and minute/hour quantities in their quotes. "
+            "Plan thresholds must match explicit day and minute/hour quantities in their "
+            "field-specific quotes, without competing quantities for the same unit. "
             "Omit plan claims when numerical participation requirements are not documented."
         )
 
 
-def attach_sources(document: DocumentRecord, evidence: DocumentEvidence) -> DocumentEvidence:
+def attach_field_quote(document: DocumentRecord, claim: Evidence, quote: str) -> None:
+    for reference in locate_quote(document, quote):
+        if reference not in claim.sources:
+            claim.sources.append(reference)
+
+
+def attach_sources(
+    document: DocumentRecord,
+    evidence: DocumentEvidence,
+    *,
+    require_field_grounding: bool = False,
+) -> DocumentEvidence:
     grounded: DocumentEvidence = evidence.model_copy(deep=True)
     patient_ids: set[str] = {patient.patient_id for patient in grounded.patients}
     for claim in evidence_claims(grounded):
@@ -231,14 +251,42 @@ def attach_sources(document: DocumentRecord, evidence: DocumentEvidence) -> Docu
         if contact.stated_minutes is not None and contact.stated_minutes < 0:
             raise ExtractionValidationError("Stated contact minutes cannot be negative.")
         if contact.stated_minutes is not None:
-            documented_minutes: set[float] = source_quantities(contact.quotes)[1]
-            if contact.stated_minutes not in documented_minutes:
+            if contact.stated_minutes_quote is None:
+                if require_field_grounding:
+                    raise ExtractionValidationError(
+                        "stated_minutes must include a patient-duration field quote."
+                    )
+                documented_minutes: set[float] = source_quantities(contact.quotes)[1]
+                duration_valid: bool = contact.stated_minutes in documented_minutes
+            else:
+                attach_field_quote(document, contact, contact.stated_minutes_quote)
+                documented_minutes = source_quantities([contact.stated_minutes_quote])[1]
+                duration_valid = documented_minutes == {float(contact.stated_minutes)}
+            if not duration_valid:
                 raise ExtractionValidationError(
-                    "stated_minutes must match an explicit quoted duration; "
+                    "stated_minutes must match an explicit quoted duration for this patient "
+                    "without competing duration quantities; "
                     "use null for durations inferred from interval clocks."
                 )
+        elif contact.stated_minutes_quote is not None:
+            raise ExtractionValidationError("A duration field quote requires stated_minutes.")
     for plan in grounded.plans:
-        validate_plan_thresholds(plan)
+        if plan.effective_end is not None and plan.effective_end < plan.effective_start:
+            raise ExtractionValidationError("Plan effective end must not precede its start.")
+        if plan.grounding is not None:
+            for quote in (
+                plan.grounding.minimum_days_quote,
+                plan.grounding.minimum_minutes_quote,
+                plan.grounding.effective_start_quote,
+            ):
+                attach_field_quote(document, plan, quote)
+            if (plan.effective_end is None) != (plan.grounding.effective_end_quote is None):
+                raise ExtractionValidationError(
+                    "Plan effective end and its field quote must be documented together."
+                )
+            if plan.grounding.effective_end_quote is not None:
+                attach_field_quote(document, plan, plan.grounding.effective_end_quote)
+        validate_plan_thresholds(plan, require_field_grounding=require_field_grounding)
     return grounded
 
 
@@ -337,7 +385,9 @@ class OpenAIExtractor:
                     elapsed_seconds=perf_counter() - started,
                 )
             try:
-                evidence: DocumentEvidence = attach_sources(document, parsed)
+                evidence: DocumentEvidence = attach_sources(
+                    document, parsed, require_field_grounding=True
+                )
             except ExtractionValidationError as error:
                 if attempt == 0:
                     instructions = (
@@ -347,8 +397,10 @@ class OpenAIExtractor:
                         "from the source. Prefer a short exact sentence or table row. Never "
                         "prepend a heading, label, or author to a later sentence; use separate "
                         "quotes for separated passages. Do not rewrite punctuation or wording. "
-                        "Omit plans without explicit numeric goals. Use null for inferred "
-                        "stated_minutes. Use HH:MM for local "
+                        "Omit plans without explicit numeric goals. Give each plan field its own "
+                        "exact applicable quote; exclude superseded goals from threshold quotes. "
+                        "Provide stated_minutes_quote for explicit patient duration, or null for "
+                        "both duration fields when inferred. Use HH:MM for local "
                         "interval clocks; any ISO datetime date must match the service date. "
                         "Do not emit source locations or invent event identifiers."
                     )

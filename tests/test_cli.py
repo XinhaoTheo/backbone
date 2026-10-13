@@ -4,6 +4,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
+import pytest
 from pydantic import TypeAdapter
 
 from backbone.benchmarking import BenchmarkReport
@@ -22,6 +23,9 @@ from backbone.models import (
     PatientIdentity,
     PatientRecord,
     PlanClaim,
+    QueryOperation,
+    QueryPlan,
+    QueryTask,
     SourceRef,
 )
 from backbone.query import AnswerBundle
@@ -134,6 +138,29 @@ def write_questions(directory: Path, questions: list[ReviewQuestion]) -> Path:
     return path
 
 
+def query_plan(question: str, snapshot_id: int, operation: QueryOperation) -> QueryPlan:
+    return QueryPlan(
+        question=question, snapshot_id=snapshot_id,
+        tasks=[QueryTask(
+            operation=operation, patient="TEST-1", patient_ids=["TEST-1"],
+            start=date(2027, 2, 1), end=date(2027, 2, 7),
+        )],
+    )
+
+
+def write_plan(directory: Path, plan: QueryPlan) -> Path:
+    path = directory / "plan.json"
+    path.write_text(plan.model_dump_json(), encoding="utf-8")
+    return path
+
+
+def write_plans(directory: Path, plans: list[QueryPlan]) -> Path:
+    adapter: TypeAdapter[list[QueryPlan]] = TypeAdapter(list[QueryPlan])
+    path = directory / "plans.json"
+    path.write_bytes(adapter.dump_json(plans))
+    return path
+
+
 def test_ask_after_restart_uses_selected_persisted_snapshot(tmp_path: Path) -> None:
     database = tmp_path / "review.sqlite3"
     store = Store(database)
@@ -141,7 +168,10 @@ def test_ask_after_restart_uses_selected_persisted_snapshot(tmp_path: Path) -> N
     first = publish_patient(store, tmp_path, 40)
     second = publish_patient(store, tmp_path, 50)
     question = "How many therapy minutes did Ellis receive?"
-    historical = cli(tmp_path, database, ["ask", question, "--snapshot", str(first), "--json"])
+    plan_path = write_plan(tmp_path, query_plan(question, first, "durations"))
+    historical = cli(tmp_path, database, [
+        "ask", question, "--snapshot", str(first), "--json", "--plan", str(plan_path),
+    ])
     assert historical.returncode == 0, historical.stderr
     previous = AnswerBundle.model_validate_json(historical.stdout)
     assert previous.snapshot_id == first
@@ -149,7 +179,8 @@ def test_ask_after_restart_uses_selected_persisted_snapshot(tmp_path: Path) -> N
     assert previous.metrics[0].session_count.exact == 1
     assert any(source.document_id == "CONTACT-40" for source in previous.sources)
 
-    current = cli(tmp_path, database, ["ask", question, "--json"])
+    write_plan(tmp_path, query_plan(question, second, "durations"))
+    current = cli(tmp_path, database, ["ask", question, "--json", "--plan", str(plan_path)])
     assert current.returncode == 0, current.stderr
     latest = AnswerBundle.model_validate_json(current.stdout)
     assert latest.snapshot_id == second
@@ -174,9 +205,14 @@ def test_answer_file_preserves_ids_and_snapshot_for_metrics_and_symptoms(tmp_pat
     question_adapter: TypeAdapter[list[ReviewQuestion]] = TypeAdapter(list[ReviewQuestion])
     question_path = tmp_path / "questions.json"
     question_path.write_bytes(question_adapter.dump_json(questions))
+    plans_path = write_plans(tmp_path, [
+        query_plan(questions[0].question, first, "durations"),
+        query_plan(questions[1].question, first, "symptoms"),
+    ])
     output = tmp_path / "answers"
     completed = cli(tmp_path, database, [
         "answer-file", str(question_path), "--snapshot", str(first), "--output", str(output),
+        "--plans", str(plans_path),
     ])
     assert completed.returncode == 0, completed.stderr
     answer_adapter: TypeAdapter[list[ReviewAnswer]] = TypeAdapter(list[ReviewAnswer])
@@ -192,14 +228,31 @@ def test_answer_file_preserves_ids_and_snapshot_for_metrics_and_symptoms(tmp_pat
     assert "## custom-duration" in markdown and "## custom-symptoms" in markdown
 
 
-def test_unsupported_question_exits_nonzero_with_actionable_error(tmp_path: Path) -> None:
+def test_missing_query_api_key_exits_nonzero_with_actionable_error(tmp_path: Path) -> None:
     database = tmp_path / "review.sqlite3"
     store = Store(database)
     store.initialize()
     publish_patient(store, tmp_path, 40)
-    completed = cli(tmp_path, database, ["ask", "What is the weather for Ellis?", "--json"])
+    completed = cli(tmp_path, database, [
+        "ask", "How many therapy minutes did Ellis receive?", "--json",
+    ])
     assert completed.returncode != 0
-    assert "Unsupported question" in completed.stderr
+    assert "Configure OPENAI_API_KEY" in completed.stderr
+    assert "Traceback" not in completed.stderr
+    assert not completed.stdout
+
+
+def test_saved_plan_from_wrong_snapshot_is_rejected(tmp_path: Path) -> None:
+    database = tmp_path / "review.sqlite3"
+    store = Store(database)
+    store.initialize()
+    first = publish_patient(store, tmp_path, 40)
+    publish_patient(store, tmp_path, 50)
+    question = "How many therapy minutes did Ellis receive?"
+    plan_path = write_plan(tmp_path, query_plan(question, first, "durations"))
+    completed = cli(tmp_path, database, ["ask", question, "--plan", str(plan_path), "--json"])
+    assert completed.returncode != 0
+    assert "must match this question and snapshot" in completed.stderr
     assert "Traceback" not in completed.stderr
     assert not completed.stdout
 
@@ -212,11 +265,17 @@ def test_export_and_replay_preserve_snapshot_without_api_or_database(tmp_path: P
     question_path = write_questions(tmp_path, [ReviewQuestion(
         id="offline-duration", question="How many therapy minutes did Ellis receive?",
     )])
+    plans_path = write_plans(tmp_path, [
+        query_plan("How many therapy minutes did Ellis receive?", first, "durations"),
+    ])
     exported = tmp_path / "exported"
-    completed = cli(tmp_path, database, ["export", str(question_path), "--output", str(exported)])
+    completed = cli(tmp_path, database, [
+        "export", str(question_path), "--output", str(exported), "--plans", str(plans_path),
+    ])
     assert completed.returncode == 0, completed.stderr
     assert {path.name for path in exported.iterdir()} >= {
         "abstraction.json", "answers.json", "answers.md", "extractions.jsonl", "execution.jsonl",
+        "plans.json",
     }
     saved = ClinicalSnapshot.model_validate_json((exported / "abstraction.json").read_bytes())
     assert saved.snapshot_id == first
@@ -226,7 +285,7 @@ def test_export_and_replay_preserve_snapshot_without_api_or_database(tmp_path: P
     replayed = tmp_path / "replayed"
     completed = cli(tmp_path, nonexistent_database, [
         "replay", str(exported / "abstraction.json"), str(question_path),
-        "--output", str(replayed),
+        "--output", str(replayed), "--plans", str(exported / "plans.json"),
     ])
     assert completed.returncode == 0, completed.stderr
     assert not nonexistent_database.exists()
@@ -247,23 +306,29 @@ def test_benchmark_covers_cohort_queries_with_zero_model_calls(tmp_path: Path) -
     store = Store(database)
     store.initialize()
     revision = publish_patient(store, tmp_path, 40)
-    question_path = write_questions(tmp_path, [
+    questions = [
         ReviewQuestion(id="duration", question="How many therapy minutes did Ellis receive?"),
         ReviewQuestion(
             id="cohort",
             question="Which patients had two consecutive weeks below their treatment requirements?",
         ),
+    ]
+    question_path = write_questions(tmp_path, questions)
+    plans_path = write_plans(tmp_path, [
+        query_plan(questions[0].question, revision, "durations"),
+        query_plan(questions[1].question, revision, "cohort"),
     ])
     output = tmp_path / "benchmark.json"
     completed = cli(tmp_path, database, [
         "benchmark", str(question_path), "--repeats", "3", "--output", str(output),
+        "--plans", str(plans_path),
     ])
     assert completed.returncode == 0, completed.stderr
     report = BenchmarkReport.model_validate_json(output.read_bytes())
     printed = BenchmarkReport.model_validate_json(completed.stdout)
     assert printed.model_dump() == report.model_dump()
     assert report.snapshot_id == revision
-    assert report.scope == "in_memory_query_only"
+    assert report.scope == "in_memory_execution_only"
     assert report.model_calls == 0
     assert report.repeats == 3 and report.query_runs == 6
     assert report.patient_count == 1 and report.document_count == 3
@@ -272,3 +337,62 @@ def test_benchmark_covers_cohort_queries_with_zero_model_calls(tmp_path: Path) -
     assert all(query.stable_across_repeats for query in report.queries)
     assert all(len(query.latency_seconds) == 3 for query in report.queries)
     assert all(sample >= 0 for query in report.queries for sample in query.latency_seconds)
+
+
+@pytest.mark.parametrize("command", ["answer-file", "export", "benchmark", "replay"])
+def test_malformed_saved_plans_exit_cleanly_before_api_or_export(
+    tmp_path: Path, command: str
+) -> None:
+    database = tmp_path / "review.sqlite3"
+    store = Store(database)
+    store.initialize()
+    publish_patient(store, tmp_path, 40)
+    question_path = write_questions(tmp_path, [ReviewQuestion(
+        id="duration", question="How many therapy minutes did Ellis receive?",
+    )])
+    plans_path = tmp_path / "plans.json"
+    plans_path.write_text('[{"question":', encoding="utf-8")
+    output = tmp_path / "output"
+    arguments = [command, str(question_path), "--plans", str(plans_path), "--output", str(output)]
+    if command == "replay":
+        abstraction = tmp_path / "abstraction.json"
+        abstraction.write_text(store.snapshot().model_dump_json(), encoding="utf-8")
+        arguments.insert(1, str(abstraction))
+    completed = cli(tmp_path, database, arguments)
+    assert completed.returncode == 2
+    assert "Invalid JSON" in completed.stderr
+    assert "Traceback" not in completed.stderr
+    assert "Configure OPENAI_API_KEY" not in completed.stderr
+    assert not completed.stdout
+    assert not output.exists()
+    assert store.execution_records() == []
+
+
+@pytest.mark.parametrize("command", ["answer-file", "export", "benchmark", "replay"])
+def test_saved_plan_count_must_match_questions_before_api_or_export(
+    tmp_path: Path, command: str
+) -> None:
+    database = tmp_path / "review.sqlite3"
+    store = Store(database)
+    store.initialize()
+    revision = publish_patient(store, tmp_path, 40)
+    questions = [
+        ReviewQuestion(id="duration", question="How many therapy minutes did Ellis receive?"),
+        ReviewQuestion(id="symptoms", question="Summarize Ellis's symptoms."),
+    ]
+    question_path = write_questions(tmp_path, questions)
+    plans_path = write_plans(tmp_path, [query_plan(questions[0].question, revision, "durations")])
+    output = tmp_path / "output"
+    arguments = [command, str(question_path), "--plans", str(plans_path), "--output", str(output)]
+    if command == "replay":
+        abstraction = tmp_path / "abstraction.json"
+        abstraction.write_text(store.snapshot().model_dump_json(), encoding="utf-8")
+        arguments.insert(1, str(abstraction))
+    completed = cli(tmp_path, database, arguments)
+    assert completed.returncode == 2
+    assert "Provide one saved plan per" in completed.stderr
+    assert "Traceback" not in completed.stderr
+    assert "Configure OPENAI_API_KEY" not in completed.stderr
+    assert not completed.stdout
+    assert not output.exists()
+    assert store.execution_records() == []
