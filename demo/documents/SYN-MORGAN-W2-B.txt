@@ -1,0 +1,11 @@
+Document ID: SYN-MORGAN-W2-B
+Data kind: SYNTHETIC authored demonstration; not a supplied clinical record.
+Organization: Synthetic Review Clinic
+Patient: Morgan Demo; MRN: SYN-MORGAN
+Treatment episode: 2027-03-01 through 2027-03-14.
+Final patient-contact note for SYN-MORGAN.
+Encounter ID: SYN-MORGAN-E2.
+Service date: 2027-03-08.
+Attendance: attended. Patient present: yes.
+Patient-present individual psychotherapy duration: 170 minutes.
+This is an independently signed final note, not a copy or a correction.

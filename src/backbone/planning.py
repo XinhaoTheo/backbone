@@ -181,7 +181,14 @@ def planning_context(
 
 
 class OpenAIQueryPlanner:
-    def __init__(self, model: str | None = None, *, client: OpenAI | None = None) -> None:
+    def __init__(
+        self,
+        model: str | None = None,
+        *,
+        client: OpenAI | None = None,
+        input_rate_per_million: float | None = None,
+        output_rate_per_million: float | None = None,
+    ) -> None:
         self.model: str = model or os.environ.get(
             "OPENAI_QUERY_MODEL", os.environ.get("OPENAI_MODEL", "gpt-4.1")
         )
@@ -192,6 +199,16 @@ class OpenAIQueryPlanner:
                 "Configure OPENAI_API_KEY for query planning, or supply a saved plan."
             ) from error
         self.prompt: str = files("backbone").joinpath("query_prompt.txt").read_text("utf-8")
+        self.input_rate_per_million: float | None = input_rate_per_million
+        self.output_rate_per_million: float | None = output_rate_per_million
+        if any(
+            rate is not None and rate < 0
+            for rate in (
+                input_rate_per_million,
+                output_rate_per_million,
+            )
+        ):
+            raise ValueError("Token rates cannot be negative.")
 
     def interpret(self, question: str, context: PlanningContext) -> IntentResult:
         started = perf_counter()
@@ -218,7 +235,16 @@ class OpenAIQueryPlanner:
             ) from error
         usage = (
             ModelUsage(
-                input_tokens=response.usage.input_tokens, output_tokens=response.usage.output_tokens
+                input_tokens=response.usage.input_tokens,
+                output_tokens=response.usage.output_tokens,
+                cost_usd=(
+                    response.usage.input_tokens * self.input_rate_per_million
+                    + response.usage.output_tokens * self.output_rate_per_million
+                )
+                / 1_000_000
+                if self.input_rate_per_million is not None
+                and self.output_rate_per_million is not None
+                else None,
             )
             if response.usage
             else None
@@ -230,7 +256,7 @@ class OpenAIQueryPlanner:
                 usage=usage,
                 elapsed_seconds=perf_counter() - started,
             )
-        if response.usage is None:
+        if usage is None:
             raise QueryPlanningError(
                 "The query planner did not report token usage.",
                 model_calls=1,
@@ -239,9 +265,7 @@ class OpenAIQueryPlanner:
         return IntentResult(
             intent=response.output_parsed,
             model=response.model,
-            usage=ModelUsage(
-                input_tokens=response.usage.input_tokens, output_tokens=response.usage.output_tokens
-            ),
+            usage=usage,
             elapsed_seconds=perf_counter() - started,
             model_calls=1,
         )

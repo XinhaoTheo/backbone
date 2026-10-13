@@ -1,0 +1,93 @@
+[
+  {
+    "question": "How many therapy sessions, treatment days, and minutes did Casey Demo receive from March 1 through March 14, 2027?",
+    "snapshot_id": 1,
+    "tasks": [
+      {
+        "operation": "durations",
+        "patient": "synthetic review clinic::SYN-CASEY",
+        "patient_ids": [
+          "synthetic review clinic::SYN-CASEY"
+        ],
+        "start": "2027-03-01",
+        "end": "2027-03-14",
+        "change_date": null,
+        "selected_dates": [],
+        "metrics": [
+          "sessions",
+          "distinct_days",
+          "minutes"
+        ],
+        "consecutive_weeks": 2
+      }
+    ],
+    "planner_model": null,
+    "planner_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": null
+    },
+    "planner_elapsed_seconds": 0.0,
+    "planner_model_calls": 0
+  },
+  {
+    "question": "Which patients had two consecutive weeks below their documented treatment requirements from March 1 through March 28, 2027?",
+    "snapshot_id": 1,
+    "tasks": [
+      {
+        "operation": "cohort",
+        "patient": null,
+        "patient_ids": [
+          "synthetic review clinic::SYN-CASEY",
+          "synthetic review clinic::SYN-MORGAN",
+          "synthetic review clinic::SYN-ALEX"
+        ],
+        "start": "2027-03-01",
+        "end": "2027-03-28",
+        "change_date": null,
+        "selected_dates": [],
+        "metrics": [],
+        "consecutive_weeks": 2
+      }
+    ],
+    "planner_model": null,
+    "planner_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": null
+    },
+    "planner_elapsed_seconds": 0.0,
+    "planner_model_calls": 0
+  },
+  {
+    "question": "Compare Alex Demo's sessions, treatment days, total minutes, and weekly goal attainment before and after the March 15, 2027 treatment plan change, using March 1 through March 28, 2027.",
+    "snapshot_id": 1,
+    "tasks": [
+      {
+        "operation": "plan_change",
+        "patient": "synthetic review clinic::SYN-ALEX",
+        "patient_ids": [
+          "synthetic review clinic::SYN-ALEX"
+        ],
+        "start": "2027-03-01",
+        "end": "2027-03-28",
+        "change_date": "2027-03-15",
+        "selected_dates": [],
+        "metrics": [
+          "sessions",
+          "distinct_days",
+          "minutes"
+        ],
+        "consecutive_weeks": 2
+      }
+    ],
+    "planner_model": null,
+    "planner_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": null
+    },
+    "planner_elapsed_seconds": 0.0,
+    "planner_model_calls": 0
+  }
+]

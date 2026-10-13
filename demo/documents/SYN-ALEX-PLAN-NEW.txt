@@ -1,0 +1,12 @@
+Document ID: SYN-ALEX-PLAN-NEW
+Data kind: SYNTHETIC authored demonstration; not a supplied clinical record.
+Organization: Synthetic Review Clinic
+Patient: Alex Demo; MRN: SYN-ALEX
+Treatment episode: 2027-03-01 through 2027-03-28.
+Final treatment plan for SYN-ALEX.
+Plan effective start: 2027-03-15.
+Plan effective end: 2027-03-28.
+Minimum distinct treatment days: 2 days.
+Minimum patient-contact time: 150 minutes.
+Requirements apply to each Monday-Sunday calendar week.
+Only individual psychotherapy with the patient present counts toward these goals.

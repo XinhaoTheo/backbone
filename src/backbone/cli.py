@@ -53,6 +53,9 @@ class Options(argparse.Namespace):
     context: str | None
     patient_id: str
     as_of: datetime | None
+    input_rate_per_million: float | None
+    output_rate_per_million: float | None
+    fixtures: str
 
 
 def read_questions(path: str) -> list[ReviewQuestion]:
@@ -83,6 +86,19 @@ def add_revision_options(parser: argparse.ArgumentParser) -> None:
     selector.add_argument("--as-of", type=parse_publication_time)
 
 
+def add_token_rates(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--input-rate-per-million", type=float)
+    parser.add_argument("--output-rate-per-million", type=float)
+
+
+def query_planner(options: Options) -> OpenAIQueryPlanner:
+    return OpenAIQueryPlanner(
+        options.model,
+        input_rate_per_million=options.input_rate_per_million,
+        output_rate_per_million=options.output_rate_per_million,
+    )
+
+
 def render_patient_history(patient_id: str, entries: list[PatientHistoryEntry]) -> str:
     if not entries:
         return f"No published history for patient ID {patient_id}."
@@ -106,14 +122,17 @@ def main() -> None:
     commands = parser.add_subparsers(dest="command", required=True)
     ingestion = commands.add_parser("ingest")
     ingestion.add_argument("path")
-    for command in ("extract", "process"):
+    for command in ("extract", "process", "benchmark-process"):
         extraction = commands.add_parser(command)
         extraction.add_argument("path")
         extraction.add_argument("--model", default=os.environ.get("OPENAI_MODEL", "gpt-4.1"))
         extraction.add_argument(
             "--workers", type=int, default=int(os.environ.get("BACKBONE_WORKERS", "4"))
         )
-    for command in ("ask", "answer-file", "export", "benchmark"):
+        add_token_rates(extraction)
+        if command == "benchmark-process":
+            extraction.add_argument("--output", default="artifacts/initial-processing.json")
+    for command in ("ask", "answer-file", "export", "benchmark", "benchmark-live"):
         question_parser = commands.add_parser(command)
         question_parser.add_argument("question" if command == "ask" else "questions")
         add_revision_options(question_parser)
@@ -122,20 +141,32 @@ def main() -> None:
             "--model",
             default=os.environ.get("OPENAI_QUERY_MODEL", os.environ.get("OPENAI_MODEL", "gpt-4.1")),
         )
+        add_token_rates(question_parser)
         if command == "ask":
             question_parser.add_argument("--json", action="store_true")
             question_parser.add_argument("--plan")
             question_parser.add_argument("--save-plan")
             question_parser.add_argument("--context")
-        elif command == "benchmark":
-            question_parser.add_argument("--plans")
-            question_parser.add_argument("--output", default="artifacts/benchmark.json")
+        elif command in {"benchmark", "benchmark-live"}:
+            if command == "benchmark":
+                question_parser.add_argument("--plans")
+            question_parser.add_argument(
+                "--output",
+                default=(
+                    "artifacts/full-query-benchmark.json"
+                    if command == "benchmark-live"
+                    else "artifacts/benchmark.json"
+                ),
+            )
             question_parser.add_argument("--repeats", type=int, default=3)
         else:
             question_parser.add_argument("--plans")
             question_parser.add_argument("--output", default="artifacts")
     commands.add_parser("status")
     commands.add_parser("rebuild")
+    demo = commands.add_parser("demo")
+    demo.add_argument("--fixtures", default="demo")
+    demo.add_argument("--output", default=".backbone/synthetic-demo")
     history = commands.add_parser("history")
     history.add_argument("patient_id")
     history.add_argument("--json", action="store_true")
@@ -149,6 +180,15 @@ def main() -> None:
     replay.add_argument("--scenario-budget", type=int, default=10000)
     replay.add_argument("--plans", required=True)
     options = parser.parse_args(namespace=Options())
+    if options.command == "demo":
+        from backbone.demo import build_demo
+
+        try:
+            demo_report = build_demo(Path(options.output), Path(options.fixtures))
+        except ValueError as error:
+            parser.error(str(error))
+        print(demo_report.model_dump_json(indent=2))
+        return
     if options.command == "replay":
         snapshot = ClinicalSnapshot.model_validate_json(Path(options.abstraction).read_bytes())
         try:
@@ -164,7 +204,77 @@ def main() -> None:
         print(result.model_dump_json(indent=2))
         return
     store = Store(Path(options.db))
+    if options.command == "benchmark-process":
+        from backbone.extraction import OpenAIExtractor
+        from backbone.performance import TokenRates, measure_initial_processing
+
+        if store.path.exists():
+            parser.error("Initial processing measurement requires a new database path.")
+        try:
+            initial_report = measure_initial_processing(
+                store,
+                Path(options.path),
+                OpenAIExtractor(
+                    options.model,
+                    input_rate_per_million=options.input_rate_per_million,
+                    output_rate_per_million=options.output_rate_per_million,
+                ),
+                options.workers,
+            )
+        except ValueError as error:
+            parser.error(str(error))
+        initial_report.requested_model = options.model
+        initial_report.token_rates = TokenRates(
+            input_usd_per_million=options.input_rate_per_million,
+            output_usd_per_million=options.output_rate_per_million,
+        )
+        output = Path(options.output)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(initial_report.model_dump_json(indent=2) + "\n", encoding="utf-8")
+        print(initial_report.model_dump_json(indent=2))
+        if initial_report.processing.failed_documents:
+            raise SystemExit(1)
+        return
     store.initialize()
+    if options.command == "benchmark-live":
+        from backbone.performance import TokenRates, measure_queries
+
+        try:
+            snapshot_id = options.snapshot
+            if options.as_of is not None:
+                revision = store.revision_at(options.as_of)
+                snapshot_id = revision.revision_id if revision is not None else 0
+            full_report = measure_queries(
+                store,
+                read_questions(options.questions),
+                options.repeats,
+                planner=query_planner(options),
+                snapshot_id=snapshot_id,
+                scenario_budget=options.scenario_budget,
+            )
+        except ValueError as error:
+            parser.error(str(error))
+        full_report.requested_model = options.model
+        full_report.token_rates = TokenRates(
+            input_usd_per_million=options.input_rate_per_million,
+            output_usd_per_million=options.output_rate_per_million,
+        )
+        output = Path(options.output)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(full_report.model_dump_json(indent=2) + "\n", encoding="utf-8")
+        store.record_run("benchmark-live", full_report.model_dump_json(exclude={"queries"}))
+        print(
+            f"Saved {full_report.fresh_query_runs} fresh queries and "
+            f"{full_report.replay_runs} replays to {output}; "
+            f"model calls: {full_report.model_calls}."
+        )
+        if any(
+            run.answer_status in {"planning_error", "execution_error"}
+            for query in full_report.queries
+            for run in query.runs
+        ):
+            raise SystemExit(1)
+        return
     if options.command == "ingest":
         print(ingest(store, Path(options.path)).model_dump_json(indent=2))
     elif options.command in {"extract", "process"}:
@@ -173,7 +283,14 @@ def main() -> None:
 
         workflow = process_documents if options.command == "process" else extract_documents
         report = workflow(
-            store, Path(options.path), OpenAIExtractor(options.model), options.workers
+            store,
+            Path(options.path),
+            OpenAIExtractor(
+                options.model,
+                input_rate_per_million=options.input_rate_per_million,
+                output_rate_per_million=options.output_rate_per_million,
+            ),
+            options.workers,
         )
         print(report.model_dump_json(indent=2))
         if report.failed_documents:
@@ -202,7 +319,7 @@ def main() -> None:
                     snapshot,
                     options.scenario_budget,
                     plan=saved,
-                    planner=OpenAIQueryPlanner(options.model) if saved is None else None,
+                    planner=query_planner(options) if saved is None else None,
                     context=context,
                 )
                 if options.save_plan:
@@ -231,7 +348,7 @@ def main() -> None:
                     document_count=store.document_count(),
                     scenario_budget=options.scenario_budget,
                     plans=read_plans(options.plans),
-                    planner=OpenAIQueryPlanner(options.model) if options.plans is None else None,
+                    planner=query_planner(options) if options.plans is None else None,
                 )
                 output = Path(options.output)
                 output.parent.mkdir(parents=True, exist_ok=True)
@@ -248,7 +365,7 @@ def main() -> None:
                     output,
                     options.scenario_budget,
                     plans=read_plans(options.plans),
-                    planner=OpenAIQueryPlanner(options.model) if options.plans is None else None,
+                    planner=query_planner(options) if options.plans is None else None,
                 )
                 if options.command == "export":
                     (output / "extractions.jsonl").write_text(

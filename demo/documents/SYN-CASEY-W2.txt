@@ -1,0 +1,11 @@
+Document ID: SYN-CASEY-W2
+Data kind: SYNTHETIC authored demonstration; not a supplied clinical record.
+Organization: Synthetic Review Clinic
+Patient: Casey Demo; MRN: SYN-CASEY
+Treatment episode: 2027-03-01 through 2027-03-14.
+Final patient-contact note for SYN-CASEY.
+Encounter ID: SYN-CASEY-E2.
+Service date: 2027-03-08.
+Attendance: attended. Patient present: yes.
+Patient-present individual psychotherapy duration: 130 minutes.
+This is an independently signed final note, not a copy or a correction.

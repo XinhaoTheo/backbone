@@ -11,6 +11,7 @@ from backbone.calculation import (
     IntegerResult,
     PatientMetrics,
     PlanComparison,
+    active_plans,
     calculate,
     cohort,
     compare_plans,
@@ -30,6 +31,29 @@ from backbone.planning import QueryPlanner, QueryPlanningError, plan_question, v
 __all__ = ["AnswerBundle", "QueryPlanningError", "answer_question", "plan_question"]
 
 
+class EvidenceNeed(BaseModel):
+    category: Literal["contact", "plan", "assessment", "processing", "analysis", "review_scope"]
+    action: Literal[
+        "obtain_documentation",
+        "complete_processing",
+        "increase_analysis_budget",
+        "expand_review_range",
+    ]
+    patient_id: str | None
+    patient_ids: list[str] = Field(default_factory=list)
+    encounter_id: str | None = None
+    assessment_id: str | None = None
+    start: date
+    end: date
+    service_dates: list[date] = Field(default_factory=list)
+    field: str
+    reason: str
+    needed_documentation: str | None
+    next_step: str
+    sources: list[SourceRef] = Field(default_factory=list)
+    document_ids: list[str] = Field(default_factory=list)
+
+
 class AnswerData(BaseModel):
     text: str
     metrics: list[PatientMetrics] = Field(default_factory=list)
@@ -39,6 +63,7 @@ class AnswerData(BaseModel):
     observations: list[Observation] = Field(default_factory=list)
     sources: list[SourceRef] = Field(default_factory=list)
     uncertainty: list[str] = Field(default_factory=list)
+    evidence_needs: list[EvidenceNeed] = Field(default_factory=list)
     coverage_status: Literal["available_records", "failed_source_processing"]
 
 
@@ -270,6 +295,326 @@ def metric_uncertainty(metrics: PatientMetrics) -> list[str]:
     return messages
 
 
+def contact_evidence_need(
+    metrics: PatientMetrics,
+    row: Contribution,
+    field: str,
+    reason: str,
+    documentation: str,
+) -> EvidenceNeed:
+    dates = row.service_dates or [row.service_date]
+    return EvidenceNeed(
+        category="contact",
+        action="obtain_documentation",
+        patient_id=metrics.patient_id,
+        encounter_id=row.encounter_id,
+        start=metrics.start,
+        end=metrics.end,
+        service_dates=dates,
+        field=field,
+        reason=reason,
+        needed_documentation=documentation,
+        next_step=documentation,
+        sources=unique_sources(row.sources),
+    )
+
+
+def metric_evidence_needs(
+    patient: PatientRecord, metrics: PatientMetrics, task: QueryTask
+) -> list[EvidenceNeed]:
+    needs: list[EvidenceNeed] = []
+    if metrics.reason == "scenario_budget_exceeded":
+        return [
+            EvidenceNeed(
+                category="analysis",
+                action="increase_analysis_budget",
+                patient_id=patient.patient_id,
+                start=metrics.start,
+                end=metrics.end,
+                field="scenario_budget",
+                reason="Supported combinations were not fully evaluated "
+                "within the analysis budget.",
+                needed_documentation=None,
+                next_step="Increase the scenario budget and replay this query; "
+                "this execution limit does not by itself require another clinical document.",
+                sources=metric_sources(metrics),
+            )
+        ]
+    minutes_requested = task.operation in ("weekly", "cohort", "plan_change") or (
+        "minutes" in task.metrics or (not task.metrics and task.operation != "counts")
+    )
+    encounters = {value.encounter_id: value for value in patient.encounters}
+    for row in metrics.contributions:
+        encounter = encounters[row.encounter_id]
+        label = f"patient {patient.patient_id}, encounter {row.encounter_id}, " + " or ".join(
+            str(value) for value in row.service_dates or [row.service_date]
+        )
+        relevant = [value for value in row.interpretations if value.in_review_range]
+        if any(
+            decision.field == "identity" and decision.status != "established"
+            for decision in encounter.decisions
+        ):
+            needs.append(
+                contact_evidence_need(
+                    metrics,
+                    row,
+                    "encounter_identity",
+                    "The record does not establish whether these descriptions are one encounter "
+                    "or separate encounters.",
+                    f"Obtain an encounter or appointment linkage record for {label} that links "
+                    "the source descriptions to their actual event identifiers.",
+                )
+            )
+        if row.inclusion == "uncertain":
+            attendance = {value.attendance for value in relevant}
+            if "unknown" in attendance or len(attendance) > 1:
+                needs.append(
+                    contact_evidence_need(
+                        metrics,
+                        row,
+                        "attendance",
+                        "Actual attendance is missing or differs across supported "
+                        "event interpretations.",
+                        "Obtain the patient-specific attendance or disposition record, "
+                        "or an explicit "
+                        f"attendance correction, for {label}.",
+                    )
+                )
+            presence = {value.patient_present for value in relevant}
+            requires_presence = any(
+                plan.patient_present_required
+                for value in relevant
+                for plan in active_plans(patient, value.service_date)
+            )
+            if requires_presence and (None in presence or len(presence) > 1):
+                needs.append(
+                    contact_evidence_need(
+                        metrics,
+                        row,
+                        "patient_present",
+                        "The effective plan requires patient presence, which is not established "
+                        "consistently for this encounter.",
+                        "Obtain a patient attendance/presence record with actual arrival "
+                        "and departure "
+                        f"times for {label}; a scheduled slot alone does not establish presence.",
+                    )
+                )
+            if any(key.startswith("plan:") for value in relevant for key in value.choices):
+                plan_sources = [
+                    reference
+                    for value in relevant
+                    for effective_plan in active_plans(patient, value.service_date)
+                    for reference in effective_plan.sources
+                ]
+                needs.append(
+                    contact_evidence_need(
+                        metrics,
+                        row,
+                        "effective_plan",
+                        "Conflicting effective plans give different therapy-inclusion rules.",
+                        f"Obtain the authoritative signed treatment plan or an explicit plan "
+                        f"correction effective for {label}, establishing eligible services "
+                        "and patient-presence requirements.",
+                    ).model_copy(
+                        update={
+                            "category": "plan",
+                            "sources": unique_sources(row.sources + plan_sources),
+                        }
+                    )
+                )
+        counted = [value for value in relevant if value.eligible]
+        durations = {value.minutes for value in counted}
+        if minutes_requested and len({value for value in durations if value is not None}) > 1:
+            values = " or ".join(
+                str(value) for value in sorted(value for value in durations if value is not None)
+            )
+            needs.append(
+                contact_evidence_need(
+                    metrics,
+                    row,
+                    "duration",
+                    "Supported records disagree on actual patient-contact duration: "
+                    f"{values} minutes.",
+                    f"Obtain an explicit duration correction scoped to {label}, identifying which "
+                    "earlier assertion it replaces, or the actual patient-contact start/end times "
+                    "and break record for that encounter.",
+                )
+            )
+        elif minutes_requested and None in durations:
+            needs.append(
+                contact_evidence_need(
+                    metrics,
+                    row,
+                    "duration",
+                    "An eligible interpretation has no established patient-contact duration.",
+                    f"Obtain actual patient-contact intervals and any break log for {label}; "
+                    "for group care, document this patient's presence within "
+                    "the activity interval.",
+                )
+            )
+        for field, conflicting_values, documentation in (
+            (
+                "service_date",
+                {value.service_date for value in row.interpretations},
+                "a dated encounter record or explicit service-date correction",
+            ),
+            (
+                "service_type",
+                {value.service_type for value in row.interpretations},
+                "a service record or explicit correction identifying the delivered service type",
+            ),
+        ):
+            if len(conflicting_values) > 1:
+                needs.append(
+                    contact_evidence_need(
+                        metrics,
+                        row,
+                        field,
+                        f"Supported event interpretations disagree on {field.replace('_', ' ')}.",
+                        f"Obtain {documentation} for {label}, linked to the source assertions.",
+                    )
+                )
+        dates_without_plan = sorted(
+            {
+                value.service_date
+                for value in relevant
+                if value.attendance not in ("no_show", "cancelled")
+                and not active_plans(patient, value.service_date)
+            }
+        )
+        if dates_without_plan:
+            needs.append(
+                contact_evidence_need(
+                    metrics,
+                    row,
+                    "effective_plan",
+                    "No effective treatment plan establishes which services "
+                    "and presence rules apply.",
+                    f"Obtain the signed treatment plan effective for {label}, including effective "
+                    "dates, eligible services, and patient-presence requirements.",
+                )
+            )
+    if task.operation in ("weekly", "cohort", "plan_change"):
+        for week in metrics.weeks:
+            if week.goal_reason in (
+                "missing_effective_plan",
+                "conflicting_or_midweek_plan_policy_unspecified",
+            ):
+                documentation = (
+                    "Obtain the signed treatment plan and effective dates covering this week, "
+                    "with its weekly day/minute targets and service eligibility rules."
+                    if week.goal_reason == "missing_effective_plan"
+                    else "Obtain the authoritative effective plan or a scoped plan correction, "
+                    "plus an explicit rule for applying weekly targets when a plan changes "
+                    "within the week; do not infer prorating."
+                )
+                needs.append(
+                    EvidenceNeed(
+                        category="plan",
+                        action="obtain_documentation",
+                        patient_id=patient.patient_id,
+                        start=week.week_start,
+                        end=week.week_end,
+                        field="weekly_goal",
+                        reason=week.goal_reason,
+                        needed_documentation=documentation,
+                        next_step=documentation,
+                        sources=unique_sources(week.sources),
+                    )
+                )
+            elif week.decision == "indeterminate" and (
+                week.review_start > max(week.week_start, patient.episode_start or week.week_start)
+                or week.review_end < min(week.week_end, patient.episode_end or week.week_end)
+            ):
+                needs.append(
+                    EvidenceNeed(
+                        category="review_scope",
+                        action="expand_review_range",
+                        patient_id=patient.patient_id,
+                        start=week.week_start,
+                        end=week.week_end,
+                        field="weekly_coverage",
+                        reason="The selected dates do not cover the week's full treatment episode.",
+                        needed_documentation=None,
+                        next_step="Expand the query to the complete episode portion "
+                        "of this calendar "
+                        "week before concluding that its weekly target was missed.",
+                        sources=unique_sources(week.sources),
+                    )
+                )
+    return needs
+
+
+def assessment_evidence_needs(assessments: list[AssessmentClaim]) -> list[EvidenceNeed]:
+    needs: list[EvidenceNeed] = []
+    for assessment in assessments:
+        dates = assessment_dates(assessment)
+        identifier = assessment.form_id or f"{assessment.instrument} on {assessment.completed_date}"
+        for field, disputed in (
+            ("score", len(assessment_scores(assessment)) > 1),
+            ("item_nine", len(assessment_item_nine(assessment)) > 1),
+            ("completed_date", len(dates) > 1),
+        ):
+            if disputed:
+                documentation = (
+                    f"Obtain the original completed {assessment.instrument} form {identifier} "
+                    f"for patient {assessment.patient_id}, or an explicit corrected result linked "
+                    f"to that form, establishing its {field.replace('_', ' ')}. "
+                    "A later import or review is not a new completed measurement."
+                )
+                needs.append(
+                    EvidenceNeed(
+                        category="assessment",
+                        action="obtain_documentation",
+                        patient_id=assessment.patient_id,
+                        assessment_id=identifier,
+                        start=min(dates),
+                        end=max(dates),
+                        service_dates=dates,
+                        field=field,
+                        reason="The same assessment has conflicting "
+                        f"{field.replace('_', ' ')} values.",
+                        needed_documentation=documentation,
+                        next_step=documentation,
+                        sources=unique_sources(assessment.sources),
+                    )
+                )
+    return needs
+
+
+def unique_evidence_needs(needs: list[EvidenceNeed]) -> list[EvidenceNeed]:
+    unique: dict[str, EvidenceNeed] = {}
+    for need in needs:
+        key = need.model_dump_json(exclude={"sources"})
+        previous = unique.get(key)
+        unique[key] = (
+            need
+            if previous is None
+            else need.model_copy(
+                update={"sources": unique_sources(previous.sources + need.sources)}
+            )
+        )
+    return list(unique.values())
+
+
+def render_evidence_needs(needs: list[EvidenceNeed], catalog: list[SourceRef]) -> list[str]:
+    if not needs:
+        return []
+    lines = ["", "Additional evidence needed:", ""]
+    for need in needs:
+        population = need.patient_id or ", ".join(need.patient_ids)
+        identifier = need.encounter_id or need.assessment_id
+        scope = f"patient {population}" if need.patient_id is not None else f"patients {population}"
+        if identifier is not None:
+            scope += f", {identifier}"
+        scope += f", {need.start} through {need.end}"
+        lines.append(
+            f"- {scope}, {need.field.replace('_', ' ')}: {need.reason} "
+            f"{need.next_step} {source_labels(need.sources, catalog)}".rstrip()
+        )
+    return lines
+
+
 def apply_failed_coverage(metrics: PatientMetrics, failed: list[str]) -> PatientMetrics:
     if not failed:
         return metrics
@@ -416,16 +761,30 @@ def render_symptoms(
                     f"{source_labels(first.sources + last.sources, catalog)}",
                 ]
             )
-    lines.extend(["", "Documented observations and reasons for contact:", ""])
+    lines.extend(["", "Attributed clinical course:", ""])
     if not observations:
         lines.append(
             "No supported observations or reasons for contact were extracted for this period."
         )
-    for observation in observations:
-        lines.append(
-            f"- {observation.observed_date}, {observation.kind.replace('_', ' ')}: "
-            f"{observation.text} {source_labels(observation.sources, catalog)}"
+    groups: list[tuple[str, str]] = [
+        ("patient_report", "Patient reports"),
+        ("clinician_observation", "Clinician observations"),
+        ("collateral_report", "Collateral reports"),
+        ("reason_for_contact", "Documented reasons for additional contact"),
+    ]
+    for kind, heading in groups:
+        entries = sorted(
+            [value for value in observations if value.kind == kind],
+            key=lambda value: value.observed_date,
         )
+        if entries:
+            lines.extend([heading + ":", ""])
+            for observation in entries:
+                lines.append(
+                    f"- {observation.observed_date}: {observation.text} "
+                    f"{source_labels(observation.sources, catalog)}"
+                )
+            lines.append("")
     lines.extend(
         [
             "",
@@ -448,6 +807,7 @@ def answer_task(
     observations: list[Observation] = []
     sources: list[SourceRef] = []
     uncertainty: list[str] = []
+    evidence_needs: list[EvidenceNeed] = []
     non_contacts = [
         record
         for record in snapshot.non_contact_records
@@ -462,6 +822,15 @@ def answer_task(
         cohort_results = cohort(
             selected, plan.start, plan.end, scenario_budget, plan.consecutive_weeks
         )
+        unresolved_ids = {
+            entry.patient_id
+            for entry in cohort_results
+            if entry.membership in ("possible", "analysis_incomplete")
+        }
+        for cohort_patient in selected:
+            if cohort_patient.patient_id in unresolved_ids:
+                cohort_metrics = calculate(cohort_patient, plan.start, plan.end, scenario_budget)
+                evidence_needs.extend(metric_evidence_needs(cohort_patient, cohort_metrics, plan))
         if snapshot.unprocessed_documents:
             cohort_results = [
                 entry.model_copy(
@@ -556,6 +925,32 @@ def answer_task(
     for result in metrics:
         sources.extend(metric_sources(result))
         uncertainty.extend(metric_uncertainty(result))
+        if patient is not None:
+            evidence_needs.extend(metric_evidence_needs(patient, result, plan))
+    evidence_needs.extend(assessment_evidence_needs(assessments))
+    if snapshot.unprocessed_documents:
+        evidence_needs.append(
+            EvidenceNeed(
+                category="processing",
+                action="complete_processing",
+                patient_id=None,
+                patient_ids=plan.patient_ids,
+                start=plan.start,
+                end=plan.end,
+                field="source_processing",
+                reason="Listed source documents have not been incorporated "
+                "into the published record; "
+                "their patient attribution and effect on this query are not yet established.",
+                needed_documentation=None,
+                next_step="Complete extraction and reconciliation for these existing documents: "
+                + ", ".join(snapshot.unprocessed_documents)
+                + ". Publish the updated snapshot and rerun the query "
+                "before requesting new records.",
+                document_ids=snapshot.unprocessed_documents,
+            )
+        )
+    evidence_needs = unique_evidence_needs(evidence_needs)
+    sources.extend(source for need in evidence_needs for source in need.sources)
     if patient is not None:
         relevant_ids = {
             row.encounter_id
@@ -652,6 +1047,7 @@ def answer_task(
     if uncertainty:
         lines.extend(["", "Unresolved conclusions and limitations:", ""])
         lines.extend(f"- {message}" for message in uncertainty)
+    lines.extend(render_evidence_needs(evidence_needs, catalog))
     lines.extend(["", "Source passages:", "", render_sources(catalog)])
     return TaskAnswer(
         task=plan,
@@ -663,6 +1059,7 @@ def answer_task(
         observations=observations,
         sources=catalog,
         uncertainty=uncertainty,
+        evidence_needs=evidence_needs,
         coverage_status="failed_source_processing"
         if snapshot.unprocessed_documents
         else "available_records",
@@ -710,6 +1107,9 @@ def answer_question(
         sources=unique_sources([source for answer in answers for source in answer.sources]),
         uncertainty=list(
             dict.fromkeys(message for answer in answers for message in answer.uncertainty)
+        ),
+        evidence_needs=unique_evidence_needs(
+            [entry for answer in answers for entry in answer.evidence_needs]
         ),
         coverage_status="failed_source_processing"
         if snapshot.unprocessed_documents

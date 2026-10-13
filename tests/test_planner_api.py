@@ -398,3 +398,102 @@ def test_invalid_structured_output_is_a_planning_failure_without_keyword_fallbac
         )
     assert len(requests) == 1
     assert failure.value.model_calls == 1
+
+
+def test_planning_cost_uses_configured_per_million_token_rates(
+    snapshot: ClinicalSnapshot, intent: QueryIntent
+) -> None:
+    client, requests = mock_client(intent)
+    with client:
+        plan = plan_question(
+            "Give me Casey's contact time during the first two treatment weeks.",
+            snapshot,
+            planner=OpenAIQueryPlanner(
+                client=client, input_rate_per_million=0.4, output_rate_per_million=1.6
+            ),
+        )
+    assert len(requests) == 1
+    assert plan.planner_usage.input_tokens == 120
+    assert plan.planner_usage.output_tokens == 45
+    assert plan.planner_usage.cost_usd == pytest.approx(0.00012)
+
+
+@pytest.mark.parametrize("input_rate,output_rate", [(None, None), (0.4, None), (None, 1.6)])
+def test_planning_cost_is_unknown_without_both_token_rates(
+    snapshot: ClinicalSnapshot,
+    intent: QueryIntent,
+    input_rate: float | None,
+    output_rate: float | None,
+) -> None:
+    client, requests = mock_client(intent)
+    with client:
+        result = OpenAIQueryPlanner(
+            client=client,
+            input_rate_per_million=input_rate,
+            output_rate_per_million=output_rate,
+        ).interpret("How many therapy minutes did Casey receive?", planning_context(snapshot))
+    assert len(requests) == 1
+    assert result.usage.input_tokens == 120
+    assert result.usage.output_tokens == 45
+    assert result.usage.cost_usd is None
+
+
+@pytest.mark.parametrize(
+    "output,status",
+    [("refusal", "completed"), ("empty", "completed"), ("text", "incomplete")],
+)
+def test_unsuccessful_planning_preserves_estimated_cost_when_usage_is_available(
+    snapshot: ClinicalSnapshot,
+    intent: QueryIntent,
+    output: Literal["text", "refusal", "empty"],
+    status: Literal["completed", "incomplete"],
+) -> None:
+    client, requests = mock_client(intent, output=output, status=status)
+    with client, pytest.raises(QueryPlanningError) as failure:
+        plan_question(
+            "How many therapy minutes did Casey receive?",
+            snapshot,
+            planner=OpenAIQueryPlanner(
+                client=client, input_rate_per_million=0.4, output_rate_per_million=1.6
+            ),
+        )
+    assert len(requests) == 1
+    assert failure.value.model_calls == 1
+    assert failure.value.usage is not None
+    assert failure.value.usage.input_tokens == 120
+    assert failure.value.usage.output_tokens == 45
+    assert failure.value.usage.cost_usd == pytest.approx(0.00012)
+
+
+def test_declined_intent_preserves_estimated_cost(
+    snapshot: ClinicalSnapshot, intent: QueryIntent
+) -> None:
+    intent.status = "clarification_required"
+    intent.message = "Specify which patient's minutes to query."
+    intent.tasks = []
+    client, requests = mock_client(intent)
+    with client, pytest.raises(QueryPlanningError, match="clarification_required") as failure:
+        plan_question(
+            "How many therapy minutes?",
+            snapshot,
+            planner=OpenAIQueryPlanner(
+                client=client, input_rate_per_million=0.4, output_rate_per_million=1.6
+            ),
+        )
+    assert len(requests) == 1
+    assert failure.value.usage is not None
+    assert failure.value.usage.cost_usd == pytest.approx(0.00012)
+
+
+@pytest.mark.parametrize("input_rate,output_rate", [(-0.4, 1.6), (0.4, -1.6)])
+def test_negative_planning_token_rates_are_rejected_before_api_calls(
+    intent: QueryIntent, input_rate: float, output_rate: float
+) -> None:
+    client, requests = mock_client(intent)
+    with client, pytest.raises(ValueError, match="Token rates cannot be negative"):
+        OpenAIQueryPlanner(
+            client=client,
+            input_rate_per_million=input_rate,
+            output_rate_per_million=output_rate,
+        )
+    assert requests == []

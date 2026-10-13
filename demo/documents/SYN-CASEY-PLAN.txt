@@ -1,0 +1,12 @@
+Document ID: SYN-CASEY-PLAN
+Data kind: SYNTHETIC authored demonstration; not a supplied clinical record.
+Organization: Synthetic Review Clinic
+Patient: Casey Demo; MRN: SYN-CASEY
+Treatment episode: 2027-03-01 through 2027-03-14.
+Final treatment plan for SYN-CASEY.
+Plan effective start: 2027-03-01.
+Plan effective end: 2027-03-14.
+Minimum distinct treatment days: 1 day.
+Minimum patient-contact time: 150 minutes.
+Requirements apply to each Monday-Sunday calendar week.
+Only individual psychotherapy with the patient present counts toward these goals.
