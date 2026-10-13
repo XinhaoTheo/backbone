@@ -45,6 +45,19 @@ uv run backbone --db .backbone/synthetic-demo/review.sqlite3 answer-file \
 This last command requires `OPENAI_API_KEY` and makes planning API calls. It does
 not use the saved demo plans.
 
+[Recorded outputs](artifacts) include a separate live benchmark with three
+repeats of each question. [Planner validation](artifacts/planner-validation.json)
+checks all nine runs against the expected scopes, cohort membership, plan goals,
+and exact source locations.
+
+```bash
+uv run backbone --db .backbone/synthetic-demo/review.sqlite3 benchmark-live \
+  demo/questions.json --model gpt-4.1-mini --repeats 3 \
+  --input-rate-per-million 0.4 --output-rate-per-million 1.6 \
+  --output .backbone/synthetic-live-benchmark.json
+uv run python -m scripts.validate_demo .backbone/synthetic-live-benchmark.json
+```
+
 Regenerate the authored fixtures after editing the demo specification:
 
 ```bash

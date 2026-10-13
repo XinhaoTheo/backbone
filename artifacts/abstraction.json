@@ -1,7 +1,7 @@
 {
   "failed_documents": [],
   "pending_documents": [],
-  "snapshot_id": 2,
+  "snapshot_id": 1,
   "patients": [
     {
       "patient_id": "harbor grove behavioral health::HG-M042",
@@ -47,6 +47,14 @@
                   "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
                   "document_id": "BH-D002",
                   "filename": "intake_and_individual_jan05.txt",
+                  "start_line": 8,
+                  "end_line": 8,
+                  "quote": "completed, 50 minutes."
+                },
+                {
+                  "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
+                  "document_id": "BH-D002",
+                  "filename": "intake_and_individual_jan05.txt",
                   "start_line": 13,
                   "end_line": 13,
                   "quote": "Rowan arrived independently and participated throughout the appointment."
@@ -80,6 +88,14 @@
                   "start_line": 8,
                   "end_line": 8,
                   "quote": "Patient-present individual therapy: 09:00–09:50 local; completed, 50 minutes."
+                },
+                {
+                  "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
+                  "document_id": "BH-D002",
+                  "filename": "intake_and_individual_jan05.txt",
+                  "start_line": 8,
+                  "end_line": 8,
+                  "quote": "completed, 50 minutes."
                 },
                 {
                   "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
@@ -124,6 +140,14 @@
                   "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
                   "document_id": "BH-D002",
                   "filename": "intake_and_individual_jan05.txt",
+                  "start_line": 8,
+                  "end_line": 8,
+                  "quote": "completed, 50 minutes."
+                },
+                {
+                  "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
+                  "document_id": "BH-D002",
+                  "filename": "intake_and_individual_jan05.txt",
                   "start_line": 13,
                   "end_line": 13,
                   "quote": "Rowan arrived independently and participated throughout the appointment."
@@ -147,6 +171,14 @@
               "start_line": 8,
               "end_line": 8,
               "quote": "Patient-present individual therapy: 09:00–09:50 local; completed, 50 minutes."
+            },
+            {
+              "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
+              "document_id": "BH-D002",
+              "filename": "intake_and_individual_jan05.txt",
+              "start_line": 8,
+              "end_line": 8,
+              "quote": "completed, 50 minutes."
             },
             {
               "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
@@ -229,15 +261,23 @@
                   "filename": "early_group_attendance_roster.txt",
                   "start_line": 13,
                   "end_line": 13,
-                  "quote": "January 6 desk note: Rowan called from the building entrance to say they were running behind after difficulty finding parking. Reception directed them to the group room after check-in. Rowan advised the facilitator that they would need to leave early for a previously arranged ride. Departure was marked when Rowan returned their visitor badge. Rowan did not re-enter the group room after departing."
+                  "quote": "Departure was marked when Rowan returned their visitor badge. Rowan did not re-enter the group room after departing."
                 },
                 {
                   "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
                   "document_id": "BH-D005",
                   "filename": "early_group_attendance_roster.txt",
-                  "start_line": 17,
-                  "end_line": 17,
-                  "quote": "The desk records arrival and departure when members enter or leave the scheduled group."
+                  "start_line": 13,
+                  "end_line": 13,
+                  "quote": "Rowan advised the facilitator that they would need to leave early for a previously arranged ride."
+                },
+                {
+                  "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
+                  "document_id": "BH-D005",
+                  "filename": "early_group_attendance_roster.txt",
+                  "start_line": 13,
+                  "end_line": 13,
+                  "quote": "Rowan called from the building entrance to say they were running behind after difficulty finding parking."
                 }
               ],
               "choices": {},
@@ -299,15 +339,23 @@
                   "filename": "early_group_attendance_roster.txt",
                   "start_line": 13,
                   "end_line": 13,
-                  "quote": "January 6 desk note: Rowan called from the building entrance to say they were running behind after difficulty finding parking. Reception directed them to the group room after check-in. Rowan advised the facilitator that they would need to leave early for a previously arranged ride. Departure was marked when Rowan returned their visitor badge. Rowan did not re-enter the group room after departing."
+                  "quote": "Departure was marked when Rowan returned their visitor badge. Rowan did not re-enter the group room after departing."
                 },
                 {
                   "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
                   "document_id": "BH-D005",
                   "filename": "early_group_attendance_roster.txt",
-                  "start_line": 17,
-                  "end_line": 17,
-                  "quote": "The desk records arrival and departure when members enter or leave the scheduled group."
+                  "start_line": 13,
+                  "end_line": 13,
+                  "quote": "Rowan advised the facilitator that they would need to leave early for a previously arranged ride."
+                },
+                {
+                  "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
+                  "document_id": "BH-D005",
+                  "filename": "early_group_attendance_roster.txt",
+                  "start_line": 13,
+                  "end_line": 13,
+                  "quote": "Rowan called from the building entrance to say they were running behind after difficulty finding parking."
                 },
                 {
                   "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
@@ -370,15 +418,23 @@
                   "filename": "early_group_attendance_roster.txt",
                   "start_line": 13,
                   "end_line": 13,
-                  "quote": "January 6 desk note: Rowan called from the building entrance to say they were running behind after difficulty finding parking. Reception directed them to the group room after check-in. Rowan advised the facilitator that they would need to leave early for a previously arranged ride. Departure was marked when Rowan returned their visitor badge. Rowan did not re-enter the group room after departing."
+                  "quote": "Departure was marked when Rowan returned their visitor badge. Rowan did not re-enter the group room after departing."
                 },
                 {
                   "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
                   "document_id": "BH-D005",
                   "filename": "early_group_attendance_roster.txt",
-                  "start_line": 17,
-                  "end_line": 17,
-                  "quote": "The desk records arrival and departure when members enter or leave the scheduled group."
+                  "start_line": 13,
+                  "end_line": 13,
+                  "quote": "Rowan advised the facilitator that they would need to leave early for a previously arranged ride."
+                },
+                {
+                  "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
+                  "document_id": "BH-D005",
+                  "filename": "early_group_attendance_roster.txt",
+                  "start_line": 13,
+                  "end_line": 13,
+                  "quote": "Rowan called from the building entrance to say they were running behind after difficulty finding parking."
                 }
               ]
             }
@@ -430,15 +486,23 @@
               "filename": "early_group_attendance_roster.txt",
               "start_line": 13,
               "end_line": 13,
-              "quote": "January 6 desk note: Rowan called from the building entrance to say they were running behind after difficulty finding parking. Reception directed them to the group room after check-in. Rowan advised the facilitator that they would need to leave early for a previously arranged ride. Departure was marked when Rowan returned their visitor badge. Rowan did not re-enter the group room after departing."
+              "quote": "Departure was marked when Rowan returned their visitor badge. Rowan did not re-enter the group room after departing."
             },
             {
               "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
               "document_id": "BH-D005",
               "filename": "early_group_attendance_roster.txt",
-              "start_line": 17,
-              "end_line": 17,
-              "quote": "The desk records arrival and departure when members enter or leave the scheduled group."
+              "start_line": 13,
+              "end_line": 13,
+              "quote": "Rowan advised the facilitator that they would need to leave early for a previously arranged ride."
+            },
+            {
+              "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
+              "document_id": "BH-D005",
+              "filename": "early_group_attendance_roster.txt",
+              "start_line": 13,
+              "end_line": 13,
+              "quote": "Rowan called from the building entrance to say they were running behind after difficulty finding parking."
             },
             {
               "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
@@ -471,20 +535,20 @@
                   "quote": "HG-E103   | Jan08 | Individual therapy     | 11:00–11:45    | No show"
                 },
                 {
+                  "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
+                  "document_id": "BH-D006",
+                  "filename": "early_appointment_status_export.txt",
+                  "start_line": 20,
+                  "end_line": 20,
+                  "quote": "HG-E103 remained unarrived at close of its appointment slot on January 8."
+                },
+                {
                   "content_hash": "4521a120a4d7a8f896d5fe9137a44f72719adc5cadbd839ef1b9d9646316b7c4",
                   "document_id": "BH-D015",
                   "filename": "missed_visit_outreach_jan08.txt",
                   "start_line": 6,
                   "end_line": 6,
                   "quote": "Related appointment: HG-E103, 2026-01-08, 11:00–11:45 local"
-                },
-                {
-                  "content_hash": "4521a120a4d7a8f896d5fe9137a44f72719adc5cadbd839ef1b9d9646316b7c4",
-                  "document_id": "BH-D015",
-                  "filename": "missed_visit_outreach_jan08.txt",
-                  "start_line": 9,
-                  "end_line": 9,
-                  "quote": "11:12: Reception notified the clinician that Rowan had not checked in. There was no arrival call or cancellation message on the scheduling line. The appointment remained on the room schedule until its end time."
                 },
                 {
                   "content_hash": "4521a120a4d7a8f896d5fe9137a44f72719adc5cadbd839ef1b9d9646316b7c4",
@@ -517,20 +581,20 @@
                   "quote": "HG-E103   | Jan08 | Individual therapy     | 11:00–11:45    | No show"
                 },
                 {
+                  "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
+                  "document_id": "BH-D006",
+                  "filename": "early_appointment_status_export.txt",
+                  "start_line": 20,
+                  "end_line": 20,
+                  "quote": "HG-E103 remained unarrived at close of its appointment slot on January 8."
+                },
+                {
                   "content_hash": "4521a120a4d7a8f896d5fe9137a44f72719adc5cadbd839ef1b9d9646316b7c4",
                   "document_id": "BH-D015",
                   "filename": "missed_visit_outreach_jan08.txt",
                   "start_line": 6,
                   "end_line": 6,
                   "quote": "Related appointment: HG-E103, 2026-01-08, 11:00–11:45 local"
-                },
-                {
-                  "content_hash": "4521a120a4d7a8f896d5fe9137a44f72719adc5cadbd839ef1b9d9646316b7c4",
-                  "document_id": "BH-D015",
-                  "filename": "missed_visit_outreach_jan08.txt",
-                  "start_line": 9,
-                  "end_line": 9,
-                  "quote": "11:12: Reception notified the clinician that Rowan had not checked in. There was no arrival call or cancellation message on the scheduling line. The appointment remained on the room schedule until its end time."
                 },
                 {
                   "content_hash": "4521a120a4d7a8f896d5fe9137a44f72719adc5cadbd839ef1b9d9646316b7c4",
@@ -556,20 +620,20 @@
                   "quote": "HG-E103   | Jan08 | Individual therapy     | 11:00–11:45    | No show"
                 },
                 {
+                  "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
+                  "document_id": "BH-D006",
+                  "filename": "early_appointment_status_export.txt",
+                  "start_line": 20,
+                  "end_line": 20,
+                  "quote": "HG-E103 remained unarrived at close of its appointment slot on January 8."
+                },
+                {
                   "content_hash": "4521a120a4d7a8f896d5fe9137a44f72719adc5cadbd839ef1b9d9646316b7c4",
                   "document_id": "BH-D015",
                   "filename": "missed_visit_outreach_jan08.txt",
                   "start_line": 6,
                   "end_line": 6,
                   "quote": "Related appointment: HG-E103, 2026-01-08, 11:00–11:45 local"
-                },
-                {
-                  "content_hash": "4521a120a4d7a8f896d5fe9137a44f72719adc5cadbd839ef1b9d9646316b7c4",
-                  "document_id": "BH-D015",
-                  "filename": "missed_visit_outreach_jan08.txt",
-                  "start_line": 9,
-                  "end_line": 9,
-                  "quote": "11:12: Reception notified the clinician that Rowan had not checked in. There was no arrival call or cancellation message on the scheduling line. The appointment remained on the room schedule until its end time."
                 },
                 {
                   "content_hash": "4521a120a4d7a8f896d5fe9137a44f72719adc5cadbd839ef1b9d9646316b7c4",
@@ -592,20 +656,20 @@
               "quote": "HG-E103   | Jan08 | Individual therapy     | 11:00–11:45    | No show"
             },
             {
+              "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
+              "document_id": "BH-D006",
+              "filename": "early_appointment_status_export.txt",
+              "start_line": 20,
+              "end_line": 20,
+              "quote": "HG-E103 remained unarrived at close of its appointment slot on January 8."
+            },
+            {
               "content_hash": "4521a120a4d7a8f896d5fe9137a44f72719adc5cadbd839ef1b9d9646316b7c4",
               "document_id": "BH-D015",
               "filename": "missed_visit_outreach_jan08.txt",
               "start_line": 6,
               "end_line": 6,
               "quote": "Related appointment: HG-E103, 2026-01-08, 11:00–11:45 local"
-            },
-            {
-              "content_hash": "4521a120a4d7a8f896d5fe9137a44f72719adc5cadbd839ef1b9d9646316b7c4",
-              "document_id": "BH-D015",
-              "filename": "missed_visit_outreach_jan08.txt",
-              "start_line": 9,
-              "end_line": 9,
-              "quote": "11:12: Reception notified the clinician that Rowan had not checked in. There was no arrival call or cancellation message on the scheduling line. The appointment remained on the room schedule until its end time."
             },
             {
               "content_hash": "4521a120a4d7a8f896d5fe9137a44f72719adc5cadbd839ef1b9d9646316b7c4",
@@ -681,6 +745,14 @@
                   "start_line": 8,
                   "end_line": 8,
                   "quote": "Participants: Rowan Mercer and Casey Mercer; both present for the full 45 minutes"
+                },
+                {
+                  "content_hash": "ad416fbda80683308baa15c433c7d1df7fe9221b9e8baf1f2189964bc0421aed",
+                  "document_id": "BH-D008",
+                  "filename": "family_cofacilitator_jan09.txt",
+                  "start_line": 8,
+                  "end_line": 8,
+                  "quote": "both present for the full 45 minutes"
                 }
               ],
               "choices": {},
@@ -751,6 +823,14 @@
                   "start_line": 8,
                   "end_line": 8,
                   "quote": "Participants: Rowan Mercer and Casey Mercer; both present for the full 45 minutes"
+                },
+                {
+                  "content_hash": "ad416fbda80683308baa15c433c7d1df7fe9221b9e8baf1f2189964bc0421aed",
+                  "document_id": "BH-D008",
+                  "filename": "family_cofacilitator_jan09.txt",
+                  "start_line": 8,
+                  "end_line": 8,
+                  "quote": "both present for the full 45 minutes"
                 }
               ]
             },
@@ -806,6 +886,14 @@
                   "start_line": 8,
                   "end_line": 8,
                   "quote": "Participants: Rowan Mercer and Casey Mercer; both present for the full 45 minutes"
+                },
+                {
+                  "content_hash": "ad416fbda80683308baa15c433c7d1df7fe9221b9e8baf1f2189964bc0421aed",
+                  "document_id": "BH-D008",
+                  "filename": "family_cofacilitator_jan09.txt",
+                  "start_line": 8,
+                  "end_line": 8,
+                  "quote": "both present for the full 45 minutes"
                 }
               ]
             }
@@ -866,6 +954,14 @@
               "start_line": 8,
               "end_line": 8,
               "quote": "Participants: Rowan Mercer and Casey Mercer; both present for the full 45 minutes"
+            },
+            {
+              "content_hash": "ad416fbda80683308baa15c433c7d1df7fe9221b9e8baf1f2189964bc0421aed",
+              "document_id": "BH-D008",
+              "filename": "family_cofacilitator_jan09.txt",
+              "start_line": 8,
+              "end_line": 8,
+              "quote": "both present for the full 45 minutes"
             }
           ]
         },
@@ -900,15 +996,15 @@
                   "filename": "early_group_attendance_roster.txt",
                   "start_line": 15,
                   "end_line": 15,
-                  "quote": "January 12 desk note: Rowan checked in before the group began and remained until the group was released. Their next printed appointment list was provided at checkout. No transport concern was reported at that time."
+                  "quote": "No transport concern was reported at that time."
                 },
                 {
                   "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
                   "document_id": "BH-D005",
                   "filename": "early_group_attendance_roster.txt",
-                  "start_line": 17,
-                  "end_line": 17,
-                  "quote": "The desk records arrival and departure when members enter or leave the scheduled group."
+                  "start_line": 15,
+                  "end_line": 15,
+                  "quote": "Rowan checked in before the group began and remained until the group was released."
                 },
                 {
                   "content_hash": "d30d18d0335d5d428acea2e5ee0334fbbafc10665133a462061a01c94baa09b7",
@@ -970,15 +1066,15 @@
                   "filename": "early_group_attendance_roster.txt",
                   "start_line": 15,
                   "end_line": 15,
-                  "quote": "January 12 desk note: Rowan checked in before the group began and remained until the group was released. Their next printed appointment list was provided at checkout. No transport concern was reported at that time."
+                  "quote": "No transport concern was reported at that time."
                 },
                 {
                   "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
                   "document_id": "BH-D005",
                   "filename": "early_group_attendance_roster.txt",
-                  "start_line": 17,
-                  "end_line": 17,
-                  "quote": "The desk records arrival and departure when members enter or leave the scheduled group."
+                  "start_line": 15,
+                  "end_line": 15,
+                  "quote": "Rowan checked in before the group began and remained until the group was released."
                 },
                 {
                   "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
@@ -1041,15 +1137,15 @@
                   "filename": "early_group_attendance_roster.txt",
                   "start_line": 15,
                   "end_line": 15,
-                  "quote": "January 12 desk note: Rowan checked in before the group began and remained until the group was released. Their next printed appointment list was provided at checkout. No transport concern was reported at that time."
+                  "quote": "No transport concern was reported at that time."
                 },
                 {
                   "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
                   "document_id": "BH-D005",
                   "filename": "early_group_attendance_roster.txt",
-                  "start_line": 17,
-                  "end_line": 17,
-                  "quote": "The desk records arrival and departure when members enter or leave the scheduled group."
+                  "start_line": 15,
+                  "end_line": 15,
+                  "quote": "Rowan checked in before the group began and remained until the group was released."
                 },
                 {
                   "content_hash": "d30d18d0335d5d428acea2e5ee0334fbbafc10665133a462061a01c94baa09b7",
@@ -1101,15 +1197,15 @@
               "filename": "early_group_attendance_roster.txt",
               "start_line": 15,
               "end_line": 15,
-              "quote": "January 12 desk note: Rowan checked in before the group began and remained until the group was released. Their next printed appointment list was provided at checkout. No transport concern was reported at that time."
+              "quote": "No transport concern was reported at that time."
             },
             {
               "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
               "document_id": "BH-D005",
               "filename": "early_group_attendance_roster.txt",
-              "start_line": 17,
-              "end_line": 17,
-              "quote": "The desk records arrival and departure when members enter or leave the scheduled group."
+              "start_line": 15,
+              "end_line": 15,
+              "quote": "Rowan checked in before the group began and remained until the group was released."
             },
             {
               "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
@@ -1190,6 +1286,14 @@
                   "content_hash": "95debafd3a72e32fd806d7aa4b420b1984f9c565d2af3c0d807269ee71aa8482",
                   "document_id": "BH-D010",
                   "filename": "medication_review_jan13.txt",
+                  "start_line": 11,
+                  "end_line": 11,
+                  "quote": "Rowan attended for medication management."
+                },
+                {
+                  "content_hash": "95debafd3a72e32fd806d7aa4b420b1984f9c565d2af3c0d807269ee71aa8482",
+                  "document_id": "BH-D010",
+                  "filename": "medication_review_jan13.txt",
                   "start_line": 17,
                   "end_line": 17,
                   "quote": "Service documented: medication review and management only. No separate psychotherapy component was provided or documented."
@@ -1236,6 +1340,14 @@
                   "content_hash": "95debafd3a72e32fd806d7aa4b420b1984f9c565d2af3c0d807269ee71aa8482",
                   "document_id": "BH-D010",
                   "filename": "medication_review_jan13.txt",
+                  "start_line": 11,
+                  "end_line": 11,
+                  "quote": "Rowan attended for medication management."
+                },
+                {
+                  "content_hash": "95debafd3a72e32fd806d7aa4b420b1984f9c565d2af3c0d807269ee71aa8482",
+                  "document_id": "BH-D010",
+                  "filename": "medication_review_jan13.txt",
                   "start_line": 17,
                   "end_line": 17,
                   "quote": "Service documented: medication review and management only. No separate psychotherapy component was provided or documented."
@@ -1262,6 +1374,14 @@
                   "start_line": 7,
                   "end_line": 7,
                   "quote": "Actual visit 09:00–09:25 local; completed, 25 minutes"
+                },
+                {
+                  "content_hash": "95debafd3a72e32fd806d7aa4b420b1984f9c565d2af3c0d807269ee71aa8482",
+                  "document_id": "BH-D010",
+                  "filename": "medication_review_jan13.txt",
+                  "start_line": 11,
+                  "end_line": 11,
+                  "quote": "Rowan attended for medication management."
                 },
                 {
                   "content_hash": "95debafd3a72e32fd806d7aa4b420b1984f9c565d2af3c0d807269ee71aa8482",
@@ -1298,6 +1418,14 @@
               "start_line": 7,
               "end_line": 7,
               "quote": "Actual visit 09:00–09:25 local; completed, 25 minutes"
+            },
+            {
+              "content_hash": "95debafd3a72e32fd806d7aa4b420b1984f9c565d2af3c0d807269ee71aa8482",
+              "document_id": "BH-D010",
+              "filename": "medication_review_jan13.txt",
+              "start_line": 11,
+              "end_line": 11,
+              "quote": "Rowan attended for medication management."
             },
             {
               "content_hash": "95debafd3a72e32fd806d7aa4b420b1984f9c565d2af3c0d807269ee71aa8482",
@@ -1454,12 +1582,12 @@
                   "quote": "HG-E108   | Jan15 | Coping skills group    | 10:00–11:30    | Clinic cancelled"
                 },
                 {
-                  "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
-                  "document_id": "BH-D016",
-                  "filename": "group_cancellation_notice_jan15.txt",
-                  "start_line": 9,
-                  "end_line": 9,
-                  "quote": "A covering facilitator is unavailable for this morning's group."
+                  "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
+                  "document_id": "BH-D006",
+                  "filename": "early_appointment_status_export.txt",
+                  "start_line": 20,
+                  "end_line": 20,
+                  "quote": "HG-E108 was removed from the active room schedule after staff illness was reported. A cancellation message was released to all registered members."
                 },
                 {
                   "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
@@ -1473,25 +1601,9 @@
                   "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
                   "document_id": "BH-D016",
                   "filename": "group_cancellation_notice_jan15.txt",
-                  "start_line": 9,
-                  "end_line": 9,
-                  "quote": "The group room has been released from the schedule, and registered participants are being contacted before the planned start time."
-                },
-                {
-                  "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
-                  "document_id": "BH-D016",
-                  "filename": "group_cancellation_notice_jan15.txt",
-                  "start_line": 11,
-                  "end_line": 11,
-                  "quote": "The notice states that the office initiated the cancellation and that the participant should not come to the group room this morning."
-                },
-                {
-                  "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
-                  "document_id": "BH-D016",
-                  "filename": "group_cancellation_notice_jan15.txt",
                   "start_line": 15,
                   "end_line": 15,
-                  "quote": "No group was held and no participants were seen for HG-E108. No replacement group was conducted in the January 15 slot."
+                  "quote": "No group was held and no participants were seen for HG-E108."
                 }
               ],
               "choices": {},
@@ -1516,12 +1628,12 @@
                   "quote": "HG-E108   | Jan15 | Coping skills group    | 10:00–11:30    | Clinic cancelled"
                 },
                 {
-                  "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
-                  "document_id": "BH-D016",
-                  "filename": "group_cancellation_notice_jan15.txt",
-                  "start_line": 9,
-                  "end_line": 9,
-                  "quote": "A covering facilitator is unavailable for this morning's group."
+                  "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
+                  "document_id": "BH-D006",
+                  "filename": "early_appointment_status_export.txt",
+                  "start_line": 20,
+                  "end_line": 20,
+                  "quote": "HG-E108 was removed from the active room schedule after staff illness was reported. A cancellation message was released to all registered members."
                 },
                 {
                   "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
@@ -1535,25 +1647,9 @@
                   "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
                   "document_id": "BH-D016",
                   "filename": "group_cancellation_notice_jan15.txt",
-                  "start_line": 9,
-                  "end_line": 9,
-                  "quote": "The group room has been released from the schedule, and registered participants are being contacted before the planned start time."
-                },
-                {
-                  "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
-                  "document_id": "BH-D016",
-                  "filename": "group_cancellation_notice_jan15.txt",
-                  "start_line": 11,
-                  "end_line": 11,
-                  "quote": "The notice states that the office initiated the cancellation and that the participant should not come to the group room this morning."
-                },
-                {
-                  "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
-                  "document_id": "BH-D016",
-                  "filename": "group_cancellation_notice_jan15.txt",
                   "start_line": 15,
                   "end_line": 15,
-                  "quote": "No group was held and no participants were seen for HG-E108. No replacement group was conducted in the January 15 slot."
+                  "quote": "No group was held and no participants were seen for HG-E108."
                 }
               ]
             },
@@ -1571,12 +1667,12 @@
                   "quote": "HG-E108   | Jan15 | Coping skills group    | 10:00–11:30    | Clinic cancelled"
                 },
                 {
-                  "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
-                  "document_id": "BH-D016",
-                  "filename": "group_cancellation_notice_jan15.txt",
-                  "start_line": 9,
-                  "end_line": 9,
-                  "quote": "A covering facilitator is unavailable for this morning's group."
+                  "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
+                  "document_id": "BH-D006",
+                  "filename": "early_appointment_status_export.txt",
+                  "start_line": 20,
+                  "end_line": 20,
+                  "quote": "HG-E108 was removed from the active room schedule after staff illness was reported. A cancellation message was released to all registered members."
                 },
                 {
                   "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
@@ -1590,25 +1686,9 @@
                   "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
                   "document_id": "BH-D016",
                   "filename": "group_cancellation_notice_jan15.txt",
-                  "start_line": 9,
-                  "end_line": 9,
-                  "quote": "The group room has been released from the schedule, and registered participants are being contacted before the planned start time."
-                },
-                {
-                  "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
-                  "document_id": "BH-D016",
-                  "filename": "group_cancellation_notice_jan15.txt",
-                  "start_line": 11,
-                  "end_line": 11,
-                  "quote": "The notice states that the office initiated the cancellation and that the participant should not come to the group room this morning."
-                },
-                {
-                  "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
-                  "document_id": "BH-D016",
-                  "filename": "group_cancellation_notice_jan15.txt",
                   "start_line": 15,
                   "end_line": 15,
-                  "quote": "No group was held and no participants were seen for HG-E108. No replacement group was conducted in the January 15 slot."
+                  "quote": "No group was held and no participants were seen for HG-E108."
                 }
               ]
             }
@@ -1623,12 +1703,12 @@
               "quote": "HG-E108   | Jan15 | Coping skills group    | 10:00–11:30    | Clinic cancelled"
             },
             {
-              "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
-              "document_id": "BH-D016",
-              "filename": "group_cancellation_notice_jan15.txt",
-              "start_line": 9,
-              "end_line": 9,
-              "quote": "A covering facilitator is unavailable for this morning's group."
+              "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
+              "document_id": "BH-D006",
+              "filename": "early_appointment_status_export.txt",
+              "start_line": 20,
+              "end_line": 20,
+              "quote": "HG-E108 was removed from the active room schedule after staff illness was reported. A cancellation message was released to all registered members."
             },
             {
               "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
@@ -1642,25 +1722,9 @@
               "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
               "document_id": "BH-D016",
               "filename": "group_cancellation_notice_jan15.txt",
-              "start_line": 9,
-              "end_line": 9,
-              "quote": "The group room has been released from the schedule, and registered participants are being contacted before the planned start time."
-            },
-            {
-              "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
-              "document_id": "BH-D016",
-              "filename": "group_cancellation_notice_jan15.txt",
-              "start_line": 11,
-              "end_line": 11,
-              "quote": "The notice states that the office initiated the cancellation and that the participant should not come to the group room this morning."
-            },
-            {
-              "content_hash": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
-              "document_id": "BH-D016",
-              "filename": "group_cancellation_notice_jan15.txt",
               "start_line": 15,
               "end_line": 15,
-              "quote": "No group was held and no participants were seen for HG-E108. No replacement group was conducted in the January 15 slot."
+              "quote": "No group was held and no participants were seen for HG-E108."
             }
           ]
         },
@@ -1673,17 +1737,14 @@
           "patient_present": false,
           "alternatives": [
             {
-              "minutes": null,
-              "intervals": [],
-              "sources": [
+              "minutes": 40,
+              "intervals": [
                 {
-                  "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
-                  "document_id": "BH-D006",
-                  "filename": "early_appointment_status_export.txt",
-                  "start_line": 18,
-                  "end_line": 18,
-                  "quote": "HG-E109   | Jan16 | Family collateral      | 14:00–14:40    | Completed"
-                },
+                  "start": "14:00",
+                  "end": "14:40"
+                }
+              ],
+              "sources": [
                 {
                   "content_hash": "432c973d1a4d505b49ba85c3c92dead5c2a70faca6b6dd66e87db92b95329fea",
                   "document_id": "BH-D012",
@@ -1747,6 +1808,14 @@
                   "quote": "HG-E109   | Jan16 | Family collateral      | 14:00–14:40    | Completed"
                 },
                 {
+                  "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
+                  "document_id": "BH-D006",
+                  "filename": "early_appointment_status_export.txt",
+                  "start_line": 20,
+                  "end_line": 20,
+                  "quote": "Appointment HG-E109 was retained as a partner collateral contact after Rowan could not attend."
+                },
+                {
                   "content_hash": "432c973d1a4d505b49ba85c3c92dead5c2a70faca6b6dd66e87db92b95329fea",
                   "document_id": "BH-D012",
                   "filename": "partner_collateral_jan16.txt",
@@ -1790,17 +1859,9 @@
             },
             {
               "field": "duration",
-              "status": "missing_evidence",
+              "status": "established",
               "reason": "Intersect attendance with activity and remove breaks for each interpretation.",
               "sources": [
-                {
-                  "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
-                  "document_id": "BH-D006",
-                  "filename": "early_appointment_status_export.txt",
-                  "start_line": 18,
-                  "end_line": 18,
-                  "quote": "HG-E109   | Jan16 | Family collateral      | 14:00–14:40    | Completed"
-                },
                 {
                   "content_hash": "432c973d1a4d505b49ba85c3c92dead5c2a70faca6b6dd66e87db92b95329fea",
                   "document_id": "BH-D012",
@@ -1852,6 +1913,14 @@
               "start_line": 18,
               "end_line": 18,
               "quote": "HG-E109   | Jan16 | Family collateral      | 14:00–14:40    | Completed"
+            },
+            {
+              "content_hash": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
+              "document_id": "BH-D006",
+              "filename": "early_appointment_status_export.txt",
+              "start_line": 20,
+              "end_line": 20,
+              "quote": "Appointment HG-E109 was retained as a partner collateral contact after Rowan could not attend."
             },
             {
               "content_hash": "432c973d1a4d505b49ba85c3c92dead5c2a70faca6b6dd66e87db92b95329fea",
@@ -2014,15 +2083,31 @@
                   "filename": "BH-D102_original_attendance_2026-01-19.txt",
                   "start_line": 16,
                   "end_line": 16,
+                  "quote": "The staff member closing the roster certified the patient row as shown at the time of signing."
+                },
+                {
+                  "content_hash": "514ca20809f682607e91b924c6cef0bb22f43a3d12cedbd23ea5fa362910cce5",
+                  "document_id": "BH-D102",
+                  "filename": "BH-D102_original_attendance_2026-01-19.txt",
+                  "start_line": 16,
+                  "end_line": 16,
                   "quote": "This roster is the original signed attendance entry for the listed service date."
                 },
                 {
-                  "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
-                  "document_id": "BH-D103",
-                  "filename": "BH-D103_attendance_correction_2026-01-20.txt",
-                  "start_line": 5,
-                  "end_line": 5,
-                  "quote": "Applies to group encounter HG-E110, service date January 19, 2026"
+                  "content_hash": "514ca20809f682607e91b924c6cef0bb22f43a3d12cedbd23ea5fa362910cce5",
+                  "document_id": "BH-D102",
+                  "filename": "BH-D102_original_attendance_2026-01-19.txt",
+                  "start_line": 18,
+                  "end_line": 18,
+                  "quote": "Electronically signed: Leah Chen, LCSW | January 19, 2026, 12:14"
+                },
+                {
+                  "content_hash": "514ca20809f682607e91b924c6cef0bb22f43a3d12cedbd23ea5fa362910cce5",
+                  "document_id": "BH-D102",
+                  "filename": "BH-D102_original_attendance_2026-01-19.txt",
+                  "start_line": 19,
+                  "end_line": 19,
+                  "quote": "Document status: Final"
                 },
                 {
                   "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
@@ -2031,6 +2116,14 @@
                   "start_line": 7,
                   "end_line": 7,
                   "quote": "Correction: Patient departure for HG-E110 is 11:15, replacing the original roster value of 11:30. Patient arrival remains 10:00."
+                },
+                {
+                  "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
+                  "document_id": "BH-D103",
+                  "filename": "BH-D103_attendance_correction_2026-01-20.txt",
+                  "start_line": 11,
+                  "end_line": 11,
+                  "quote": "The original signed roster is retained in the chart with this correction attached to its attendance entry."
                 },
                 {
                   "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
@@ -2188,15 +2281,31 @@
                   "filename": "BH-D102_original_attendance_2026-01-19.txt",
                   "start_line": 16,
                   "end_line": 16,
+                  "quote": "The staff member closing the roster certified the patient row as shown at the time of signing."
+                },
+                {
+                  "content_hash": "514ca20809f682607e91b924c6cef0bb22f43a3d12cedbd23ea5fa362910cce5",
+                  "document_id": "BH-D102",
+                  "filename": "BH-D102_original_attendance_2026-01-19.txt",
+                  "start_line": 16,
+                  "end_line": 16,
                   "quote": "This roster is the original signed attendance entry for the listed service date."
                 },
                 {
-                  "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
-                  "document_id": "BH-D103",
-                  "filename": "BH-D103_attendance_correction_2026-01-20.txt",
-                  "start_line": 5,
-                  "end_line": 5,
-                  "quote": "Applies to group encounter HG-E110, service date January 19, 2026"
+                  "content_hash": "514ca20809f682607e91b924c6cef0bb22f43a3d12cedbd23ea5fa362910cce5",
+                  "document_id": "BH-D102",
+                  "filename": "BH-D102_original_attendance_2026-01-19.txt",
+                  "start_line": 18,
+                  "end_line": 18,
+                  "quote": "Electronically signed: Leah Chen, LCSW | January 19, 2026, 12:14"
+                },
+                {
+                  "content_hash": "514ca20809f682607e91b924c6cef0bb22f43a3d12cedbd23ea5fa362910cce5",
+                  "document_id": "BH-D102",
+                  "filename": "BH-D102_original_attendance_2026-01-19.txt",
+                  "start_line": 19,
+                  "end_line": 19,
+                  "quote": "Document status: Final"
                 },
                 {
                   "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
@@ -2205,6 +2314,14 @@
                   "start_line": 7,
                   "end_line": 7,
                   "quote": "Correction: Patient departure for HG-E110 is 11:15, replacing the original roster value of 11:30. Patient arrival remains 10:00."
+                },
+                {
+                  "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
+                  "document_id": "BH-D103",
+                  "filename": "BH-D103_attendance_correction_2026-01-20.txt",
+                  "start_line": 11,
+                  "end_line": 11,
+                  "quote": "The original signed roster is retained in the chart with this correction attached to its attendance entry."
                 },
                 {
                   "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
@@ -2257,17 +2374,17 @@
                   "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
                   "document_id": "BH-D103",
                   "filename": "BH-D103_attendance_correction_2026-01-20.txt",
-                  "start_line": 5,
-                  "end_line": 5,
-                  "quote": "Applies to group encounter HG-E110, service date January 19, 2026"
+                  "start_line": 7,
+                  "end_line": 7,
+                  "quote": "Correction: Patient departure for HG-E110 is 11:15, replacing the original roster value of 11:30. Patient arrival remains 10:00."
                 },
                 {
                   "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
                   "document_id": "BH-D103",
                   "filename": "BH-D103_attendance_correction_2026-01-20.txt",
-                  "start_line": 7,
-                  "end_line": 7,
-                  "quote": "Correction: Patient departure for HG-E110 is 11:15, replacing the original roster value of 11:30. Patient arrival remains 10:00."
+                  "start_line": 11,
+                  "end_line": 11,
+                  "quote": "The original signed roster is retained in the chart with this correction attached to its attendance entry."
                 },
                 {
                   "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
@@ -2386,15 +2503,31 @@
                   "filename": "BH-D102_original_attendance_2026-01-19.txt",
                   "start_line": 16,
                   "end_line": 16,
+                  "quote": "The staff member closing the roster certified the patient row as shown at the time of signing."
+                },
+                {
+                  "content_hash": "514ca20809f682607e91b924c6cef0bb22f43a3d12cedbd23ea5fa362910cce5",
+                  "document_id": "BH-D102",
+                  "filename": "BH-D102_original_attendance_2026-01-19.txt",
+                  "start_line": 16,
+                  "end_line": 16,
                   "quote": "This roster is the original signed attendance entry for the listed service date."
                 },
                 {
-                  "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
-                  "document_id": "BH-D103",
-                  "filename": "BH-D103_attendance_correction_2026-01-20.txt",
-                  "start_line": 5,
-                  "end_line": 5,
-                  "quote": "Applies to group encounter HG-E110, service date January 19, 2026"
+                  "content_hash": "514ca20809f682607e91b924c6cef0bb22f43a3d12cedbd23ea5fa362910cce5",
+                  "document_id": "BH-D102",
+                  "filename": "BH-D102_original_attendance_2026-01-19.txt",
+                  "start_line": 18,
+                  "end_line": 18,
+                  "quote": "Electronically signed: Leah Chen, LCSW | January 19, 2026, 12:14"
+                },
+                {
+                  "content_hash": "514ca20809f682607e91b924c6cef0bb22f43a3d12cedbd23ea5fa362910cce5",
+                  "document_id": "BH-D102",
+                  "filename": "BH-D102_original_attendance_2026-01-19.txt",
+                  "start_line": 19,
+                  "end_line": 19,
+                  "quote": "Document status: Final"
                 },
                 {
                   "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
@@ -2403,6 +2536,14 @@
                   "start_line": 7,
                   "end_line": 7,
                   "quote": "Correction: Patient departure for HG-E110 is 11:15, replacing the original roster value of 11:30. Patient arrival remains 10:00."
+                },
+                {
+                  "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
+                  "document_id": "BH-D103",
+                  "filename": "BH-D103_attendance_correction_2026-01-20.txt",
+                  "start_line": 11,
+                  "end_line": 11,
+                  "quote": "The original signed roster is retained in the chart with this correction attached to its attendance entry."
                 },
                 {
                   "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
@@ -2550,15 +2691,31 @@
               "filename": "BH-D102_original_attendance_2026-01-19.txt",
               "start_line": 16,
               "end_line": 16,
+              "quote": "The staff member closing the roster certified the patient row as shown at the time of signing."
+            },
+            {
+              "content_hash": "514ca20809f682607e91b924c6cef0bb22f43a3d12cedbd23ea5fa362910cce5",
+              "document_id": "BH-D102",
+              "filename": "BH-D102_original_attendance_2026-01-19.txt",
+              "start_line": 16,
+              "end_line": 16,
               "quote": "This roster is the original signed attendance entry for the listed service date."
             },
             {
-              "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
-              "document_id": "BH-D103",
-              "filename": "BH-D103_attendance_correction_2026-01-20.txt",
-              "start_line": 5,
-              "end_line": 5,
-              "quote": "Applies to group encounter HG-E110, service date January 19, 2026"
+              "content_hash": "514ca20809f682607e91b924c6cef0bb22f43a3d12cedbd23ea5fa362910cce5",
+              "document_id": "BH-D102",
+              "filename": "BH-D102_original_attendance_2026-01-19.txt",
+              "start_line": 18,
+              "end_line": 18,
+              "quote": "Electronically signed: Leah Chen, LCSW | January 19, 2026, 12:14"
+            },
+            {
+              "content_hash": "514ca20809f682607e91b924c6cef0bb22f43a3d12cedbd23ea5fa362910cce5",
+              "document_id": "BH-D102",
+              "filename": "BH-D102_original_attendance_2026-01-19.txt",
+              "start_line": 19,
+              "end_line": 19,
+              "quote": "Document status: Final"
             },
             {
               "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
@@ -2567,6 +2724,14 @@
               "start_line": 7,
               "end_line": 7,
               "quote": "Correction: Patient departure for HG-E110 is 11:15, replacing the original roster value of 11:30. Patient arrival remains 10:00."
+            },
+            {
+              "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
+              "document_id": "BH-D103",
+              "filename": "BH-D103_attendance_correction_2026-01-20.txt",
+              "start_line": 11,
+              "end_line": 11,
+              "quote": "The original signed roster is retained in the chart with this correction attached to its attendance entry."
             },
             {
               "content_hash": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
@@ -2639,17 +2804,17 @@
                   "content_hash": "91fd8e8b1b3182207971dbecd77e3d2bd13e5f49608f4083e4a9245b8a2d8935",
                   "document_id": "BH-D105",
                   "filename": "BH-D105_individual_2026-01-19.txt",
-                  "start_line": 4,
-                  "end_line": 4,
-                  "quote": "Rowan Mercer | DOB: 1991-04-12 | MRN: HG-M042"
+                  "start_line": 5,
+                  "end_line": 5,
+                  "quote": "January 19, 2026 | In person"
                 },
                 {
                   "content_hash": "91fd8e8b1b3182207971dbecd77e3d2bd13e5f49608f4083e4a9245b8a2d8935",
                   "document_id": "BH-D105",
                   "filename": "BH-D105_individual_2026-01-19.txt",
-                  "start_line": 5,
-                  "end_line": 5,
-                  "quote": "January 19, 2026 | In person"
+                  "start_line": 6,
+                  "end_line": 6,
+                  "quote": "Completed: 30 minutes"
                 },
                 {
                   "content_hash": "91fd8e8b1b3182207971dbecd77e3d2bd13e5f49608f4083e4a9245b8a2d8935",
@@ -2693,17 +2858,17 @@
                   "content_hash": "91fd8e8b1b3182207971dbecd77e3d2bd13e5f49608f4083e4a9245b8a2d8935",
                   "document_id": "BH-D105",
                   "filename": "BH-D105_individual_2026-01-19.txt",
-                  "start_line": 4,
-                  "end_line": 4,
-                  "quote": "Rowan Mercer | DOB: 1991-04-12 | MRN: HG-M042"
+                  "start_line": 5,
+                  "end_line": 5,
+                  "quote": "January 19, 2026 | In person"
                 },
                 {
                   "content_hash": "91fd8e8b1b3182207971dbecd77e3d2bd13e5f49608f4083e4a9245b8a2d8935",
                   "document_id": "BH-D105",
                   "filename": "BH-D105_individual_2026-01-19.txt",
-                  "start_line": 5,
-                  "end_line": 5,
-                  "quote": "January 19, 2026 | In person"
+                  "start_line": 6,
+                  "end_line": 6,
+                  "quote": "Completed: 30 minutes"
                 },
                 {
                   "content_hash": "91fd8e8b1b3182207971dbecd77e3d2bd13e5f49608f4083e4a9245b8a2d8935",
@@ -2740,17 +2905,17 @@
                   "content_hash": "91fd8e8b1b3182207971dbecd77e3d2bd13e5f49608f4083e4a9245b8a2d8935",
                   "document_id": "BH-D105",
                   "filename": "BH-D105_individual_2026-01-19.txt",
-                  "start_line": 4,
-                  "end_line": 4,
-                  "quote": "Rowan Mercer | DOB: 1991-04-12 | MRN: HG-M042"
+                  "start_line": 5,
+                  "end_line": 5,
+                  "quote": "January 19, 2026 | In person"
                 },
                 {
                   "content_hash": "91fd8e8b1b3182207971dbecd77e3d2bd13e5f49608f4083e4a9245b8a2d8935",
                   "document_id": "BH-D105",
                   "filename": "BH-D105_individual_2026-01-19.txt",
-                  "start_line": 5,
-                  "end_line": 5,
-                  "quote": "January 19, 2026 | In person"
+                  "start_line": 6,
+                  "end_line": 6,
+                  "quote": "Completed: 30 minutes"
                 },
                 {
                   "content_hash": "91fd8e8b1b3182207971dbecd77e3d2bd13e5f49608f4083e4a9245b8a2d8935",
@@ -2784,17 +2949,17 @@
               "content_hash": "91fd8e8b1b3182207971dbecd77e3d2bd13e5f49608f4083e4a9245b8a2d8935",
               "document_id": "BH-D105",
               "filename": "BH-D105_individual_2026-01-19.txt",
-              "start_line": 4,
-              "end_line": 4,
-              "quote": "Rowan Mercer | DOB: 1991-04-12 | MRN: HG-M042"
+              "start_line": 5,
+              "end_line": 5,
+              "quote": "January 19, 2026 | In person"
             },
             {
               "content_hash": "91fd8e8b1b3182207971dbecd77e3d2bd13e5f49608f4083e4a9245b8a2d8935",
               "document_id": "BH-D105",
               "filename": "BH-D105_individual_2026-01-19.txt",
-              "start_line": 5,
-              "end_line": 5,
-              "quote": "January 19, 2026 | In person"
+              "start_line": 6,
+              "end_line": 6,
+              "quote": "Completed: 30 minutes"
             },
             {
               "content_hash": "91fd8e8b1b3182207971dbecd77e3d2bd13e5f49608f4083e4a9245b8a2d8935",
@@ -2879,17 +3044,9 @@
                   "content_hash": "09c946a2248a5a81b2c1dc85b7620babe57b72f1bd4bed3d49eba574be5ccd46",
                   "document_id": "BH-D106",
                   "filename": "BH-D106_telehealth_2026-01-21.txt",
-                  "start_line": 17,
-                  "end_line": 17,
-                  "quote": "HG-A112 | VC-112A | January 21 13:00 | January 21 13:20"
-                },
-                {
-                  "content_hash": "09c946a2248a5a81b2c1dc85b7620babe57b72f1bd4bed3d49eba574be5ccd46",
-                  "document_id": "BH-D106",
-                  "filename": "BH-D106_telehealth_2026-01-21.txt",
-                  "start_line": 18,
+                  "start_line": 16,
                   "end_line": 18,
-                  "quote": "HG-A112 | VC-112B | January 21 13:30 | January 21 13:55"
+                  "quote": "Appointment ID | Call ID | Connected | Ended\nHG-A112 | VC-112A | January 21 13:00 | January 21 13:20\nHG-A112 | VC-112B | January 21 13:30 | January 21 13:55"
                 }
               ],
               "choices": {},
@@ -2949,17 +3106,9 @@
                   "content_hash": "09c946a2248a5a81b2c1dc85b7620babe57b72f1bd4bed3d49eba574be5ccd46",
                   "document_id": "BH-D106",
                   "filename": "BH-D106_telehealth_2026-01-21.txt",
-                  "start_line": 17,
-                  "end_line": 17,
-                  "quote": "HG-A112 | VC-112A | January 21 13:00 | January 21 13:20"
-                },
-                {
-                  "content_hash": "09c946a2248a5a81b2c1dc85b7620babe57b72f1bd4bed3d49eba574be5ccd46",
-                  "document_id": "BH-D106",
-                  "filename": "BH-D106_telehealth_2026-01-21.txt",
-                  "start_line": 18,
+                  "start_line": 16,
                   "end_line": 18,
-                  "quote": "HG-A112 | VC-112B | January 21 13:30 | January 21 13:55"
+                  "quote": "Appointment ID | Call ID | Connected | Ended\nHG-A112 | VC-112A | January 21 13:00 | January 21 13:20\nHG-A112 | VC-112B | January 21 13:30 | January 21 13:55"
                 }
               ]
             },
@@ -3012,17 +3161,9 @@
                   "content_hash": "09c946a2248a5a81b2c1dc85b7620babe57b72f1bd4bed3d49eba574be5ccd46",
                   "document_id": "BH-D106",
                   "filename": "BH-D106_telehealth_2026-01-21.txt",
-                  "start_line": 17,
-                  "end_line": 17,
-                  "quote": "HG-A112 | VC-112A | January 21 13:00 | January 21 13:20"
-                },
-                {
-                  "content_hash": "09c946a2248a5a81b2c1dc85b7620babe57b72f1bd4bed3d49eba574be5ccd46",
-                  "document_id": "BH-D106",
-                  "filename": "BH-D106_telehealth_2026-01-21.txt",
-                  "start_line": 18,
+                  "start_line": 16,
                   "end_line": 18,
-                  "quote": "HG-A112 | VC-112B | January 21 13:30 | January 21 13:55"
+                  "quote": "Appointment ID | Call ID | Connected | Ended\nHG-A112 | VC-112A | January 21 13:00 | January 21 13:20\nHG-A112 | VC-112B | January 21 13:30 | January 21 13:55"
                 }
               ]
             }
@@ -3072,17 +3213,9 @@
               "content_hash": "09c946a2248a5a81b2c1dc85b7620babe57b72f1bd4bed3d49eba574be5ccd46",
               "document_id": "BH-D106",
               "filename": "BH-D106_telehealth_2026-01-21.txt",
-              "start_line": 17,
-              "end_line": 17,
-              "quote": "HG-A112 | VC-112A | January 21 13:00 | January 21 13:20"
-            },
-            {
-              "content_hash": "09c946a2248a5a81b2c1dc85b7620babe57b72f1bd4bed3d49eba574be5ccd46",
-              "document_id": "BH-D106",
-              "filename": "BH-D106_telehealth_2026-01-21.txt",
-              "start_line": 18,
+              "start_line": 16,
               "end_line": 18,
-              "quote": "HG-A112 | VC-112B | January 21 13:30 | January 21 13:55"
+              "quote": "Appointment ID | Call ID | Connected | Ended\nHG-A112 | VC-112A | January 21 13:00 | January 21 13:20\nHG-A112 | VC-112B | January 21 13:30 | January 21 13:55"
             }
           ]
         },
@@ -3632,14 +3765,6 @@
                   "content_hash": "4b64c46a13b80c09ec46d1cbb7b577dbfe8027cb62366631c15efa8ec1a1f58b",
                   "document_id": "BH-D110",
                   "filename": "BH-D110_individual_primary_record_2026-01-26.txt",
-                  "start_line": 4,
-                  "end_line": 4,
-                  "quote": "Rowan Mercer | DOB: 1991-04-12 | MRN: HG-M042"
-                },
-                {
-                  "content_hash": "4b64c46a13b80c09ec46d1cbb7b577dbfe8027cb62366631c15efa8ec1a1f58b",
-                  "document_id": "BH-D110",
-                  "filename": "BH-D110_individual_primary_record_2026-01-26.txt",
                   "start_line": 5,
                   "end_line": 5,
                   "quote": "January 26, 2026 | In person"
@@ -3699,14 +3824,6 @@
                   "start_line": 3,
                   "end_line": 3,
                   "quote": "Individual psychotherapy | Encounter HG-E115 | Appointment HG-A115"
-                },
-                {
-                  "content_hash": "4b64c46a13b80c09ec46d1cbb7b577dbfe8027cb62366631c15efa8ec1a1f58b",
-                  "document_id": "BH-D110",
-                  "filename": "BH-D110_individual_primary_record_2026-01-26.txt",
-                  "start_line": 4,
-                  "end_line": 4,
-                  "quote": "Rowan Mercer | DOB: 1991-04-12 | MRN: HG-M042"
                 },
                 {
                   "content_hash": "4b64c46a13b80c09ec46d1cbb7b577dbfe8027cb62366631c15efa8ec1a1f58b",
@@ -3831,14 +3948,6 @@
                   "content_hash": "4b64c46a13b80c09ec46d1cbb7b577dbfe8027cb62366631c15efa8ec1a1f58b",
                   "document_id": "BH-D110",
                   "filename": "BH-D110_individual_primary_record_2026-01-26.txt",
-                  "start_line": 4,
-                  "end_line": 4,
-                  "quote": "Rowan Mercer | DOB: 1991-04-12 | MRN: HG-M042"
-                },
-                {
-                  "content_hash": "4b64c46a13b80c09ec46d1cbb7b577dbfe8027cb62366631c15efa8ec1a1f58b",
-                  "document_id": "BH-D110",
-                  "filename": "BH-D110_individual_primary_record_2026-01-26.txt",
                   "start_line": 5,
                   "end_line": 5,
                   "quote": "January 26, 2026 | In person"
@@ -3950,14 +4059,6 @@
               "start_line": 3,
               "end_line": 3,
               "quote": "Individual psychotherapy | Encounter HG-E115 | Appointment HG-A115"
-            },
-            {
-              "content_hash": "4b64c46a13b80c09ec46d1cbb7b577dbfe8027cb62366631c15efa8ec1a1f58b",
-              "document_id": "BH-D110",
-              "filename": "BH-D110_individual_primary_record_2026-01-26.txt",
-              "start_line": 4,
-              "end_line": 4,
-              "quote": "Rowan Mercer | DOB: 1991-04-12 | MRN: HG-M042"
             },
             {
               "content_hash": "4b64c46a13b80c09ec46d1cbb7b577dbfe8027cb62366631c15efa8ec1a1f58b",
@@ -4146,6 +4247,46 @@
                   "start_line": 11,
                   "end_line": 11,
                   "quote": "Template attendance text: Patient attended the full session and participated in the skills discussion."
+                },
+                {
+                  "content_hash": "b4390ed6b672381f671aae23dbfa937d9c5585ca4b6db83cd811797e2a34505f",
+                  "document_id": "BH-D112",
+                  "filename": "BH-D112_draft_note_and_charge_extract_2026-01-27.txt",
+                  "start_line": 18,
+                  "end_line": 18,
+                  "quote": "SECTION B — POSTED CHARGE EXTRACT"
+                },
+                {
+                  "content_hash": "b4390ed6b672381f671aae23dbfa937d9c5585ca4b6db83cd811797e2a34505f",
+                  "document_id": "BH-D112",
+                  "filename": "BH-D112_draft_note_and_charge_extract_2026-01-27.txt",
+                  "start_line": 20,
+                  "end_line": 20,
+                  "quote": "Service date: January 27, 2026"
+                },
+                {
+                  "content_hash": "b4390ed6b672381f671aae23dbfa937d9c5585ca4b6db83cd811797e2a34505f",
+                  "document_id": "BH-D112",
+                  "filename": "BH-D112_draft_note_and_charge_extract_2026-01-27.txt",
+                  "start_line": 21,
+                  "end_line": 21,
+                  "quote": "Description: Group psychotherapy"
+                },
+                {
+                  "content_hash": "b4390ed6b672381f671aae23dbfa937d9c5585ca4b6db83cd811797e2a34505f",
+                  "document_id": "BH-D112",
+                  "filename": "BH-D112_draft_note_and_charge_extract_2026-01-27.txt",
+                  "start_line": 22,
+                  "end_line": 22,
+                  "quote": "Quantity charged: 1 group session"
+                },
+                {
+                  "content_hash": "b4390ed6b672381f671aae23dbfa937d9c5585ca4b6db83cd811797e2a34505f",
+                  "document_id": "BH-D112",
+                  "filename": "BH-D112_draft_note_and_charge_extract_2026-01-27.txt",
+                  "start_line": 23,
+                  "end_line": 23,
+                  "quote": "Charge status in this export: Posted"
                 }
               ]
             },
@@ -4213,6 +4354,46 @@
               "start_line": 11,
               "end_line": 11,
               "quote": "Template attendance text: Patient attended the full session and participated in the skills discussion."
+            },
+            {
+              "content_hash": "b4390ed6b672381f671aae23dbfa937d9c5585ca4b6db83cd811797e2a34505f",
+              "document_id": "BH-D112",
+              "filename": "BH-D112_draft_note_and_charge_extract_2026-01-27.txt",
+              "start_line": 18,
+              "end_line": 18,
+              "quote": "SECTION B — POSTED CHARGE EXTRACT"
+            },
+            {
+              "content_hash": "b4390ed6b672381f671aae23dbfa937d9c5585ca4b6db83cd811797e2a34505f",
+              "document_id": "BH-D112",
+              "filename": "BH-D112_draft_note_and_charge_extract_2026-01-27.txt",
+              "start_line": 20,
+              "end_line": 20,
+              "quote": "Service date: January 27, 2026"
+            },
+            {
+              "content_hash": "b4390ed6b672381f671aae23dbfa937d9c5585ca4b6db83cd811797e2a34505f",
+              "document_id": "BH-D112",
+              "filename": "BH-D112_draft_note_and_charge_extract_2026-01-27.txt",
+              "start_line": 21,
+              "end_line": 21,
+              "quote": "Description: Group psychotherapy"
+            },
+            {
+              "content_hash": "b4390ed6b672381f671aae23dbfa937d9c5585ca4b6db83cd811797e2a34505f",
+              "document_id": "BH-D112",
+              "filename": "BH-D112_draft_note_and_charge_extract_2026-01-27.txt",
+              "start_line": 22,
+              "end_line": 22,
+              "quote": "Quantity charged: 1 group session"
+            },
+            {
+              "content_hash": "b4390ed6b672381f671aae23dbfa937d9c5585ca4b6db83cd811797e2a34505f",
+              "document_id": "BH-D112",
+              "filename": "BH-D112_draft_note_and_charge_extract_2026-01-27.txt",
+              "start_line": 23,
+              "end_line": 23,
+              "quote": "Charge status in this export: Posted"
             }
           ]
         },
@@ -4603,6 +4784,22 @@
                   "start_line": 7,
                   "end_line": 7,
                   "quote": "Partner only: 13:00–13:15. Rowan present with partner: 13:15–13:45, 30 minutes."
+                },
+                {
+                  "content_hash": "36764827bcb39caf2e9304c881f55e4acba9744a9792228bf36981f19a0feaf9",
+                  "document_id": "BH-D113",
+                  "filename": "BH-D113_family_therapy_2026-01-30.txt",
+                  "start_line": 7,
+                  "end_line": 7,
+                  "quote": "Rowan present with partner: 13:15–13:45, 30 minutes."
+                },
+                {
+                  "content_hash": "36764827bcb39caf2e9304c881f55e4acba9744a9792228bf36981f19a0feaf9",
+                  "document_id": "BH-D113",
+                  "filename": "BH-D113_family_therapy_2026-01-30.txt",
+                  "start_line": 11,
+                  "end_line": 11,
+                  "quote": "Rowan joined at 13:15 and participated through the end of the session."
                 }
               ],
               "choices": {},
@@ -4649,6 +4846,22 @@
                   "start_line": 7,
                   "end_line": 7,
                   "quote": "Partner only: 13:00–13:15. Rowan present with partner: 13:15–13:45, 30 minutes."
+                },
+                {
+                  "content_hash": "36764827bcb39caf2e9304c881f55e4acba9744a9792228bf36981f19a0feaf9",
+                  "document_id": "BH-D113",
+                  "filename": "BH-D113_family_therapy_2026-01-30.txt",
+                  "start_line": 7,
+                  "end_line": 7,
+                  "quote": "Rowan present with partner: 13:15–13:45, 30 minutes."
+                },
+                {
+                  "content_hash": "36764827bcb39caf2e9304c881f55e4acba9744a9792228bf36981f19a0feaf9",
+                  "document_id": "BH-D113",
+                  "filename": "BH-D113_family_therapy_2026-01-30.txt",
+                  "start_line": 11,
+                  "end_line": 11,
+                  "quote": "Rowan joined at 13:15 and participated through the end of the session."
                 }
               ]
             },
@@ -4688,6 +4901,22 @@
                   "start_line": 7,
                   "end_line": 7,
                   "quote": "Partner only: 13:00–13:15. Rowan present with partner: 13:15–13:45, 30 minutes."
+                },
+                {
+                  "content_hash": "36764827bcb39caf2e9304c881f55e4acba9744a9792228bf36981f19a0feaf9",
+                  "document_id": "BH-D113",
+                  "filename": "BH-D113_family_therapy_2026-01-30.txt",
+                  "start_line": 7,
+                  "end_line": 7,
+                  "quote": "Rowan present with partner: 13:15–13:45, 30 minutes."
+                },
+                {
+                  "content_hash": "36764827bcb39caf2e9304c881f55e4acba9744a9792228bf36981f19a0feaf9",
+                  "document_id": "BH-D113",
+                  "filename": "BH-D113_family_therapy_2026-01-30.txt",
+                  "start_line": 11,
+                  "end_line": 11,
+                  "quote": "Rowan joined at 13:15 and participated through the end of the session."
                 }
               ]
             }
@@ -4724,6 +4953,22 @@
               "start_line": 7,
               "end_line": 7,
               "quote": "Partner only: 13:00–13:15. Rowan present with partner: 13:15–13:45, 30 minutes."
+            },
+            {
+              "content_hash": "36764827bcb39caf2e9304c881f55e4acba9744a9792228bf36981f19a0feaf9",
+              "document_id": "BH-D113",
+              "filename": "BH-D113_family_therapy_2026-01-30.txt",
+              "start_line": 7,
+              "end_line": 7,
+              "quote": "Rowan present with partner: 13:15–13:45, 30 minutes."
+            },
+            {
+              "content_hash": "36764827bcb39caf2e9304c881f55e4acba9744a9792228bf36981f19a0feaf9",
+              "document_id": "BH-D113",
+              "filename": "BH-D113_family_therapy_2026-01-30.txt",
+              "start_line": 11,
+              "end_line": 11,
+              "quote": "Rowan joined at 13:15 and participated through the end of the session."
             }
           ]
         },
@@ -4744,6 +4989,14 @@
                 }
               ],
               "sources": [
+                {
+                  "content_hash": "9942bd886fcd2158bbd56914551519397d70eef7103b6d33ba2fa90cc424093c",
+                  "document_id": "BH-D114",
+                  "filename": "BH-D114_medication_management_2026-01-30.txt",
+                  "start_line": 5,
+                  "end_line": 5,
+                  "quote": "Completed, 20 minutes"
+                },
                 {
                   "content_hash": "9942bd886fcd2158bbd56914551519397d70eef7103b6d33ba2fa90cc424093c",
                   "document_id": "BH-D114",
@@ -4780,6 +5033,14 @@
                   "filename": "BH-D114_medication_management_2026-01-30.txt",
                   "start_line": 5,
                   "end_line": 5,
+                  "quote": "Completed, 20 minutes"
+                },
+                {
+                  "content_hash": "9942bd886fcd2158bbd56914551519397d70eef7103b6d33ba2fa90cc424093c",
+                  "document_id": "BH-D114",
+                  "filename": "BH-D114_medication_management_2026-01-30.txt",
+                  "start_line": 5,
+                  "end_line": 5,
                   "quote": "January 30, 2026 | 15:00–15:20 | Completed, 20 minutes"
                 },
                 {
@@ -4803,6 +5064,14 @@
                   "filename": "BH-D114_medication_management_2026-01-30.txt",
                   "start_line": 5,
                   "end_line": 5,
+                  "quote": "Completed, 20 minutes"
+                },
+                {
+                  "content_hash": "9942bd886fcd2158bbd56914551519397d70eef7103b6d33ba2fa90cc424093c",
+                  "document_id": "BH-D114",
+                  "filename": "BH-D114_medication_management_2026-01-30.txt",
+                  "start_line": 5,
+                  "end_line": 5,
                   "quote": "January 30, 2026 | 15:00–15:20 | Completed, 20 minutes"
                 },
                 {
@@ -4817,6 +5086,14 @@
             }
           ],
           "sources": [
+            {
+              "content_hash": "9942bd886fcd2158bbd56914551519397d70eef7103b6d33ba2fa90cc424093c",
+              "document_id": "BH-D114",
+              "filename": "BH-D114_medication_management_2026-01-30.txt",
+              "start_line": 5,
+              "end_line": 5,
+              "quote": "Completed, 20 minutes"
+            },
             {
               "content_hash": "9942bd886fcd2158bbd56914551519397d70eef7103b6d33ba2fa90cc424093c",
               "document_id": "BH-D114",
@@ -4847,6 +5124,14 @@
               "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
               "document_id": "BH-D003",
               "filename": "signed_treatment_plan_jan05.txt",
+              "start_line": 6,
+              "end_line": 6,
+              "quote": "Episode dates: 2026-01-05 through 2026-01-30"
+            },
+            {
+              "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
+              "document_id": "BH-D003",
+              "filename": "signed_treatment_plan_jan05.txt",
               "start_line": 12,
               "end_line": 12,
               "quote": "A therapy day is a calendar day on which Rowan participates in individual, group, or family psychotherapy. Patient-present individual, group, and family therapy contribute to the minute goal. Medication management, contacts with collateral informants only, and care coordination do not contribute. This is the program's individualized treatment-plan goal for Rowan."
@@ -4858,6 +5143,22 @@
               "start_line": 12,
               "end_line": 12,
               "quote": "Local treatment participation goal: at least 3 therapy days and at least 150 minutes of patient-present therapy in each Monday–Sunday week."
+            },
+            {
+              "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
+              "document_id": "BH-D003",
+              "filename": "signed_treatment_plan_jan05.txt",
+              "start_line": 12,
+              "end_line": 12,
+              "quote": "at least 150 minutes of patient-present therapy"
+            },
+            {
+              "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
+              "document_id": "BH-D003",
+              "filename": "signed_treatment_plan_jan05.txt",
+              "start_line": 12,
+              "end_line": 12,
+              "quote": "at least 3 therapy days"
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
@@ -4872,14 +5173,20 @@
           ],
           "week_start": "Monday",
           "patient_present_required": true,
-          "note": "Medication management, collateral-only contacts, and care coordination do not count toward the participation goal.",
-          "grounding": null
+          "note": "Medication management, collateral-only contacts, and care coordination do not count toward the plan's minimums. Only patient-present individual, group, and family therapy are eligible.",
+          "grounding": {
+            "minimum_days_quote": "at least 3 therapy days",
+            "minimum_minutes_quote": "at least 150 minutes of patient-present therapy",
+            "effective_start_quote": "Episode dates: 2026-01-05 through 2026-01-30",
+            "effective_end_quote": null
+          }
         }
       ],
       "assessments": [
         {
           "quotes": [
-            "PHQ-9 completed by Rowan on 2026-01-05: total score 18. The questionnaire is retained in the assessment tab."
+            "PHQ-9 completed by Rowan on 2026-01-05: total score 18.",
+            "The questionnaire is retained in the assessment tab."
           ],
           "sources": [
             {
@@ -4888,7 +5195,15 @@
               "filename": "intake_and_individual_jan05.txt",
               "start_line": 15,
               "end_line": 15,
-              "quote": "PHQ-9 completed by Rowan on 2026-01-05: total score 18. The questionnaire is retained in the assessment tab."
+              "quote": "PHQ-9 completed by Rowan on 2026-01-05: total score 18."
+            },
+            {
+              "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
+              "document_id": "BH-D002",
+              "filename": "intake_and_individual_jan05.txt",
+              "start_line": 15,
+              "end_line": 15,
+              "quote": "The questionnaire is retained in the assessment tab."
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
@@ -5015,64 +5330,9 @@
       "observations": [
         {
           "quotes": [
-            "Presenting needs: depressed mood, sleep disruption, anxiety about resuming work responsibilities, and avoidance of tasks and communication."
-          ],
-          "sources": [
-            {
-              "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
-              "document_id": "BH-D003",
-              "filename": "signed_treatment_plan_jan05.txt",
-              "start_line": 10,
-              "end_line": 10,
-              "quote": "Presenting needs: depressed mood, sleep disruption, anxiety about resuming work responsibilities, and avoidance of tasks and communication."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-05",
-          "kind": "clinician_observation",
-          "text": "Depressed mood, sleep disruption, anxiety about resuming work responsibilities, and avoidance of tasks and communication."
-        },
-        {
-          "quotes": [
-            "Rowan wishes to improve follow-through without waiting for anxiety to disappear."
-          ],
-          "sources": [
-            {
-              "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
-              "document_id": "BH-D003",
-              "filename": "signed_treatment_plan_jan05.txt",
-              "start_line": 10,
-              "end_line": 10,
-              "quote": "Rowan wishes to improve follow-through without waiting for anxiety to disappear."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-05",
-          "kind": "patient_report",
-          "text": "Rowan wishes to improve follow-through without waiting for anxiety to disappear."
-        },
-        {
-          "quotes": [
-            "Partner support is available but repeated reminders sometimes increase tension."
-          ],
-          "sources": [
-            {
-              "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
-              "document_id": "BH-D003",
-              "filename": "signed_treatment_plan_jan05.txt",
-              "start_line": 10,
-              "end_line": 10,
-              "quote": "Partner support is available but repeated reminders sometimes increase tension."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-05",
-          "kind": "collateral_report",
-          "text": "Partner support is available but repeated reminders sometimes increase tension."
-        },
-        {
-          "quotes": [
-            "Rowan describes several weeks of low mood, reduced interest in usual activities, fragmented sleep, and difficulty beginning ordinary tasks."
+            "Rowan describes several weeks of low mood, reduced interest in usual activities, fragmented sleep, and difficulty beginning ordinary tasks.",
+            "Rowan has been postponing email replies, avoiding conversations about the return date, and spending more time alone at home.",
+            "Worry increases when thinking about returning to work after a recent leave."
           ],
           "sources": [
             {
@@ -5082,35 +5342,34 @@
               "start_line": 11,
               "end_line": 11,
               "quote": "Rowan describes several weeks of low mood, reduced interest in usual activities, fragmented sleep, and difficulty beginning ordinary tasks."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-05",
-          "kind": "patient_report",
-          "text": "Rowan reported several weeks of low mood, reduced interest in usual activities, fragmented sleep, and difficulty beginning ordinary tasks."
-        },
-        {
-          "quotes": [
-            "Worry increases when thinking about returning to work after a recent leave. Rowan has been postponing email replies, avoiding conversations about the return date, and spending more time alone at home."
-          ],
-          "sources": [
+            },
             {
               "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
               "document_id": "BH-D002",
               "filename": "intake_and_individual_jan05.txt",
               "start_line": 11,
               "end_line": 11,
-              "quote": "Worry increases when thinking about returning to work after a recent leave. Rowan has been postponing email replies, avoiding conversations about the return date, and spending more time alone at home."
+              "quote": "Rowan has been postponing email replies, avoiding conversations about the return date, and spending more time alone at home."
+            },
+            {
+              "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
+              "document_id": "BH-D002",
+              "filename": "intake_and_individual_jan05.txt",
+              "start_line": 11,
+              "end_line": 11,
+              "quote": "Worry increases when thinking about returning to work after a recent leave."
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-05",
           "kind": "patient_report",
-          "text": "Rowan reported increased worry about returning to work, postponing email replies, avoiding conversations about the return date, and spending more time alone at home."
+          "text": "Rowan reports low mood, reduced interest, fragmented sleep, difficulty starting tasks, increased worry about returning to work, postponing emails, avoiding conversations about return date, and spending more time alone."
         },
         {
           "quotes": [
-            "Speech was clear and organized. Affect was subdued but responsive, especially when discussing their partner's support."
+            "Affect was subdued but responsive, especially when discussing their partner's support.",
+            "Daytime fatigue appears to make avoidance more likely.",
+            "Speech was clear and organized."
           ],
           "sources": [
             {
@@ -5119,32 +5378,29 @@
               "filename": "intake_and_individual_jan05.txt",
               "start_line": 13,
               "end_line": 13,
-              "quote": "Speech was clear and organized. Affect was subdued but responsive, especially when discussing their partner's support."
+              "quote": "Affect was subdued but responsive, especially when discussing their partner's support."
+            },
+            {
+              "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
+              "document_id": "BH-D002",
+              "filename": "intake_and_individual_jan05.txt",
+              "start_line": 13,
+              "end_line": 13,
+              "quote": "Daytime fatigue appears to make avoidance more likely."
+            },
+            {
+              "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
+              "document_id": "BH-D002",
+              "filename": "intake_and_individual_jan05.txt",
+              "start_line": 13,
+              "end_line": 13,
+              "quote": "Speech was clear and organized."
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-05",
           "kind": "clinician_observation",
-          "text": "Clinician observed clear and organized speech and subdued but responsive affect, especially when discussing partner's support."
-        },
-        {
-          "quotes": [
-            "Rowan described waking in the night and then checking the time repeatedly. Daytime fatigue appears to make avoidance more likely."
-          ],
-          "sources": [
-            {
-              "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
-              "document_id": "BH-D002",
-              "filename": "intake_and_individual_jan05.txt",
-              "start_line": 13,
-              "end_line": 13,
-              "quote": "Rowan described waking in the night and then checking the time repeatedly. Daytime fatigue appears to make avoidance more likely."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-05",
-          "kind": "patient_report",
-          "text": "Rowan reported waking in the night and checking the time repeatedly; daytime fatigue appears to make avoidance more likely."
+          "text": "Clinician observed subdued but responsive affect, clear and organized speech, and noted that daytime fatigue increases avoidance."
         },
         {
           "quotes": [
@@ -5163,7 +5419,26 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-05",
           "kind": "clinician_observation",
-          "text": "Clinician observed no immediate safety concern and that Rowan was able to discuss support contacts and ways to seek additional help."
+          "text": "No immediate safety concern identified; Rowan able to discuss support contacts and ways to seek help."
+        },
+        {
+          "quotes": [
+            "Rowan described waking in the night and then checking the time repeatedly."
+          ],
+          "sources": [
+            {
+              "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
+              "document_id": "BH-D002",
+              "filename": "intake_and_individual_jan05.txt",
+              "start_line": 13,
+              "end_line": 13,
+              "quote": "Rowan described waking in the night and then checking the time repeatedly."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-05",
+          "kind": "patient_report",
+          "text": "Rowan reports waking in the night and repeatedly checking the time."
         },
         {
           "quotes": [
@@ -5186,7 +5461,7 @@
         },
         {
           "quotes": [
-            "practiced breaking one work-related task into a short, observable step. Rowan selected opening their work inbox for five minutes without requiring an immediate reply."
+            "Rowan selected opening their work inbox for five minutes without requiring an immediate reply."
           ],
           "sources": [
             {
@@ -5195,13 +5470,184 @@
               "filename": "intake_and_individual_jan05.txt",
               "start_line": 17,
               "end_line": 17,
-              "quote": "practiced breaking one work-related task into a short, observable step. Rowan selected opening their work inbox for five minutes without requiring an immediate reply."
+              "quote": "Rowan selected opening their work inbox for five minutes without requiring an immediate reply."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-05",
+          "kind": "patient_report",
+          "text": "Rowan selected opening work inbox for five minutes as a task step."
+        },
+        {
+          "quotes": [
+            "Plan: participate in scheduled individual, group, and selected family appointments."
+          ],
+          "sources": [
+            {
+              "content_hash": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
+              "document_id": "BH-D002",
+              "filename": "intake_and_individual_jan05.txt",
+              "start_line": 19,
+              "end_line": 19,
+              "quote": "Plan: participate in scheduled individual, group, and selected family appointments."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-05",
+          "kind": "reason_for_contact",
+          "text": "Plan to participate in scheduled individual, group, and selected family appointments."
+        },
+        {
+          "quotes": [
+            "Presenting needs: depressed mood, sleep disruption, anxiety about resuming work responsibilities, and avoidance of tasks and communication."
+          ],
+          "sources": [
+            {
+              "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
+              "document_id": "BH-D003",
+              "filename": "signed_treatment_plan_jan05.txt",
+              "start_line": 10,
+              "end_line": 10,
+              "quote": "Presenting needs: depressed mood, sleep disruption, anxiety about resuming work responsibilities, and avoidance of tasks and communication."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-05",
+          "kind": "patient_report",
+          "text": "Rowan reported depressed mood, sleep disruption, anxiety about resuming work responsibilities, and avoidance of tasks and communication."
+        },
+        {
+          "quotes": [
+            "Rowan wishes to improve follow-through without waiting for anxiety to disappear."
+          ],
+          "sources": [
+            {
+              "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
+              "document_id": "BH-D003",
+              "filename": "signed_treatment_plan_jan05.txt",
+              "start_line": 10,
+              "end_line": 10,
+              "quote": "Rowan wishes to improve follow-through without waiting for anxiety to disappear."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-05",
+          "kind": "patient_report",
+          "text": "Rowan expressed a desire to improve follow-through even if anxiety persists."
+        },
+        {
+          "quotes": [
+            "Partner support is available but repeated reminders sometimes increase tension."
+          ],
+          "sources": [
+            {
+              "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
+              "document_id": "BH-D003",
+              "filename": "signed_treatment_plan_jan05.txt",
+              "start_line": 10,
+              "end_line": 10,
+              "quote": "Partner support is available but repeated reminders sometimes increase tension."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-05",
+          "kind": "collateral_report",
+          "text": "Partner support is available, but repeated reminders sometimes increase tension."
+        },
+        {
+          "quotes": [
+            "Goal 1: improve daily activity and task initiation. Rowan will select manageable activities, track attempts, and review barriers with the individual therapist. The team will emphasize completion of useful steps rather than judging the day by mood alone."
+          ],
+          "sources": [
+            {
+              "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
+              "document_id": "BH-D003",
+              "filename": "signed_treatment_plan_jan05.txt",
+              "start_line": 14,
+              "end_line": 14,
+              "quote": "Goal 1: improve daily activity and task initiation. Rowan will select manageable activities, track attempts, and review barriers with the individual therapist. The team will emphasize completion of useful steps rather than judging the day by mood alone."
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-05",
           "kind": "clinician_observation",
-          "text": "Rowan practiced breaking a work-related task into a short step and selected opening their work inbox for five minutes without requiring an immediate reply."
+          "text": "Rowan has difficulty with daily activity and task initiation; the team will focus on completion of useful steps rather than mood."
+        },
+        {
+          "quotes": [
+            "Goal 2: improve coping with anxiety and disrupted sleep. Rowan will practice one grounding or paced-breathing exercise and establish a consistent morning routine. Group participation will provide opportunities to rehearse skills and hear alternative approaches."
+          ],
+          "sources": [
+            {
+              "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
+              "document_id": "BH-D003",
+              "filename": "signed_treatment_plan_jan05.txt",
+              "start_line": 16,
+              "end_line": 16,
+              "quote": "Goal 2: improve coping with anxiety and disrupted sleep. Rowan will practice one grounding or paced-breathing exercise and establish a consistent morning routine. Group participation will provide opportunities to rehearse skills and hear alternative approaches."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-05",
+          "kind": "clinician_observation",
+          "text": "Rowan experiences anxiety and disrupted sleep; will practice grounding or paced-breathing and establish a morning routine."
+        },
+        {
+          "quotes": [
+            "Goal 3: support a workable return to employment. Individual sessions will address avoided communication and gradual preparation. Family sessions may address how Rowan can request help and how the partner can offer support without taking over tasks."
+          ],
+          "sources": [
+            {
+              "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
+              "document_id": "BH-D003",
+              "filename": "signed_treatment_plan_jan05.txt",
+              "start_line": 18,
+              "end_line": 18,
+              "quote": "Goal 3: support a workable return to employment. Individual sessions will address avoided communication and gradual preparation. Family sessions may address how Rowan can request help and how the partner can offer support without taking over tasks."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-05",
+          "kind": "clinician_observation",
+          "text": "Rowan avoids communication related to employment; individual and family sessions will address gradual preparation and support."
+        },
+        {
+          "quotes": [
+            "Rowan called from the building entrance to say they were running behind after difficulty finding parking."
+          ],
+          "sources": [
+            {
+              "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
+              "document_id": "BH-D005",
+              "filename": "early_group_attendance_roster.txt",
+              "start_line": 13,
+              "end_line": 13,
+              "quote": "Rowan called from the building entrance to say they were running behind after difficulty finding parking."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-06",
+          "kind": "patient_report",
+          "text": "Patient reported running behind after difficulty finding parking."
+        },
+        {
+          "quotes": [
+            "Rowan advised the facilitator that they would need to leave early for a previously arranged ride."
+          ],
+          "sources": [
+            {
+              "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
+              "document_id": "BH-D005",
+              "filename": "early_group_attendance_roster.txt",
+              "start_line": 13,
+              "end_line": 13,
+              "quote": "Rowan advised the facilitator that they would need to leave early for a previously arranged ride."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-06",
+          "kind": "patient_report",
+          "text": "Patient reported needing to leave early for a previously arranged ride."
         },
         {
           "quotes": [
@@ -5220,7 +5666,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-06",
           "kind": "patient_report",
-          "text": "Rowan described delaying a reply to a work message due to fear of being asked for a firm return date."
+          "text": "Rowan reported delaying a reply to a work message due to fear of being asked for a firm return date."
         },
         {
           "quotes": [
@@ -5239,7 +5685,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-06",
           "kind": "clinician_observation",
-          "text": "Rowan practiced a breathing exercise and chose reading the message before deciding how to respond as a possible next step."
+          "text": "Rowan practiced a breathing exercise and chose reading the message before responding as a next step."
         },
         {
           "quotes": [
@@ -5262,44 +5708,6 @@
         },
         {
           "quotes": [
-            "January 6 desk note: Rowan called from the building entrance to say they were running behind after difficulty finding parking."
-          ],
-          "sources": [
-            {
-              "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
-              "document_id": "BH-D005",
-              "filename": "early_group_attendance_roster.txt",
-              "start_line": 13,
-              "end_line": 13,
-              "quote": "January 6 desk note: Rowan called from the building entrance to say they were running behind after difficulty finding parking."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-06",
-          "kind": "patient_report",
-          "text": "Rowan reported running behind after difficulty finding parking."
-        },
-        {
-          "quotes": [
-            "Rowan advised the facilitator that they would need to leave early for a previously arranged ride."
-          ],
-          "sources": [
-            {
-              "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
-              "document_id": "BH-D005",
-              "filename": "early_group_attendance_roster.txt",
-              "start_line": 13,
-              "end_line": 13,
-              "quote": "Rowan advised the facilitator that they would need to leave early for a previously arranged ride."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-06",
-          "kind": "patient_report",
-          "text": "Rowan reported needing to leave early for a previously arranged ride."
-        },
-        {
-          "quotes": [
             "HG-E103 remained unarrived at close of its appointment slot on January 8."
           ],
           "sources": [
@@ -5315,7 +5723,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-08",
           "kind": "clinician_observation",
-          "text": "Rowan Mercer did not arrive for the individual therapy appointment on January 8, 2026."
+          "text": "Rowan Mercer did not arrive for the scheduled individual therapy appointment on January 8, 2026."
         },
         {
           "quotes": [
@@ -5335,101 +5743,6 @@
           "observed_date": "2026-01-08",
           "kind": "patient_report",
           "text": "Rowan reported missing the appointment after a poor night of sleep."
-        },
-        {
-          "quotes": [
-            "Rowan described feeling watched when asked repeatedly whether they had contacted work."
-          ],
-          "sources": [
-            {
-              "content_hash": "924dee06b05c0a841c3f86d0c394c7af39447db6c9ea7b643cc6eb3a3c40df6b",
-              "document_id": "BH-D007",
-              "filename": "family_primary_jan09.txt",
-              "start_line": 12,
-              "end_line": 12,
-              "quote": "Rowan described feeling watched when asked repeatedly whether they had contacted work."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-09",
-          "kind": "patient_report",
-          "text": "Rowan reported feeling watched when repeatedly asked about contacting work."
-        },
-        {
-          "quotes": [
-            "Casey described worry that giving Rowan space might leave them isolated."
-          ],
-          "sources": [
-            {
-              "content_hash": "924dee06b05c0a841c3f86d0c394c7af39447db6c9ea7b643cc6eb3a3c40df6b",
-              "document_id": "BH-D007",
-              "filename": "family_primary_jan09.txt",
-              "start_line": 12,
-              "end_line": 12,
-              "quote": "Casey described worry that giving Rowan space might leave them isolated."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-09",
-          "kind": "collateral_report",
-          "text": "Casey reported worry that giving Rowan space might leave them isolated."
-        },
-        {
-          "quotes": [
-            "Rowan practiced asking for one specific kind of help, and Casey practiced reflecting the request before offering suggestions."
-          ],
-          "sources": [
-            {
-              "content_hash": "924dee06b05c0a841c3f86d0c394c7af39447db6c9ea7b643cc6eb3a3c40df6b",
-              "document_id": "BH-D007",
-              "filename": "family_primary_jan09.txt",
-              "start_line": 14,
-              "end_line": 14,
-              "quote": "Rowan practiced asking for one specific kind of help, and Casey practiced reflecting the request before offering suggestions."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-09",
-          "kind": "clinician_observation",
-          "text": "Rowan practiced asking for specific help; Casey practiced reflecting the request before offering suggestions."
-        },
-        {
-          "quotes": [
-            "Rowan remained present and engaged throughout the visit. They became more animated when describing a shared evening walk and identified this as support that did not feel like pressure."
-          ],
-          "sources": [
-            {
-              "content_hash": "924dee06b05c0a841c3f86d0c394c7af39447db6c9ea7b643cc6eb3a3c40df6b",
-              "document_id": "BH-D007",
-              "filename": "family_primary_jan09.txt",
-              "start_line": 16,
-              "end_line": 16,
-              "quote": "Rowan remained present and engaged throughout the visit. They became more animated when describing a shared evening walk and identified this as support that did not feel like pressure."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-09",
-          "kind": "clinician_observation",
-          "text": "Rowan was present and engaged; became more animated when describing a shared evening walk, identifying it as support that did not feel like pressure."
-        },
-        {
-          "quotes": [
-            "Casey agreed to use a single planned check-in about work preparation instead of repeated reminders. Rowan agreed to say when they wanted practical assistance versus quiet company."
-          ],
-          "sources": [
-            {
-              "content_hash": "924dee06b05c0a841c3f86d0c394c7af39447db6c9ea7b643cc6eb3a3c40df6b",
-              "document_id": "BH-D007",
-              "filename": "family_primary_jan09.txt",
-              "start_line": 16,
-              "end_line": 16,
-              "quote": "Casey agreed to use a single planned check-in about work preparation instead of repeated reminders. Rowan agreed to say when they wanted practical assistance versus quiet company."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-09",
-          "kind": "clinician_observation",
-          "text": "Casey agreed to use a single planned check-in about work preparation; Rowan agreed to communicate when they wanted practical assistance versus quiet company."
         },
         {
           "quotes": [
@@ -5467,7 +5780,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-09",
           "kind": "collateral_report",
-          "text": "Casey reported reminders were intended to help but acknowledged repeated prompts increased tension."
+          "text": "Casey reported that reminders were intended to help but acknowledged that repeated prompts increased tension."
         },
         {
           "quotes": [
@@ -5486,7 +5799,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-09",
           "kind": "clinician_observation",
-          "text": "Clinician observed Rowan could state Casey wanted reassurance about preparation."
+          "text": "Clinician observed Rowan could articulate Casey's need for reassurance about preparation."
         },
         {
           "quotes": [
@@ -5504,8 +5817,8 @@
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-09",
-          "kind": "collateral_report",
-          "text": "Casey reflected Rowan's wish to keep ownership of the return-to-work process."
+          "kind": "clinician_observation",
+          "text": "Clinician observed Casey could reflect Rowan's wish to maintain ownership of the return-to-work process."
         },
         {
           "quotes": [
@@ -5524,7 +5837,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-09",
           "kind": "clinician_observation",
-          "text": "Clinician observed the rehearsal became less defensive with repetition."
+          "text": "Clinician observed that communication rehearsal became less defensive with repetition."
         },
         {
           "quotes": [
@@ -5543,11 +5856,106 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-09",
           "kind": "patient_report",
-          "text": "Rowan reported that sharing an evening walk felt more acceptable than reviewing unfinished tasks."
+          "text": "Rowan reported that an evening walk felt more acceptable than a lengthy review of unfinished tasks."
         },
         {
           "quotes": [
-            "January 12 desk note: Rowan checked in before the group began and remained until the group was released. Their next printed appointment list was provided at checkout. No transport concern was reported at that time."
+            "Rowan described feeling watched when asked repeatedly whether they had contacted work."
+          ],
+          "sources": [
+            {
+              "content_hash": "924dee06b05c0a841c3f86d0c394c7af39447db6c9ea7b643cc6eb3a3c40df6b",
+              "document_id": "BH-D007",
+              "filename": "family_primary_jan09.txt",
+              "start_line": 12,
+              "end_line": 12,
+              "quote": "Rowan described feeling watched when asked repeatedly whether they had contacted work."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-09",
+          "kind": "patient_report",
+          "text": "Rowan reported feeling watched when repeatedly asked about contacting work."
+        },
+        {
+          "quotes": [
+            "Casey described worry that giving Rowan space might leave them isolated."
+          ],
+          "sources": [
+            {
+              "content_hash": "924dee06b05c0a841c3f86d0c394c7af39447db6c9ea7b643cc6eb3a3c40df6b",
+              "document_id": "BH-D007",
+              "filename": "family_primary_jan09.txt",
+              "start_line": 12,
+              "end_line": 12,
+              "quote": "Casey described worry that giving Rowan space might leave them isolated."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-09",
+          "kind": "collateral_report",
+          "text": "Casey reported worry that giving Rowan space might leave Rowan isolated."
+        },
+        {
+          "quotes": [
+            "Rowan practiced asking for one specific kind of help, and Casey practiced reflecting the request before offering suggestions."
+          ],
+          "sources": [
+            {
+              "content_hash": "924dee06b05c0a841c3f86d0c394c7af39447db6c9ea7b643cc6eb3a3c40df6b",
+              "document_id": "BH-D007",
+              "filename": "family_primary_jan09.txt",
+              "start_line": 14,
+              "end_line": 14,
+              "quote": "Rowan practiced asking for one specific kind of help, and Casey practiced reflecting the request before offering suggestions."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-09",
+          "kind": "clinician_observation",
+          "text": "Rowan practiced asking for specific help and Casey practiced reflecting the request before offering suggestions."
+        },
+        {
+          "quotes": [
+            "Rowan remained present and engaged throughout the visit. They became more animated when describing a shared evening walk and identified this as support that did not feel like pressure."
+          ],
+          "sources": [
+            {
+              "content_hash": "924dee06b05c0a841c3f86d0c394c7af39447db6c9ea7b643cc6eb3a3c40df6b",
+              "document_id": "BH-D007",
+              "filename": "family_primary_jan09.txt",
+              "start_line": 16,
+              "end_line": 16,
+              "quote": "Rowan remained present and engaged throughout the visit. They became more animated when describing a shared evening walk and identified this as support that did not feel like pressure."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-09",
+          "kind": "clinician_observation",
+          "text": "Rowan was present and engaged, and described a shared evening walk as supportive and not pressuring."
+        },
+        {
+          "quotes": [
+            "Casey agreed to use a single planned check-in about work preparation instead of repeated reminders. Rowan agreed to say when they wanted practical assistance versus quiet company."
+          ],
+          "sources": [
+            {
+              "content_hash": "924dee06b05c0a841c3f86d0c394c7af39447db6c9ea7b643cc6eb3a3c40df6b",
+              "document_id": "BH-D007",
+              "filename": "family_primary_jan09.txt",
+              "start_line": 16,
+              "end_line": 16,
+              "quote": "Casey agreed to use a single planned check-in about work preparation instead of repeated reminders. Rowan agreed to say when they wanted practical assistance versus quiet company."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-09",
+          "kind": "clinician_observation",
+          "text": "Casey agreed to use a single planned check-in about work preparation, and Rowan agreed to communicate when they wanted practical assistance versus quiet company."
+        },
+        {
+          "quotes": [
+            "Rowan checked in before the group began and remained until the group was released."
           ],
           "sources": [
             {
@@ -5556,13 +5964,32 @@
               "filename": "early_group_attendance_roster.txt",
               "start_line": 15,
               "end_line": 15,
-              "quote": "January 12 desk note: Rowan checked in before the group began and remained until the group was released. Their next printed appointment list was provided at checkout. No transport concern was reported at that time."
+              "quote": "Rowan checked in before the group began and remained until the group was released."
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-12",
           "kind": "clinician_observation",
-          "text": "No transport concern was reported at that time."
+          "text": "Patient remained for the full group session."
+        },
+        {
+          "quotes": [
+            "No transport concern was reported at that time."
+          ],
+          "sources": [
+            {
+              "content_hash": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
+              "document_id": "BH-D005",
+              "filename": "early_group_attendance_roster.txt",
+              "start_line": 15,
+              "end_line": 15,
+              "quote": "No transport concern was reported at that time."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-12",
+          "kind": "patient_report",
+          "text": "Patient reported no transport concern."
         },
         {
           "quotes": [
@@ -5600,7 +6027,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-12",
           "kind": "patient_report",
-          "text": "Rowan reported that taking a walk with Casey over the weekend helped reduce evening worry."
+          "text": "Rowan reported that taking a walk with Casey helped reduce evening worry."
         },
         {
           "quotes": [
@@ -5619,7 +6046,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-12",
           "kind": "patient_report",
-          "text": "Rowan planned to try an action after breakfast and expressed concern about handling a poor morning."
+          "text": "Rowan planned to attempt an action after breakfast and expressed concern about coping if the morning went poorly."
         },
         {
           "quotes": [
@@ -5794,25 +6221,6 @@
         },
         {
           "quotes": [
-            "They said the message seemed less overwhelming when it did not need to solve the entire return-to-work question."
-          ],
-          "sources": [
-            {
-              "content_hash": "8c2fbaf5bb4545cc4590b288d768ab893a4d727f6946bcc88339669d0629eb8a",
-              "document_id": "BH-D011",
-              "filename": "individual_therapy_jan14.txt",
-              "start_line": 13,
-              "end_line": 13,
-              "quote": "They said the message seemed less overwhelming when it did not need to solve the entire return-to-work question."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-14",
-          "kind": "patient_report",
-          "text": "Rowan said the message seemed less overwhelming when it did not need to solve the entire return-to-work question."
-        },
-        {
-          "quotes": [
             "Affect was more varied than at intake, although worry was evident when discussing employment."
           ],
           "sources": [
@@ -5829,6 +6237,25 @@
           "observed_date": "2026-01-14",
           "kind": "clinician_observation",
           "text": "Affect was more varied than at intake, although worry was evident when discussing employment."
+        },
+        {
+          "quotes": [
+            "Rowan identified setting out appointment information the evening before as a helpful preparation step."
+          ],
+          "sources": [
+            {
+              "content_hash": "8c2fbaf5bb4545cc4590b288d768ab893a4d727f6946bcc88339669d0629eb8a",
+              "document_id": "BH-D011",
+              "filename": "individual_therapy_jan14.txt",
+              "start_line": 15,
+              "end_line": 15,
+              "quote": "Rowan identified setting out appointment information the evening before as a helpful preparation step."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-14",
+          "kind": "patient_report",
+          "text": "Rowan identified setting out appointment information the evening before as a helpful preparation step."
         },
         {
           "quotes": [
@@ -5870,50 +6297,22 @@
         },
         {
           "quotes": [
-            "Rowan also described sleep as inconsistent.",
-            "Rowan wrote that getting out of the apartment had become a little easier, while thinking about work continued to make them want to put things off."
+            "some improvement in depressive symptoms; ongoing avoidance of work communication and inconsistent sleep."
           ],
           "sources": [
             {
-              "content_hash": "300a30dbe42be8dcfdf7ad644f23c583259611467ae32e944e8d7154c78b968e",
-              "document_id": "BH-D013",
-              "filename": "symptom_measure_review_jan16.txt",
-              "start_line": 11,
-              "end_line": 11,
-              "quote": "Rowan also described sleep as inconsistent."
-            },
-            {
-              "content_hash": "300a30dbe42be8dcfdf7ad644f23c583259611467ae32e944e8d7154c78b968e",
-              "document_id": "BH-D013",
-              "filename": "symptom_measure_review_jan16.txt",
-              "start_line": 11,
-              "end_line": 11,
-              "quote": "Rowan wrote that getting out of the apartment had become a little easier, while thinking about work continued to make them want to put things off."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-16",
-          "kind": "patient_report",
-          "text": "Getting out of the apartment has become a little easier. Thinking about work continues to lead to avoidance. Sleep is inconsistent."
-        },
-        {
-          "quotes": [
-            "the score and recent individual-session material suggest some improvement in depressive symptoms. Persistent avoidance, difficulty initiating work communication, and sleep disruption remain clinically relevant. Rowan has attempted small activities and communication practice but has not yet established a reliable routine."
-          ],
-          "sources": [
-            {
-              "content_hash": "300a30dbe42be8dcfdf7ad644f23c583259611467ae32e944e8d7154c78b968e",
-              "document_id": "BH-D013",
-              "filename": "symptom_measure_review_jan16.txt",
-              "start_line": 13,
-              "end_line": 13,
-              "quote": "the score and recent individual-session material suggest some improvement in depressive symptoms. Persistent avoidance, difficulty initiating work communication, and sleep disruption remain clinically relevant. Rowan has attempted small activities and communication practice but has not yet established a reliable routine."
+              "content_hash": "85e2c780abded9efe663fd61ac6e6a7a56e5b30c9597b24f35f90076b6f7358b",
+              "document_id": "BH-D014",
+              "filename": "imported_measure_summary_received_jan26.txt",
+              "start_line": 15,
+              "end_line": 15,
+              "quote": "some improvement in depressive symptoms; ongoing avoidance of work communication and inconsistent sleep."
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-16",
           "kind": "clinician_observation",
-          "text": "Some improvement in depressive symptoms. Persistent avoidance, difficulty initiating work communication, and sleep disruption remain clinically relevant. Rowan has attempted small activities and communication practice but has not yet established a reliable routine."
+          "text": "Some improvement in depressive symptoms; ongoing avoidance of work communication and inconsistent sleep."
         },
         {
           "quotes": [
@@ -5993,41 +6392,79 @@
         },
         {
           "quotes": [
-            "some improvement in depressive symptoms; ongoing avoidance of work communication and inconsistent sleep."
+            "In the optional update field, Rowan wrote that getting out of the apartment had become a little easier, while thinking about work continued to make them want to put things off."
           ],
           "sources": [
             {
-              "content_hash": "85e2c780abded9efe663fd61ac6e6a7a56e5b30c9597b24f35f90076b6f7358b",
-              "document_id": "BH-D014",
-              "filename": "imported_measure_summary_received_jan26.txt",
-              "start_line": 15,
-              "end_line": 15,
-              "quote": "some improvement in depressive symptoms; ongoing avoidance of work communication and inconsistent sleep."
+              "content_hash": "300a30dbe42be8dcfdf7ad644f23c583259611467ae32e944e8d7154c78b968e",
+              "document_id": "BH-D013",
+              "filename": "symptom_measure_review_jan16.txt",
+              "start_line": 11,
+              "end_line": 11,
+              "quote": "In the optional update field, Rowan wrote that getting out of the apartment had become a little easier, while thinking about work continued to make them want to put things off."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-16",
+          "kind": "patient_report",
+          "text": "Getting out of the apartment has become a little easier, but thinking about work continues to lead to avoidance."
+        },
+        {
+          "quotes": [
+            "Rowan also described sleep as inconsistent."
+          ],
+          "sources": [
+            {
+              "content_hash": "300a30dbe42be8dcfdf7ad644f23c583259611467ae32e944e8d7154c78b968e",
+              "document_id": "BH-D013",
+              "filename": "symptom_measure_review_jan16.txt",
+              "start_line": 11,
+              "end_line": 11,
+              "quote": "Rowan also described sleep as inconsistent."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-16",
+          "kind": "patient_report",
+          "text": "Sleep is inconsistent."
+        },
+        {
+          "quotes": [
+            "Persistent avoidance, difficulty initiating work communication, and sleep disruption remain clinically relevant."
+          ],
+          "sources": [
+            {
+              "content_hash": "300a30dbe42be8dcfdf7ad644f23c583259611467ae32e944e8d7154c78b968e",
+              "document_id": "BH-D013",
+              "filename": "symptom_measure_review_jan16.txt",
+              "start_line": 13,
+              "end_line": 13,
+              "quote": "Persistent avoidance, difficulty initiating work communication, and sleep disruption remain clinically relevant."
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-16",
           "kind": "clinician_observation",
-          "text": "some improvement in depressive symptoms; ongoing avoidance of work communication and inconsistent sleep."
+          "text": "Persistent avoidance, difficulty initiating work communication, and sleep disruption remain clinically relevant."
         },
         {
           "quotes": [
-            "Today's group addressed recognizing the sequence between a triggering situation, an anxious prediction, physical activation, and an avoidance response. The facilitator used a worked example involving an unanswered work email. Members then practiced describing the prediction without treating it as an established outcome, and selected a small approach behavior they could attempt during the week."
+            "Rowan has attempted small activities and communication practice but has not yet established a reliable routine."
           ],
           "sources": [
             {
-              "content_hash": "05a234a8adc98e72a51ba9e82c13e5975ee5026f03bb03e66575015b22562fb6",
-              "document_id": "BH-D101",
-              "filename": "BH-D101_group_content_2026-01-19.txt",
-              "start_line": 8,
-              "end_line": 8,
-              "quote": "Today's group addressed recognizing the sequence between a triggering situation, an anxious prediction, physical activation, and an avoidance response. The facilitator used a worked example involving an unanswered work email. Members then practiced describing the prediction without treating it as an established outcome, and selected a small approach behavior they could attempt during the week."
+              "content_hash": "300a30dbe42be8dcfdf7ad644f23c583259611467ae32e944e8d7154c78b968e",
+              "document_id": "BH-D013",
+              "filename": "symptom_measure_review_jan16.txt",
+              "start_line": 13,
+              "end_line": 13,
+              "quote": "Rowan has attempted small activities and communication practice but has not yet established a reliable routine."
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-19",
+          "observed_date": "2026-01-16",
           "kind": "clinician_observation",
-          "text": "Group focused on recognizing triggers, anxious predictions, physical activation, and avoidance; members practiced describing predictions and selecting approach behaviors."
+          "text": "Rowan has attempted small activities and communication practice but has not yet established a reliable routine."
         },
         {
           "quotes": [
@@ -6045,8 +6482,8 @@
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-19",
-          "kind": "clinician_observation",
-          "text": "Rowan identified postponing a message to a supervisor as a familiar avoidance pattern."
+          "kind": "patient_report",
+          "text": "Rowan reported postponing a message to a supervisor as a familiar avoidance pattern."
         },
         {
           "quotes": [
@@ -6065,7 +6502,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-19",
           "kind": "clinician_observation",
-          "text": "Rowan became visibly tense and reported that the amount of discussion about returning to the workplace felt difficult to manage."
+          "text": "Rowan became visibly tense and stated the group discussion felt difficult to manage when the topic turned to returning to the workplace."
         },
         {
           "quotes": [
@@ -6084,7 +6521,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-19",
           "kind": "reason_for_contact",
-          "text": "A same-day individual meeting was arranged due to Rowan's difficulty managing group discussion about returning to the workplace."
+          "text": "A same-day individual meeting was arranged due to Rowan's difficulty managing the group discussion about returning to the workplace."
         },
         {
           "quotes": [
@@ -6126,6 +6563,25 @@
         },
         {
           "quotes": [
+            "Rowan attended the opening check-in, accepted the exercise handout, and requested additional help from the individual clinician."
+          ],
+          "sources": [
+            {
+              "content_hash": "f3f25065559f4e82b110b5c284df5c2c4f81c55c950721e7bd6a9c23a91241d5",
+              "document_id": "BH-D104",
+              "filename": "BH-D104_resent_roster_received_2026-01-26.txt",
+              "start_line": 18,
+              "end_line": 18,
+              "quote": "Rowan attended the opening check-in, accepted the exercise handout, and requested additional help from the individual clinician."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-19",
+          "kind": "clinician_observation",
+          "text": "Rowan attended the opening check-in, accepted the exercise handout, and requested additional help from the individual clinician."
+        },
+        {
+          "quotes": [
             "This visit was added because Rowan became anxious during group and needed individual grounding and review of coping strategies."
           ],
           "sources": [
@@ -6141,7 +6597,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-19",
           "kind": "reason_for_contact",
-          "text": "Visit added due to anxiety during group and need for individual grounding."
+          "text": "Visit added due to anxiety during group requiring individual grounding and coping review."
         },
         {
           "quotes": [
@@ -6160,7 +6616,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-19",
           "kind": "patient_report",
-          "text": "Patient reported feeling overwhelmed by workplace discussions and worried about returning to work due to difficulties keeping up."
+          "text": "Rowan reported feeling overwhelmed by workplace discussions and worried about difficulties keeping up if returning to work."
         },
         {
           "quotes": [
@@ -6179,7 +6635,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-19",
           "kind": "patient_report",
-          "text": "Patient identified muscle tension, rapid breathing, and urge to leave as early signs of anxiety activation."
+          "text": "Rowan identified muscle tension, rapid breathing, and urge to leave as early signs of anxiety activation."
         },
         {
           "quotes": [
@@ -6198,7 +6654,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-19",
           "kind": "patient_report",
-          "text": "Patient reported that anxiety intensity eased enough to discuss a next step."
+          "text": "Rowan reported anxiety intensity eased enough to discuss a next step."
         },
         {
           "quotes": [
@@ -6217,7 +6673,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-19",
           "kind": "clinician_observation",
-          "text": "Work-related task was narrowed to drafting two sentences to a supervisor, with discussion about tolerating an incomplete draft."
+          "text": "Work-related task was narrowed to drafting two sentences to a supervisor, with discussion of tolerating an incomplete draft."
         },
         {
           "quotes": [
@@ -6236,7 +6692,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-19",
           "kind": "clinician_observation",
-          "text": "Patient denied current suicidal thoughts and remained future oriented; no acute safety concern identified."
+          "text": "Rowan denied suicidal thoughts, remained future oriented, and no acute safety concern was identified."
         },
         {
           "quotes": [
@@ -6256,25 +6712,6 @@
           "observed_date": "2026-01-19",
           "kind": "clinician_observation",
           "text": "Persistent avoidance and disrupted sleep continue to interfere with resuming usual work routine."
-        },
-        {
-          "quotes": [
-            "Rowan attended the opening check-in, accepted the exercise handout, and requested additional help from the individual clinician."
-          ],
-          "sources": [
-            {
-              "content_hash": "f3f25065559f4e82b110b5c284df5c2c4f81c55c950721e7bd6a9c23a91241d5",
-              "document_id": "BH-D104",
-              "filename": "BH-D104_resent_roster_received_2026-01-26.txt",
-              "start_line": 18,
-              "end_line": 18,
-              "quote": "Rowan attended the opening check-in, accepted the exercise handout, and requested additional help from the individual clinician."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-19",
-          "kind": "clinician_observation",
-          "text": "Rowan attended the opening check-in, accepted the exercise handout, and requested additional help from the individual clinician."
         },
         {
           "quotes": [
@@ -6311,7 +6748,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-21",
           "kind": "patient_report",
-          "text": "Rowan reported drafting but not sending a message about returning to work, repeatedly checking the draft, and practiced reading it and planning when to send."
+          "text": "Rowan reported drafting a message about returning to work but did not send it, checked the draft repeatedly, and practiced reading it and planning to send it."
         },
         {
           "quotes": [
@@ -6330,7 +6767,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-21",
           "kind": "clinician_observation",
-          "text": "Explored Rowan's uncertainty about the supervisor's response versus evidence it would be negative."
+          "text": "Explored Rowan's uncertainty about the supervisor's response versus evidence for a negative response."
         },
         {
           "quotes": [
@@ -6367,7 +6804,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-21",
           "kind": "patient_report",
-          "text": "Rowan described one night of improved sleep and one night of prolonged wakefulness; discussed evening routines."
+          "text": "Rowan described one night of improved sleep and another of prolonged wakefulness; discussed evening routines."
         },
         {
           "quotes": [
@@ -6409,9 +6846,7 @@
         },
         {
           "quotes": [
-            "Rowan joined the discussion after it had begun; the arrival field is maintained in the attendance register.",
-            "Rowan used opening a work calendar as an example and described concern that seeing outstanding items would become overwhelming.",
-            "The patient contributed an example to the discussion after the break."
+            "The session addressed translating a broad intention into one observable action. Members practiced reducing a complicated task to an action that could be completed in a few minutes and identifying the cue that would prompt it. Rowan joined the discussion after it had begun; the arrival field is maintained in the attendance register. Rowan used opening a work calendar as an example and described concern that seeing outstanding items would become overwhelming. Facilitator encouraged a limited, planned review period and a stopping point. The patient contributed an example to the discussion after the break."
           ],
           "sources": [
             {
@@ -6420,29 +6855,13 @@
               "filename": "BH-D107_group_activity_records_2026-01-22_and_29.txt",
               "start_line": 9,
               "end_line": 9,
-              "quote": "Rowan joined the discussion after it had begun; the arrival field is maintained in the attendance register."
-            },
-            {
-              "content_hash": "c5953bcb242ef0143301019cf06964a4b759d432e26dc0e34f0ad1c2b819df70",
-              "document_id": "BH-D107",
-              "filename": "BH-D107_group_activity_records_2026-01-22_and_29.txt",
-              "start_line": 9,
-              "end_line": 9,
-              "quote": "Rowan used opening a work calendar as an example and described concern that seeing outstanding items would become overwhelming."
-            },
-            {
-              "content_hash": "c5953bcb242ef0143301019cf06964a4b759d432e26dc0e34f0ad1c2b819df70",
-              "document_id": "BH-D107",
-              "filename": "BH-D107_group_activity_records_2026-01-22_and_29.txt",
-              "start_line": 9,
-              "end_line": 9,
-              "quote": "The patient contributed an example to the discussion after the break."
+              "quote": "The session addressed translating a broad intention into one observable action. Members practiced reducing a complicated task to an action that could be completed in a few minutes and identifying the cue that would prompt it. Rowan joined the discussion after it had begun; the arrival field is maintained in the attendance register. Rowan used opening a work calendar as an example and described concern that seeing outstanding items would become overwhelming. Facilitator encouraged a limited, planned review period and a stopping point. The patient contributed an example to the discussion after the break."
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-22",
           "kind": "patient_report",
-          "text": "Rowan reported concern that seeing outstanding items in the work calendar would become overwhelming."
+          "text": "Rowan used opening a work calendar as an example and described concern that seeing outstanding items would become overwhelming."
         },
         {
           "quotes": [
@@ -6462,6 +6881,25 @@
           "observed_date": "2026-01-22",
           "kind": "clinician_observation",
           "text": "Facilitator encouraged Rowan to use a limited, planned review period and a stopping point."
+        },
+        {
+          "quotes": [
+            "The patient contributed an example to the discussion after the break."
+          ],
+          "sources": [
+            {
+              "content_hash": "c5953bcb242ef0143301019cf06964a4b759d432e26dc0e34f0ad1c2b819df70",
+              "document_id": "BH-D107",
+              "filename": "BH-D107_group_activity_records_2026-01-22_and_29.txt",
+              "start_line": 9,
+              "end_line": 9,
+              "quote": "The patient contributed an example to the discussion after the break."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-22",
+          "kind": "clinician_observation",
+          "text": "Rowan contributed an example to the discussion after the break."
         },
         {
           "quotes": [
@@ -6503,7 +6941,7 @@
         },
         {
           "quotes": [
-            "No change to medication or psychotherapy frequency was made during the coordination call."
+            "I will continue to address avoidance and coping within scheduled therapy."
           ],
           "sources": [
             {
@@ -6512,13 +6950,13 @@
               "filename": "BH-D109_care_coordination_2026-01-23.txt",
               "start_line": 11,
               "end_line": 11,
-              "quote": "No change to medication or psychotherapy frequency was made during the coordination call."
+              "quote": "I will continue to address avoidance and coping within scheduled therapy."
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-23",
           "kind": "clinician_observation",
-          "text": "No change to medication or psychotherapy frequency."
+          "text": "Avoidance and coping will continue to be addressed in scheduled therapy."
         },
         {
           "quotes": [
@@ -6537,7 +6975,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-26",
           "kind": "patient_report",
-          "text": "Rowan reported sending a message to the supervisor, receiving a request to discuss next steps, feeling worry about possible commitments, and postponing choosing a time for the conversation."
+          "text": "Rowan reported sending a message to the supervisor, feeling some uncertainty reduced, but also worrying about being asked for commitments and continued to postpone scheduling a conversation."
         },
         {
           "quotes": [
@@ -6556,7 +6994,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-26",
           "kind": "patient_report",
-          "text": "Rowan reported uneven sleep and difficulty settling on nights with repetitive work-related thoughts."
+          "text": "Rowan reported uneven sleep and difficulty settling at night due to repetitive work-related thoughts."
         },
         {
           "quotes": [
@@ -6575,7 +7013,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-26",
           "kind": "clinician_observation",
-          "text": "Rowan practiced a brief response to the supervisor's request, participated in role-play to identify communication patterns, and was able to return to the main request with prompting. A grounding cue was rehearsed."
+          "text": "Rowan practiced responding to the supervisor's request, role-played communication, and with prompting was able to return to the main request; rehearsed a grounding cue."
         },
         {
           "quotes": [
@@ -6594,7 +7032,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-26",
           "kind": "clinician_observation",
-          "text": "Rowan was attentive and collaborative but hesitant about completing the task outside the office."
+          "text": "Rowan was attentive and collaborative in session but hesitant to complete the task outside the office."
         },
         {
           "quotes": [
@@ -6632,7 +7070,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-26",
           "kind": "clinician_observation",
-          "text": "Ongoing work on avoidance and bedtime routine was discussed."
+          "text": "Ongoing work is focused on avoidance and improving the bedtime routine."
         },
         {
           "quotes": [
@@ -6651,7 +7089,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-26",
           "kind": "clinician_observation",
-          "text": "Maintaining scheduled treatment contact during return-to-work planning was discussed, with a plan to bring the response draft to the next visit if needed."
+          "text": "Plan to maintain scheduled treatment contact during return-to-work planning and bring the response draft to the next visit if needed."
         },
         {
           "quotes": [
@@ -6698,7 +7136,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-26",
           "kind": "patient_report",
-          "text": "Rowan recognized a tendency to keep editing a message after the essential point was already clear."
+          "text": "Rowan recognized a tendency to keep editing a message after the essential point was clear."
         },
         {
           "quotes": [
@@ -6717,7 +7155,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-26",
           "kind": "clinician_observation",
-          "text": "The patient could use a grounding cue during rehearsal but remained uncertain about using it independently when anxious."
+          "text": "Rowan could use a grounding cue during rehearsal but remained uncertain about using it independently when anxious."
         },
         {
           "quotes": [
@@ -6735,8 +7173,8 @@
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-26",
-          "kind": "clinician_observation",
-          "text": "Repetitive planning at night affected Rowan's ability to settle for sleep."
+          "kind": "patient_report",
+          "text": "Rowan reported that repetitive planning at night affected settling for sleep."
         },
         {
           "quotes": [
@@ -6797,7 +7235,7 @@
         },
         {
           "quotes": [
-            "Rowan reported opening the work calendar but delaying a follow-up conversation."
+            "Members identified an initial effort, what made follow-through difficult, and one adjustment for the next attempt. Rowan reported opening the work calendar but delaying a follow-up conversation."
           ],
           "sources": [
             {
@@ -6806,7 +7244,7 @@
               "filename": "BH-D107_group_activity_records_2026-01-22_and_29.txt",
               "start_line": 14,
               "end_line": 14,
-              "quote": "Rowan reported opening the work calendar but delaying a follow-up conversation."
+              "quote": "Members identified an initial effort, what made follow-through difficult, and one adjustment for the next attempt. Rowan reported opening the work calendar but delaying a follow-up conversation."
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
@@ -6816,8 +7254,7 @@
         },
         {
           "quotes": [
-            "Rowan participated in the paired rehearsal and accepted feedback about keeping the request brief.",
-            "The facilitator helped identify a specific question to ask rather than trying to anticipate every possible concern."
+            "The facilitator helped identify a specific question to ask rather than trying to anticipate every possible concern. Rowan participated in the paired rehearsal and accepted feedback about keeping the request brief."
           ],
           "sources": [
             {
@@ -6826,25 +7263,36 @@
               "filename": "BH-D107_group_activity_records_2026-01-22_and_29.txt",
               "start_line": 14,
               "end_line": 14,
-              "quote": "Rowan participated in the paired rehearsal and accepted feedback about keeping the request brief."
-            },
-            {
-              "content_hash": "c5953bcb242ef0143301019cf06964a4b759d432e26dc0e34f0ad1c2b819df70",
-              "document_id": "BH-D107",
-              "filename": "BH-D107_group_activity_records_2026-01-22_and_29.txt",
-              "start_line": 14,
-              "end_line": 14,
-              "quote": "The facilitator helped identify a specific question to ask rather than trying to anticipate every possible concern."
+              "quote": "The facilitator helped identify a specific question to ask rather than trying to anticipate every possible concern. Rowan participated in the paired rehearsal and accepted feedback about keeping the request brief."
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-29",
           "kind": "clinician_observation",
-          "text": "Facilitator helped Rowan identify a specific question to ask and provided feedback about keeping the request brief."
+          "text": "Facilitator helped Rowan identify a specific question to ask and Rowan participated in rehearsal, accepting feedback about keeping the request brief."
         },
         {
           "quotes": [
-            "Rowan joined at 13:15 and participated through the end of the session. Together, they identified a recurring pattern in which a reminder about contacting work led to a lengthy discussion, followed by Rowan withdrawing from the task."
+            "Rowan's partner, Casey Mercer, arrived first. During the initial interval, Casey described uncertainty about when reminders helped and when they seemed to increase Rowan's sense of pressure. Rowan was not present for that portion. The discussion focused on Casey's observations and questions about supporting the agreed approach tasks."
+          ],
+          "sources": [
+            {
+              "content_hash": "36764827bcb39caf2e9304c881f55e4acba9744a9792228bf36981f19a0feaf9",
+              "document_id": "BH-D113",
+              "filename": "BH-D113_family_therapy_2026-01-30.txt",
+              "start_line": 9,
+              "end_line": 9,
+              "quote": "Rowan's partner, Casey Mercer, arrived first. During the initial interval, Casey described uncertainty about when reminders helped and when they seemed to increase Rowan's sense of pressure. Rowan was not present for that portion. The discussion focused on Casey's observations and questions about supporting the agreed approach tasks."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-30",
+          "kind": "collateral_report",
+          "text": "Casey reported uncertainty about when reminders helped Rowan and when they increased Rowan's sense of pressure."
+        },
+        {
+          "quotes": [
+            "Together, they identified a recurring pattern in which a reminder about contacting work led to a lengthy discussion, followed by Rowan withdrawing from the task."
           ],
           "sources": [
             {
@@ -6853,13 +7301,13 @@
               "filename": "BH-D113_family_therapy_2026-01-30.txt",
               "start_line": 11,
               "end_line": 11,
-              "quote": "Rowan joined at 13:15 and participated through the end of the session. Together, they identified a recurring pattern in which a reminder about contacting work led to a lengthy discussion, followed by Rowan withdrawing from the task."
+              "quote": "Together, they identified a recurring pattern in which a reminder about contacting work led to a lengthy discussion, followed by Rowan withdrawing from the task."
             }
           ],
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-30",
           "kind": "clinician_observation",
-          "text": "A recurring pattern was identified in which reminders about contacting work led to lengthy discussions and Rowan withdrawing from the task."
+          "text": "A recurring pattern was identified: reminders about contacting work led to lengthy discussions and Rowan withdrawing from the task."
         },
         {
           "quotes": [
@@ -6901,62 +7349,6 @@
         },
         {
           "quotes": [
-            "The patient continued to endorse sleep difficulty and trouble sustaining usual activities, with fewer days of pervasive low mood than reported at intake."
-          ],
-          "sources": [
-            {
-              "content_hash": "4a3859fd81fc5afc5533e9add8718ce4b89492121bf68f812f73db92d319755e",
-              "document_id": "BH-D115",
-              "filename": "BH-D115_symptom_measure_review_2026-01-30.txt",
-              "start_line": 8,
-              "end_line": 8,
-              "quote": "The patient continued to endorse sleep difficulty and trouble sustaining usual activities, with fewer days of pervasive low mood than reported at intake."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-30",
-          "kind": "patient_report",
-          "text": "Patient reports ongoing sleep difficulty and trouble sustaining usual activities, with fewer days of pervasive low mood than at intake."
-        },
-        {
-          "quotes": [
-            "Rowan shows partial improvement, with persistent avoidance and meaningful functional impact around returning to work.",
-            "Sleep disruption remains an intermittent barrier to establishing a steadier daytime routine.",
-            "The patient has taken some initial steps, including drafting and sending a message, but continues to delay follow-up and becomes anxious when a task expands beyond a narrowly defined action."
-          ],
-          "sources": [
-            {
-              "content_hash": "4a3859fd81fc5afc5533e9add8718ce4b89492121bf68f812f73db92d319755e",
-              "document_id": "BH-D115",
-              "filename": "BH-D115_symptom_measure_review_2026-01-30.txt",
-              "start_line": 10,
-              "end_line": 10,
-              "quote": "Rowan shows partial improvement, with persistent avoidance and meaningful functional impact around returning to work."
-            },
-            {
-              "content_hash": "4a3859fd81fc5afc5533e9add8718ce4b89492121bf68f812f73db92d319755e",
-              "document_id": "BH-D115",
-              "filename": "BH-D115_symptom_measure_review_2026-01-30.txt",
-              "start_line": 10,
-              "end_line": 10,
-              "quote": "Sleep disruption remains an intermittent barrier to establishing a steadier daytime routine."
-            },
-            {
-              "content_hash": "4a3859fd81fc5afc5533e9add8718ce4b89492121bf68f812f73db92d319755e",
-              "document_id": "BH-D115",
-              "filename": "BH-D115_symptom_measure_review_2026-01-30.txt",
-              "start_line": 10,
-              "end_line": 10,
-              "quote": "The patient has taken some initial steps, including drafting and sending a message, but continues to delay follow-up and becomes anxious when a task expands beyond a narrowly defined action."
-            }
-          ],
-          "patient_id": "harbor grove behavioral health::HG-M042",
-          "observed_date": "2026-01-30",
-          "kind": "clinician_observation",
-          "text": "Clinician observes partial improvement, persistent avoidance, functional impact around returning to work, initial steps taken, continued delay and anxiety with expanded tasks, and intermittent sleep disruption."
-        },
-        {
-          "quotes": [
             "Rowan reported taking the medication as prescribed and did not describe a new adverse effect."
           ],
           "sources": [
@@ -6991,7 +7383,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-30",
           "kind": "patient_report",
-          "text": "Patient reported mood was less persistently low, but anxiety remained when anticipating work contact."
+          "text": "Patient reported mood improvement but persistent anxiety related to work."
         },
         {
           "quotes": [
@@ -7010,7 +7402,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-30",
           "kind": "patient_report",
-          "text": "Patient reported sleep was still variable."
+          "text": "Patient reported variable sleep."
         },
         {
           "quotes": [
@@ -7029,7 +7421,7 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-30",
           "kind": "clinician_observation",
-          "text": "Clinician observed patient was alert, organized, and able to describe the follow-up plan."
+          "text": "Patient was alert, organized, and able to describe the follow-up plan."
         },
         {
           "quotes": [
@@ -7067,7 +7459,102 @@
           "patient_id": "harbor grove behavioral health::HG-M042",
           "observed_date": "2026-01-30",
           "kind": "clinician_observation",
-          "text": "Clinician observed no new acute safety issue."
+          "text": "No new acute safety issue was observed."
+        },
+        {
+          "quotes": [
+            "The patient continued to endorse sleep difficulty and trouble sustaining usual activities, with fewer days of pervasive low mood than reported at intake."
+          ],
+          "sources": [
+            {
+              "content_hash": "4a3859fd81fc5afc5533e9add8718ce4b89492121bf68f812f73db92d319755e",
+              "document_id": "BH-D115",
+              "filename": "BH-D115_symptom_measure_review_2026-01-30.txt",
+              "start_line": 8,
+              "end_line": 8,
+              "quote": "The patient continued to endorse sleep difficulty and trouble sustaining usual activities, with fewer days of pervasive low mood than reported at intake."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-30",
+          "kind": "patient_report",
+          "text": "Patient reports ongoing sleep difficulty and trouble sustaining usual activities, with fewer days of pervasive low mood than at intake."
+        },
+        {
+          "quotes": [
+            "Rowan shows partial improvement, with persistent avoidance and meaningful functional impact around returning to work."
+          ],
+          "sources": [
+            {
+              "content_hash": "4a3859fd81fc5afc5533e9add8718ce4b89492121bf68f812f73db92d319755e",
+              "document_id": "BH-D115",
+              "filename": "BH-D115_symptom_measure_review_2026-01-30.txt",
+              "start_line": 10,
+              "end_line": 10,
+              "quote": "Rowan shows partial improvement, with persistent avoidance and meaningful functional impact around returning to work."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-30",
+          "kind": "clinician_observation",
+          "text": "Clinician observes partial improvement, but persistent avoidance and significant impact on returning to work."
+        },
+        {
+          "quotes": [
+            "The patient has taken some initial steps, including drafting and sending a message, but continues to delay follow-up and becomes anxious when a task expands beyond a narrowly defined action."
+          ],
+          "sources": [
+            {
+              "content_hash": "4a3859fd81fc5afc5533e9add8718ce4b89492121bf68f812f73db92d319755e",
+              "document_id": "BH-D115",
+              "filename": "BH-D115_symptom_measure_review_2026-01-30.txt",
+              "start_line": 10,
+              "end_line": 10,
+              "quote": "The patient has taken some initial steps, including drafting and sending a message, but continues to delay follow-up and becomes anxious when a task expands beyond a narrowly defined action."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-30",
+          "kind": "clinician_observation",
+          "text": "Patient has taken initial steps (drafting and sending a message), but delays follow-up and becomes anxious with broader tasks."
+        },
+        {
+          "quotes": [
+            "Sleep disruption remains an intermittent barrier to establishing a steadier daytime routine."
+          ],
+          "sources": [
+            {
+              "content_hash": "4a3859fd81fc5afc5533e9add8718ce4b89492121bf68f812f73db92d319755e",
+              "document_id": "BH-D115",
+              "filename": "BH-D115_symptom_measure_review_2026-01-30.txt",
+              "start_line": 10,
+              "end_line": 10,
+              "quote": "Sleep disruption remains an intermittent barrier to establishing a steadier daytime routine."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-30",
+          "kind": "clinician_observation",
+          "text": "Sleep disruption intermittently impedes establishing a steadier daytime routine."
+        },
+        {
+          "quotes": [
+            "Continued treatment is appropriate given the remaining difficulties with follow-through and work-related functioning."
+          ],
+          "sources": [
+            {
+              "content_hash": "4a3859fd81fc5afc5533e9add8718ce4b89492121bf68f812f73db92d319755e",
+              "document_id": "BH-D115",
+              "filename": "BH-D115_symptom_measure_review_2026-01-30.txt",
+              "start_line": 12,
+              "end_line": 12,
+              "quote": "Continued treatment is appropriate given the remaining difficulties with follow-through and work-related functioning."
+            }
+          ],
+          "patient_id": "harbor grove behavioral health::HG-M042",
+          "observed_date": "2026-01-30",
+          "kind": "clinician_observation",
+          "text": "Continued treatment is recommended due to ongoing difficulties with follow-through and work-related functioning."
         }
       ]
     }
@@ -7094,7 +7581,7 @@
         "harbor grove behavioral health::HG-M042"
       ],
       "assessment_claims": 0,
-      "observation_claims": 3,
+      "observation_claims": 6,
       "source": {
         "content_hash": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
         "document_id": "BH-D003",
@@ -7109,7 +7596,7 @@
         "harbor grove behavioral health::HG-M042"
       ],
       "assessment_claims": 1,
-      "observation_claims": 2,
+      "observation_claims": 4,
       "source": {
         "content_hash": "300a30dbe42be8dcfdf7ad644f23c583259611467ae32e944e8d7154c78b968e",
         "document_id": "BH-D013",
@@ -7139,7 +7626,7 @@
         "harbor grove behavioral health::HG-M042"
       ],
       "assessment_claims": 1,
-      "observation_claims": 2,
+      "observation_claims": 5,
       "source": {
         "content_hash": "4a3859fd81fc5afc5533e9add8718ce4b89492121bf68f812f73db92d319755e",
         "document_id": "BH-D115",

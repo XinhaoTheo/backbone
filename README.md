@@ -26,6 +26,11 @@ uv run backbone ask "Which patients had two consecutive weeks below their treatm
 uv run backbone export questions.json --output artifacts
 uv run backbone benchmark artifacts/benchmark_questions.json \
   --plans artifacts/benchmark_plans.json --repeats 10
+uv run backbone benchmark-live artifacts/benchmark_questions.json \
+  --model gpt-4.1-mini --repeats 3 \
+  --input-rate-per-million 0.4 --output-rate-per-million 1.6
+uv run backbone --db .backbone/initial-measurement.sqlite3 benchmark-process documents \
+  --model gpt-4.1 --workers 4 --input-rate-per-million 2 --output-rate-per-million 8
 ```
 
 Process a new file or directory with the same `process` command. Unchanged files
@@ -77,8 +82,9 @@ Ambiguous or unsupported requests return an actionable error.
 Use `ask --plan PATH` for one saved plan or `--context PATH` for a previous plan.
 Batch commands accept `--plans PATH`; export writes `plans.json`. A saved plan
 must match the exact question and snapshot. Replay requires saved plans and
-makes no API calls. The submitted plans were migrated from the initial rule-based
-run; they are not represented as fresh LLM outputs.
+makes no API calls. The submitted plans come from recorded fresh LLM runs of
+the original questions. [Planner validation](artifacts/planner_validation.json)
+checks their patient/date/task scopes, numerical results, and source locations.
 
 No vector RAG is implemented. Numerical questions require complete scoped event
 sets. Symptom answers use saved assessments and attributed observations. Semantic
@@ -107,6 +113,19 @@ minutes. The last week's plan status remains indeterminate because the January
 26 contact has unresolved 40/50-minute alternatives. Production code contains
 no patient-specific rules or answers.
 
+Answers identify additional evidence needed by patient, event, date, and field.
+For January 26, they request an identified correction or actual contact intervals
+and breaks to resolve the 40/50-minute dispute. Processing, computation-budget,
+and partial-week limitations instead name the operational step needed.
+Symptom answers separate distinct forms, numerical score changes, attributed
+observations, and additional-contact reasons; score reduction does not establish recovery.
+
+The separate [synthetic demonstration](demo/README.md) contains three patients,
+confirmed/possible/excluded cohort membership, and a documented plan change.
+`backbone demo` processes authored source-grounded fixtures without API calls.
+[Its live benchmark](demo/artifacts/full-query-benchmark.json) tests the current
+model planner separately. Synthetic records never enter the original five answers.
+
 ## Submission
 
 | File | Contents |
@@ -117,50 +136,73 @@ no patient-specific rules or answers.
 | [extractions.jsonl](artifacts/extractions.jsonl) | Validated model claims before reconciliation. |
 | [execution.jsonl](artifacts/execution.jsonl) | Processing and query execution logs. |
 | [query_planning_checks.json](artifacts/query_planning_checks.json) | Synthetic live-API intent and field-grounding checks, including the observed failure and retry. |
-| [benchmark.json](artifacts/benchmark.json) / [performance.json](artifacts/performance.json) | Measured timings, sizes, token usage, and labeled cost estimates. |
+| [full-query-benchmark.json](artifacts/full-query-benchmark.json) / [planner_validation.json](artifacts/planner_validation.json) | Fresh planning, stage timings, tokens/cost, saved-plan replay, and reference checks. |
+| [initial-processing.json](artifacts/initial-processing.json) / [clean_environment.json](artifacts/clean_environment.json) | Complete new-database measurement and isolated-wheel verification. |
+| [benchmark.json](artifacts/benchmark.json) / [performance.json](artifacts/performance.json) | Saved-plan calculation timings and earlier separate-stage processing measurements. |
+| [demo/artifacts](demo/artifacts) | Separate synthetic abstractions, source-linked answers, fixtures, and live planning measurements. |
 
 ## Measurements and model
 
-The final 31-record extraction used `gpt-4.1` (returned snapshot
-`gpt-4.1-2025-04-14`), Responses structured outputs, temperature 0,
-12,000 maximum output tokens, and four workers. Each failed local validation
-gets one retry with its specific error. Exact quotation locations are attached
-by code, outside the model schema. Query planning uses Responses structured
-outputs with 5,000 maximum output tokens; each saved plan records the returned
-model, tokens, planning time, and logical model calls. Query sampling uses the
-provider default. Costs are null when no rate was configured. The implementation
-follows [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs).
+The isolated wheel run at `396ed6b` processed 31 new records in **36.043 seconds**,
+including database initialization, ingestion, extraction, reconciliation, and
+publication. It used `gpt-4.1-2025-04-14`, 134,470 input / 25,265 output tokens,
+and an estimated **$0.47106**. A preceding 40.096-second attempt rejected one
+non-verbatim quotation and published no snapshot; its report is retained in
+[initial-processing-failed.json](artifacts/initial-processing-failed.json).
+The successful measurement uses another empty database, without extraction caches.
 
-Initial ingestion and extraction took 28.638 seconds and used 117,058 input and
-22,716 output tokens. Cached reconciliation/publication took 0.136 seconds.
-These are separate measured stages. The final run's standard uncached token
-estimate is $0.416 at [$2 input / $8 output per million tokens](https://developers.openai.com/api/docs/models/gpt-4.1).
-Actual billing and prompt-cache discounts were not captured; development probes
-are additional. Saved-plan execution latency and current abstraction size are in the benchmark.
-Initial extraction figures above describe the earlier extraction run. Query
-planning time, tokens, and model calls are reported separately from execution.
+Extraction uses Responses structured outputs, temperature 0, 12,000 maximum
+output tokens, and four workers. A failed local evidence check gets one retry.
+Code attaches exact quotation locations. Planning uses structured outputs,
+5,000 maximum output tokens, and provider-default sampling.
+See [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs).
 
-A seven-record comparison found that `gpt-4.1-mini` repeatedly generated a
-non-verbatim quotation and misclassified group timing. Clearer field descriptions
-and explicit quantity validation fixed several errors; `gpt-4.1` then passed
-all seven cases. The final 31-record outputs also pass independent expected-ledger
-and duplicate-invariance checks.
+Fresh query measurements use `gpt-4.1-mini-2025-04-14` and three repeats per
+question. Every repeat calls the planner and reloads the SQLite snapshot.
+Each table cell is its stage median; separate medians need not sum.
 
-Exact quotation validation does not establish semantic correctness. The final
-model still labeled an administrative desk export as final and a routine
-continuation statement as an added-contact reason. Neither changes the supplied
-therapy totals. Next, label claim status, timing scope, and observation attribution
-on additional records and compare error rates before changing the schema or model.
+| Query | Database (ms) | Planning (s) | Calculation/render (ms) | End to end (s) | Saved-plan replay (ms) |
+| --- | --- | --- | --- | --- | --- |
+| DEV-01: counts | 3.408 | 1.453 | 3.177 | 1.460 | 7.268 |
+| DEV-02: minutes | 3.150 | 2.095 | 6.529 | 2.104 | 10.330 |
+| DEV-03: weekly goals | 3.397 | 1.470 | 5.106 | 1.479 | 9.530 |
+| DEV-04: selected dates | 3.770 | 1.451 | 2.594 | 1.457 | 9.613 |
+| DEV-05: symptoms | 3.986 | 1.495 | 4.175 | 1.503 | 9.691 |
+| COHORT-01: supplied collection, one patient | 3.343 | 1.208 | 4.319 | 1.215 | 8.915 |
+| SYN-01: individual | 1.496 | 1.444 | 0.651 | 1.447 | 3.157 |
+| SYN-02: three-patient cohort | 1.708 | 1.394 | 3.572 | 1.398 | 5.906 |
+| SYN-03: plan comparison | 1.515 | 1.339 | 1.538 | 1.342 | 5.517 |
 
+The original workload used 18 calls, 30,147 input / 2,667 output tokens, estimated
+$0.016326. The synthetic workload used nine calls, 16,440 input / 1,105 output
+tokens, estimated $0.008344. All 27 saved-plan replays match their corresponding
+fresh answers without model calls. Independent gold checks pass all 15 original
+five-question runs and all nine synthetic runs. One weekly answer varies whether
+it also displays the session count; its totals and goal decisions agree.
+
+Prices are standard uncached estimates at [$2/$8 per million input/output tokens
+for gpt-4.1](https://developers.openai.com/api/docs/models/gpt-4.1) and
+[$0.40/$1.60 for gpt-4.1-mini](https://developers.openai.com/api/docs/models/gpt-4.1-mini).
+Actual billing, cache discounts, the failed attempt, and other development probes
+are excluded from each successful workload estimate. Unconfigured prices yield
+null costs. Reports retain stage samples, model names, tokens, rates, and scope.
+Query timing excludes CLI startup, report serialization, and output writes;
+replay includes database loading but excludes reading the saved-plan file.
+These small samples do not establish tail latency or large-collection capacity.
+
+[Clean-environment verification](artifacts/clean_environment.json) records the
+wheel hash, source commit, locked dependencies, source hashes, and identical
+exports/replays with an empty API key and a nonexistent database path.
+[performance.json](artifacts/performance.json) retains the earlier separate-stage
+processing measurement. Earlier synthetic planning/grounding probes are in
+[query_planning_checks.json](artifacts/query_planning_checks.json).
+
+Exact quotations do not establish semantic correctness. Verification covers
+these supplied and synthetic questions; it is not a broader accuracy estimate.
+Earlier miniature-model extraction trials misclassified timing and altered
+quotations, so extraction and planning use different models here.
 OpenAI Codex and collaborating coding agents assisted implementation and review.
 No coding-assistant sampling settings were configured in the repository.
-
-Ten synthetic live query-planning checks initially passed nine cases. Average
-session duration incorrectly triggered a date clarification; capability-priority
-instructions made the targeted retry return unsupported. Two synthetic live
-extraction checks passed old/new plan goals and patient-versus-therapist duration.
-The check artifact records returned models and token usage. These checks are not
-an accuracy estimate on a broader question distribution.
 
 ## Scale
 
@@ -177,7 +219,8 @@ patient in memory. Normalize events and
 patient-week aggregates, index date/patient filters, and invalidate affected
 weeks on publication. SQLite has one writer; move revision publication to a
 transactional shared store when concurrent writers are needed. The 31-document,
-one-patient benchmark does not measure 500K-document or million-document capacity.
+one-patient measurement and the three-patient synthetic measurement do not establish
+500K-document or million-document capacity.
 See [architecture](docs/SYSTEM_ARCHITECTURE.md) for the expansion path.
 
 ## Verify
@@ -186,6 +229,8 @@ See [architecture](docs/SYSTEM_ARCHITECTURE.md) for the expansion path.
 uv run pytest
 uv run mypy src tests
 uv run ruff check src tests
+uv run python -m scripts.validate_submission artifacts/full-query-benchmark.json
+uv run python -m scripts.validate_demo demo/artifacts/full-query-benchmark.json
 ```
 
 Tests include exact source grounding, the five reference answers, scoped

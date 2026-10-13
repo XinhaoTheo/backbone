@@ -1,0 +1,279 @@
+{
+  "verified_at": "2026-10-13T22:02:05.170866Z",
+  "implementation_commit": "396ed6b3f94d3f91322f402674be28cb37f663cb",
+  "wheel": "dist/backbone_review-0.1.0-py3-none-any.whl",
+  "wheel_sha256": "65b5c757c3685f1091d6d253bc71f0b5c54717b334ef986f0fea66bd6a7675fe",
+  "installed_module": "/private/tmp/backbone-submission-20261013/lib/python3.12/site-packages/backbone/__init__.py",
+  "python": "3.12.12",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "locked_dependencies": {
+    "annotated-types": "0.8.0",
+    "anyio": "4.15.1",
+    "h11": "0.16.0",
+    "httpcore2": "2.13.1",
+    "httpx2": "2.13.1",
+    "idna": "3.20",
+    "jiter": "0.17.0",
+    "openai": "3.29.0",
+    "pydantic": "2.14.1",
+    "pydantic-core": "2.50.1",
+    "python-dotenv": "1.2.4",
+    "sniffio": "1.3.1",
+    "truststore": "0.10.4",
+    "typing-extensions": "4.16.0",
+    "typing-inspection": "0.4.4",
+    "backbone-review": "0.1.0"
+  },
+  "checks": [
+    {
+      "name": "fixed_package:src/backbone/__init__.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/__main__.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/benchmarking.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/calculation.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/cli.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/demo.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/extraction.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/extraction_prompt.txt",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/ingestion.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/models.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/performance.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/planning.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/query.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/query_prompt.txt",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/reconciliation.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/storage.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "fixed_package:src/backbone/workflow.py",
+      "passed": true,
+      "detail": "Committed, wheel, and installed package bytes agree."
+    },
+    {
+      "name": "isolated_installed_package",
+      "passed": true,
+      "detail": "/private/tmp/backbone-submission-20261013/lib/python3.12/site-packages/backbone/__init__.py"
+    },
+    {
+      "name": "source_corpus:initial-processing-failed.json",
+      "passed": true,
+      "detail": "31 supplied document hashes match the measured input."
+    },
+    {
+      "name": "source_corpus:initial-processing.json",
+      "passed": true,
+      "detail": "31 supplied document hashes match the measured input."
+    },
+    {
+      "name": "supplied_records_unchanged",
+      "passed": true,
+      "detail": "No supplied document differs from the committed source corpus."
+    },
+    {
+      "name": "offline_replays_identical",
+      "passed": true,
+      "detail": "Both CLI replays ran with OPENAI_API_KEY empty and explicit nonexistent --db; abstractions, plans, JSON answers, and Markdown answers match byte for byte."
+    },
+    {
+      "name": "offline_replay_database_not_created",
+      "passed": true,
+      "detail": "Both replays ran from the isolated verification directory without .env or source code."
+    },
+    {
+      "name": "fresh_and_replay:artifacts/full-query-benchmark.json",
+      "passed": true,
+      "detail": "18 fresh model plans and corresponding zero-model replays."
+    },
+    {
+      "name": "fresh_and_replay:demo/artifacts/full-query-benchmark.json",
+      "passed": true,
+      "detail": "9 fresh model plans and corresponding zero-model replays."
+    }
+  ],
+  "initial_processing_attempts": [
+    {
+      "report": "artifacts/initial-processing-failed.json",
+      "successful": false,
+      "end_to_end_seconds": 40.09599333303049,
+      "extracted_documents": 30,
+      "cached_documents": 0,
+      "snapshot_id": 0,
+      "failed_document_ids": [
+        "BH-D013"
+      ],
+      "estimated_cost_usd": 0.463636
+    },
+    {
+      "report": "artifacts/initial-processing.json",
+      "successful": true,
+      "end_to_end_seconds": 36.0428914995864,
+      "extracted_documents": 31,
+      "cached_documents": 0,
+      "snapshot_id": 1,
+      "failed_document_ids": [],
+      "estimated_cost_usd": 0.47106
+    }
+  ],
+  "fresh_query_reports": [
+    "artifacts/full-query-benchmark.json",
+    "demo/artifacts/full-query-benchmark.json"
+  ],
+  "source_hashes": {
+    "BH-D101_group_content_2026-01-19.txt": "05a234a8adc98e72a51ba9e82c13e5975ee5026f03bb03e66575015b22562fb6",
+    "BH-D102_original_attendance_2026-01-19.txt": "514ca20809f682607e91b924c6cef0bb22f43a3d12cedbd23ea5fa362910cce5",
+    "BH-D103_attendance_correction_2026-01-20.txt": "674440968b5d6d38d68b8b513cc7ac3b3516ddd97285bde1e4af69cb9f128bd9",
+    "BH-D104_resent_roster_received_2026-01-26.txt": "f3f25065559f4e82b110b5c284df5c2c4f81c55c950721e7bd6a9c23a91241d5",
+    "BH-D105_individual_2026-01-19.txt": "91fd8e8b1b3182207971dbecd77e3d2bd13e5f49608f4083e4a9245b8a2d8935",
+    "BH-D106_telehealth_2026-01-21.txt": "09c946a2248a5a81b2c1dc85b7620babe57b72f1bd4bed3d49eba574be5ccd46",
+    "BH-D107_group_activity_records_2026-01-22_and_29.txt": "c5953bcb242ef0143301019cf06964a4b759d432e26dc0e34f0ad1c2b819df70",
+    "BH-D108_final_attendance_and_cancellation_register.txt": "805b2c69c7fa18ab31b618b4a313c39dcdbde570cc0890de2dfd52d77ca547e1",
+    "BH-D109_care_coordination_2026-01-23.txt": "069ea4112779b68e7ba7bc9d06a73a6ad6dbb8110d7a1e7dfd3307769c6305be",
+    "BH-D110_individual_primary_record_2026-01-26.txt": "4b64c46a13b80c09ec46d1cbb7b577dbfe8027cb62366631c15efa8ec1a1f58b",
+    "BH-D111_individual_second_record_2026-01-26.txt": "d03451942797c3fb189a5083c80950887657a79d0d1da9bb7f74bda8731d9380",
+    "BH-D112_draft_note_and_charge_extract_2026-01-27.txt": "b4390ed6b672381f671aae23dbfa937d9c5585ca4b6db83cd811797e2a34505f",
+    "BH-D113_family_therapy_2026-01-30.txt": "36764827bcb39caf2e9304c881f55e4acba9744a9792228bf36981f19a0feaf9",
+    "BH-D114_medication_management_2026-01-30.txt": "9942bd886fcd2158bbd56914551519397d70eef7103b6d33ba2fa90cc424093c",
+    "BH-D115_symptom_measure_review_2026-01-30.txt": "4a3859fd81fc5afc5533e9add8718ce4b89492121bf68f812f73db92d319755e",
+    "early_appointment_status_export.txt": "0bf056f3769e7daf39941514e6f3e1c40c99cbc00dbb4228ee0fac07d9f75f96",
+    "early_group_attendance_roster.txt": "6f205f89f8d3dbd05094e647925bb3c5955f11e9fb44f255f8cdedc3edb49616",
+    "family_cofacilitator_jan09.txt": "ad416fbda80683308baa15c433c7d1df7fe9221b9e8baf1f2189964bc0421aed",
+    "family_primary_jan09.txt": "924dee06b05c0a841c3f86d0c394c7af39447db6c9ea7b643cc6eb3a3c40df6b",
+    "group_authorization_letter.txt": "d2240979a2de7d7782a34a6ca26e289ee829d01eea9932e4d61b3588c724ceb1",
+    "group_cancellation_notice_jan15.txt": "5f3375f11c857ad3e9917ad2eefffffd5ee0412e6ab56885901c1b5d5b2115f9",
+    "group_facilitator_jan06.txt": "5edddc6b20937ecdadf834b331c399375d0889d12a8595eb4084f1da2d4f4a11",
+    "group_facilitator_jan12.txt": "d30d18d0335d5d428acea2e5ee0334fbbafc10665133a462061a01c94baa09b7",
+    "imported_measure_summary_received_jan26.txt": "85e2c780abded9efe663fd61ac6e6a7a56e5b30c9597b24f35f90076b6f7358b",
+    "individual_therapy_jan14.txt": "8c2fbaf5bb4545cc4590b288d768ab893a4d727f6946bcc88339669d0629eb8a",
+    "intake_and_individual_jan05.txt": "7f5f7d4bbfc9b47a632fb33cca1b261999078d058cbd7601c63f6c6e5be3c747",
+    "medication_review_jan13.txt": "95debafd3a72e32fd806d7aa4b420b1984f9c565d2af3c0d807269ee71aa8482",
+    "missed_visit_outreach_jan08.txt": "4521a120a4d7a8f896d5fe9137a44f72719adc5cadbd839ef1b9d9646316b7c4",
+    "partner_collateral_jan16.txt": "432c973d1a4d505b49ba85c3c92dead5c2a70faca6b6dd66e87db92b95329fea",
+    "signed_treatment_plan_jan05.txt": "3b3f50db40b348bdd9e3baeb64b67a11d5edaf12699954762bec9633ad79ad12",
+    "symptom_measure_review_jan16.txt": "300a30dbe42be8dcfdf7ad644f23c583259611467ae32e944e8d7154c78b968e"
+  },
+  "replay_files": [
+    {
+      "canonical": "artifacts/abstraction.json",
+      "replay": "/private/tmp/backbone-submission-20261013/verification/original-replay/abstraction.json",
+      "canonical_sha256": "621296ba84bf2d062d451ab01dcc9c302e20885df549b5691b616f53410e55af",
+      "replay_sha256": "621296ba84bf2d062d451ab01dcc9c302e20885df549b5691b616f53410e55af",
+      "identical": true
+    },
+    {
+      "canonical": "artifacts/answers.json",
+      "replay": "/private/tmp/backbone-submission-20261013/verification/original-replay/answers.json",
+      "canonical_sha256": "7b5424f466839aac9ab3d4419190d32075d1e7df4c4d5a198cf85ac379b22393",
+      "replay_sha256": "7b5424f466839aac9ab3d4419190d32075d1e7df4c4d5a198cf85ac379b22393",
+      "identical": true
+    },
+    {
+      "canonical": "artifacts/answers.md",
+      "replay": "/private/tmp/backbone-submission-20261013/verification/original-replay/answers.md",
+      "canonical_sha256": "49a2881dd8a2c2461fe519c45eeebaf3b2160f3e827409283f01a7f79b6e0bd6",
+      "replay_sha256": "49a2881dd8a2c2461fe519c45eeebaf3b2160f3e827409283f01a7f79b6e0bd6",
+      "identical": true
+    },
+    {
+      "canonical": "artifacts/plans.json",
+      "replay": "/private/tmp/backbone-submission-20261013/verification/original-replay/plans.json",
+      "canonical_sha256": "d2a4a58485263df16826ade3c598d7f6f9970c41fb4ee198b6888386d723a5b4",
+      "replay_sha256": "d2a4a58485263df16826ade3c598d7f6f9970c41fb4ee198b6888386d723a5b4",
+      "identical": true
+    },
+    {
+      "canonical": "demo/artifacts/abstraction.json",
+      "replay": "/private/tmp/backbone-submission-20261013/verification/synthetic-replay/abstraction.json",
+      "canonical_sha256": "29e27610d000a17ee1f7e2d8731889155f7e09641ea1383927dd46695d21aa7b",
+      "replay_sha256": "29e27610d000a17ee1f7e2d8731889155f7e09641ea1383927dd46695d21aa7b",
+      "identical": true
+    },
+    {
+      "canonical": "demo/artifacts/answers.json",
+      "replay": "/private/tmp/backbone-submission-20261013/verification/synthetic-replay/answers.json",
+      "canonical_sha256": "7eddf1d79b9bee2ddbd8d444a581b824cc4eb1251c6e9b40eb7fda65cea35b0f",
+      "replay_sha256": "7eddf1d79b9bee2ddbd8d444a581b824cc4eb1251c6e9b40eb7fda65cea35b0f",
+      "identical": true
+    },
+    {
+      "canonical": "demo/artifacts/answers.md",
+      "replay": "/private/tmp/backbone-submission-20261013/verification/synthetic-replay/answers.md",
+      "canonical_sha256": "ff56a13a4b8ca2119024ec5beeeb800b6d9c134469298ab6d7bfc56d815f8ca9",
+      "replay_sha256": "ff56a13a4b8ca2119024ec5beeeb800b6d9c134469298ab6d7bfc56d815f8ca9",
+      "identical": true
+    },
+    {
+      "canonical": "demo/artifacts/plans.json",
+      "replay": "/private/tmp/backbone-submission-20261013/verification/synthetic-replay/plans.json",
+      "canonical_sha256": "e6fcc0cea25e06732945b28827542309e0e97e4ae1e50fb0f4423bc568109ff3",
+      "replay_sha256": "e6fcc0cea25e06732945b28827542309e0e97e4ae1e50fb0f4423bc568109ff3",
+      "identical": true
+    }
+  ],
+  "limitations": [
+    "Measured package code is pinned to the implementation commit; submission artifact and evaluation-script updates occur in the following commit.",
+    "The first cold model-extraction attempt failed and is retained. The second was a complete successful run against another new database with zero cached documents.",
+    "Installation used a wheel in a new environment with uv.lock dependency versions; the provided source documents and evaluation scripts were read from the checkout.",
+    "Source hashes and byte-identical replay verify reproducibility of these artifacts, not semantic accuracy beyond the independent reference checks."
+  ]
+}

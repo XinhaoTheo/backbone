@@ -1,7 +1,7 @@
 [
   {
     "question": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.",
-    "snapshot_id": 2,
+    "snapshot_id": 1,
     "tasks": [
       {
         "operation": "counts",
@@ -13,22 +13,26 @@
         "end": "2026-01-30",
         "change_date": null,
         "selected_dates": [],
-        "metrics": [],
-        "consecutive_weeks": 2
+        "metrics": [
+          "sessions",
+          "distinct_days",
+          "service_mix"
+        ],
+        "consecutive_weeks": 1
       }
     ],
-    "planner_model": null,
+    "planner_model": "gpt-4.1-mini-2025-04-14",
     "planner_usage": {
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": null
+      "input_tokens": 1687,
+      "output_tokens": 133,
+      "cost_usd": 0.0008876000000000001
     },
-    "planner_elapsed_seconds": 0.0,
-    "planner_model_calls": 0
+    "planner_elapsed_seconds": 1.4529439588077366,
+    "planner_model_calls": 1
   },
   {
     "question": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.",
-    "snapshot_id": 2,
+    "snapshot_id": 1,
     "tasks": [
       {
         "operation": "durations",
@@ -40,22 +44,39 @@
         "end": "2026-01-30",
         "change_date": null,
         "selected_dates": [],
-        "metrics": [],
-        "consecutive_weeks": 2
+        "metrics": [
+          "minutes"
+        ],
+        "consecutive_weeks": 1
+      },
+      {
+        "operation": "weekly",
+        "patient": "harbor grove behavioral health::HG-M042",
+        "patient_ids": [
+          "harbor grove behavioral health::HG-M042"
+        ],
+        "start": "2026-01-05",
+        "end": "2026-01-30",
+        "change_date": null,
+        "selected_dates": [],
+        "metrics": [
+          "minutes"
+        ],
+        "consecutive_weeks": 1
       }
     ],
-    "planner_model": null,
+    "planner_model": "gpt-4.1-mini-2025-04-14",
     "planner_usage": {
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": null
+      "input_tokens": 1674,
+      "output_tokens": 243,
+      "cost_usd": 0.0010584000000000001
     },
-    "planner_elapsed_seconds": 0.0,
-    "planner_model_calls": 0
+    "planner_elapsed_seconds": 2.0944210002198815,
+    "planner_model_calls": 1
   },
   {
     "question": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.",
-    "snapshot_id": 2,
+    "snapshot_id": 1,
     "tasks": [
       {
         "operation": "weekly",
@@ -67,22 +88,26 @@
         "end": "2026-01-30",
         "change_date": null,
         "selected_dates": [],
-        "metrics": [],
-        "consecutive_weeks": 2
+        "metrics": [
+          "sessions",
+          "distinct_days",
+          "minutes"
+        ],
+        "consecutive_weeks": 1
       }
     ],
-    "planner_model": null,
+    "planner_model": "gpt-4.1-mini-2025-04-14",
     "planner_usage": {
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": null
+      "input_tokens": 1681,
+      "output_tokens": 133,
+      "cost_usd": 0.0008852
     },
-    "planner_elapsed_seconds": 0.0,
-    "planner_model_calls": 0
+    "planner_elapsed_seconds": 1.352203665766865,
+    "planner_model_calls": 1
   },
   {
     "question": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?",
-    "snapshot_id": 2,
+    "snapshot_id": 1,
     "tasks": [
       {
         "operation": "day",
@@ -97,22 +122,25 @@
           "2026-01-19",
           "2026-01-21"
         ],
-        "metrics": [],
-        "consecutive_weeks": 2
+        "metrics": [
+          "sessions",
+          "minutes"
+        ],
+        "consecutive_weeks": 1
       }
     ],
-    "planner_model": null,
+    "planner_model": "gpt-4.1-mini-2025-04-14",
     "planner_usage": {
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": null
+      "input_tokens": 1680,
+      "output_tokens": 133,
+      "cost_usd": 0.0008847999999999999
     },
-    "planner_elapsed_seconds": 0.0,
-    "planner_model_calls": 0
+    "planner_elapsed_seconds": 1.4505885001271963,
+    "planner_model_calls": 1
   },
   {
     "question": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?",
-    "snapshot_id": 2,
+    "snapshot_id": 1,
     "tasks": [
       {
         "operation": "symptoms",
@@ -124,26 +152,28 @@
         "end": "2026-01-30",
         "change_date": null,
         "selected_dates": [],
-        "metrics": [],
+        "metrics": [
+          "sessions"
+        ],
         "consecutive_weeks": 2
       }
     ],
-    "planner_model": null,
+    "planner_model": "gpt-4.1-mini-2025-04-14",
     "planner_usage": {
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": null
+      "input_tokens": 1673,
+      "output_tokens": 135,
+      "cost_usd": 0.0008852
     },
-    "planner_elapsed_seconds": 0.0,
-    "planner_model_calls": 0
+    "planner_elapsed_seconds": 1.4184987088665366,
+    "planner_model_calls": 1
   },
   {
     "question": "Which patients had two consecutive weeks below their treatment requirements during January 5–30, 2026?",
-    "snapshot_id": 2,
+    "snapshot_id": 1,
     "tasks": [
       {
         "operation": "cohort",
-        "patient": null,
+        "patient": "harbor grove behavioral health::HG-M042",
         "patient_ids": [
           "harbor grove behavioral health::HG-M042"
         ],
@@ -151,17 +181,22 @@
         "end": "2026-01-30",
         "change_date": null,
         "selected_dates": [],
-        "metrics": [],
+        "metrics": [
+          "sessions",
+          "distinct_days",
+          "minutes",
+          "service_mix"
+        ],
         "consecutive_weeks": 2
       }
     ],
-    "planner_model": null,
+    "planner_model": "gpt-4.1-mini-2025-04-14",
     "planner_usage": {
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": null
+      "input_tokens": 1654,
+      "output_tokens": 116,
+      "cost_usd": 0.0008472
     },
-    "planner_elapsed_seconds": 0.0,
-    "planner_model_calls": 0
+    "planner_elapsed_seconds": 1.275148999877274,
+    "planner_model_calls": 1
   }
 ]

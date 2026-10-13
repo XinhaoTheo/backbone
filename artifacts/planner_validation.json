@@ -1,0 +1,3575 @@
+{
+  "scope": "Live planning and execution of the five supplied development questions.",
+  "gold_reference": "tests/test_reference_records.py",
+  "passed": true,
+  "expected_question_count": 5,
+  "observed_question_count": 5,
+  "input_run_count": 18,
+  "run_count": 15,
+  "excluded_question_ids": [
+    "COHORT-01"
+  ],
+  "excluded_run_count": 3,
+  "checks": [
+    {
+      "name": "questions.match_reference_set",
+      "passed": true,
+      "expected": "['DEV-01', 'DEV-02', 'DEV-03', 'DEV-04', 'DEV-05']",
+      "observed": "['DEV-01', 'DEV-02', 'DEV-03', 'DEV-04', 'DEV-05']"
+    },
+    {
+      "name": "runs.cover_all_questions",
+      "passed": true,
+      "expected": "['DEV-01', 'DEV-02', 'DEV-03', 'DEV-04', 'DEV-05']",
+      "observed": "['DEV-01', 'DEV-02', 'DEV-03', 'DEV-04', 'DEV-05']"
+    },
+    {
+      "name": "runs.unique_question_repeat_pairs",
+      "passed": true,
+      "expected": "True",
+      "observed": "True"
+    }
+  ],
+  "results": [
+    {
+      "id": "DEV-01",
+      "repeat": 1,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1687,
+        "output_tokens": 133,
+        "cost_usd": 0.0008876000000000001
+      },
+      "timings": {
+        "database_load_seconds": 0.0038203750737011433,
+        "planning_seconds": 1.4530586246401072,
+        "execution_render_seconds": 0.0031677912920713425,
+        "end_to_end_seconds": 1.4600467910058796
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.",
+          "observed": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts."
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.",
+          "observed": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts."
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1687 output_tokens=133 cost_usd=0.0008876000000000001",
+          "observed": "input_tokens=1687 output_tokens=133 cost_usd=0.0008876000000000001"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.required_task",
+          "passed": true,
+          "expected": "counts",
+          "observed": "counts"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_1.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.",
+          "observed": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts."
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"counts\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"sessions\",\"distinct_days\",\"service_mix\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1687,\"output_tokens\":133,\"cost_usd\":0.0008876000000000001},\"planner_elapsed_seconds\":1.4529439588077366,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"counts\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"sessions\",\"distinct_days\",\"service_mix\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1687,\"output_tokens\":133,\"cost_usd\":0.0008876000000000001},\"planner_elapsed_seconds\":1.4529439588077366,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "answer.metrics_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "answer.metrics_1.sessions",
+          "passed": true,
+          "expected": "12",
+          "observed": "12"
+        },
+        {
+          "name": "answer.metrics_1.distinct_days",
+          "passed": true,
+          "expected": "11",
+          "observed": "11"
+        },
+        {
+          "name": "answer.metrics_1.individual_sessions",
+          "passed": true,
+          "expected": "5",
+          "observed": "5"
+        },
+        {
+          "name": "answer.metrics_1.group_sessions",
+          "passed": true,
+          "expected": "5",
+          "observed": "5"
+        },
+        {
+          "name": "answer.metrics_1.family_sessions",
+          "passed": true,
+          "expected": "2",
+          "observed": "2"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-01",
+      "repeat": 2,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1687,
+        "output_tokens": 123,
+        "cost_usd": 0.0008716000000000002
+      },
+      "timings": {
+        "database_load_seconds": 0.002918708138167858,
+        "planning_seconds": 1.3353758328594267,
+        "execution_render_seconds": 0.006684167310595512,
+        "end_to_end_seconds": 1.34497870830819
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.",
+          "observed": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts."
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.",
+          "observed": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts."
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1687 output_tokens=123 cost_usd=0.0008716000000000002",
+          "observed": "input_tokens=1687 output_tokens=123 cost_usd=0.0008716000000000002"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.required_task",
+          "passed": true,
+          "expected": "counts",
+          "observed": "counts"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_1.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.",
+          "observed": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts."
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"counts\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"sessions\",\"distinct_days\",\"service_mix\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1687,\"output_tokens\":123,\"cost_usd\":0.0008716000000000002},\"planner_elapsed_seconds\":1.3352004578337073,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"counts\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"sessions\",\"distinct_days\",\"service_mix\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1687,\"output_tokens\":123,\"cost_usd\":0.0008716000000000002},\"planner_elapsed_seconds\":1.3352004578337073,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "answer.metrics_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "answer.metrics_1.sessions",
+          "passed": true,
+          "expected": "12",
+          "observed": "12"
+        },
+        {
+          "name": "answer.metrics_1.distinct_days",
+          "passed": true,
+          "expected": "11",
+          "observed": "11"
+        },
+        {
+          "name": "answer.metrics_1.individual_sessions",
+          "passed": true,
+          "expected": "5",
+          "observed": "5"
+        },
+        {
+          "name": "answer.metrics_1.group_sessions",
+          "passed": true,
+          "expected": "5",
+          "observed": "5"
+        },
+        {
+          "name": "answer.metrics_1.family_sessions",
+          "passed": true,
+          "expected": "2",
+          "observed": "2"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-01",
+      "repeat": 3,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1687,
+        "output_tokens": 133,
+        "cost_usd": 0.0008876000000000001
+      },
+      "timings": {
+        "database_load_seconds": 0.003407999873161316,
+        "planning_seconds": 1.5589569169096649,
+        "execution_render_seconds": 0.0031774998642504215,
+        "end_to_end_seconds": 1.5655424166470766
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.",
+          "observed": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts."
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.",
+          "observed": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts."
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1687 output_tokens=133 cost_usd=0.0008876000000000001",
+          "observed": "input_tokens=1687 output_tokens=133 cost_usd=0.0008876000000000001"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.required_task",
+          "passed": true,
+          "expected": "counts",
+          "observed": "counts"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_1.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.",
+          "observed": "For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts."
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"counts\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"sessions\",\"distinct_days\",\"service_mix\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1687,\"output_tokens\":133,\"cost_usd\":0.0008876000000000001},\"planner_elapsed_seconds\":1.5588642093352973,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"For January 5–30, 2026, how many therapy sessions did Rowan attend, by service type and in total, and on how many distinct days? Provide a reviewable abstraction with source support and explain records that could lead to duplicate or ineligible counts.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"counts\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"sessions\",\"distinct_days\",\"service_mix\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1687,\"output_tokens\":133,\"cost_usd\":0.0008876000000000001},\"planner_elapsed_seconds\":1.5588642093352973,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "answer.metrics_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "answer.metrics_1.sessions",
+          "passed": true,
+          "expected": "12",
+          "observed": "12"
+        },
+        {
+          "name": "answer.metrics_1.distinct_days",
+          "passed": true,
+          "expected": "11",
+          "observed": "11"
+        },
+        {
+          "name": "answer.metrics_1.individual_sessions",
+          "passed": true,
+          "expected": "5",
+          "observed": "5"
+        },
+        {
+          "name": "answer.metrics_1.group_sessions",
+          "passed": true,
+          "expected": "5",
+          "observed": "5"
+        },
+        {
+          "name": "answer.metrics_1.family_sessions",
+          "passed": true,
+          "expected": "2",
+          "observed": "2"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-02",
+      "repeat": 1,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1674,
+        "output_tokens": 243,
+        "cost_usd": 0.0010584000000000001
+      },
+      "timings": {
+        "database_load_seconds": 0.0032495842315256596,
+        "planning_seconds": 2.094508375041187,
+        "execution_render_seconds": 0.005940957926213741,
+        "end_to_end_seconds": 2.103698917198926
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.",
+          "observed": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle."
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.",
+          "observed": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle."
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1674 output_tokens=243 cost_usd=0.0010584000000000001",
+          "observed": "input_tokens=1674 output_tokens=243 cost_usd=0.0010584000000000001"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.required_task",
+          "passed": true,
+          "expected": "durations",
+          "observed": "durations"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_1.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "plan.task_2.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_2.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_2.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_2.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_2.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_2.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.",
+          "observed": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle."
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"durations\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\"],\"consecutive_weeks\":1},{\"operation\":\"weekly\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1674,\"output_tokens\":243,\"cost_usd\":0.0010584000000000001},\"planner_elapsed_seconds\":2.0944210002198815,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"durations\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\"],\"consecutive_weeks\":1},{\"operation\":\"weekly\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1674,\"output_tokens\":243,\"cost_usd\":0.0010584000000000001},\"planner_elapsed_seconds\":2.0944210002198815,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "answer.metrics_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "answer.metrics_1.minutes.values",
+          "passed": true,
+          "expected": "[585, 595]",
+          "observed": "[585, 595]"
+        },
+        {
+          "name": "answer.metrics_1.minutes.exact",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "answer.metrics_1.minutes.lower_bound",
+          "passed": true,
+          "expected": "585",
+          "observed": "585"
+        },
+        {
+          "name": "answer.metrics_1.minutes.upper_bound",
+          "passed": true,
+          "expected": "595",
+          "observed": "595"
+        },
+        {
+          "name": "answer.metrics_1.weekly_minutes",
+          "passed": true,
+          "expected": "[[140], [120], [180], [145, 155]]",
+          "observed": "[[140], [120], [180], [145, 155]]"
+        },
+        {
+          "name": "answer.metrics_2.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_2.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "answer.metrics_2.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "answer.metrics_2.minutes.values",
+          "passed": true,
+          "expected": "[585, 595]",
+          "observed": "[585, 595]"
+        },
+        {
+          "name": "answer.metrics_2.minutes.exact",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "answer.metrics_2.minutes.lower_bound",
+          "passed": true,
+          "expected": "585",
+          "observed": "585"
+        },
+        {
+          "name": "answer.metrics_2.minutes.upper_bound",
+          "passed": true,
+          "expected": "595",
+          "observed": "595"
+        },
+        {
+          "name": "answer.metrics_2.weekly_minutes",
+          "passed": true,
+          "expected": "[[140], [120], [180], [145, 155]]",
+          "observed": "[[140], [120], [180], [145, 155]]"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-02",
+      "repeat": 2,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1674,
+        "output_tokens": 243,
+        "cost_usd": 0.0010584000000000001
+      },
+      "timings": {
+        "database_load_seconds": 0.003137958701699972,
+        "planning_seconds": 2.256344625260681,
+        "execution_render_seconds": 0.011021665763109922,
+        "end_to_end_seconds": 2.270504249725491
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.",
+          "observed": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle."
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.",
+          "observed": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle."
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1674 output_tokens=243 cost_usd=0.0010584000000000001",
+          "observed": "input_tokens=1674 output_tokens=243 cost_usd=0.0010584000000000001"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.required_task",
+          "passed": true,
+          "expected": "durations",
+          "observed": "durations"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_1.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "plan.task_2.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_2.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_2.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_2.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_2.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_2.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.",
+          "observed": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle."
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"durations\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\"],\"consecutive_weeks\":1},{\"operation\":\"weekly\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1674,\"output_tokens\":243,\"cost_usd\":0.0010584000000000001},\"planner_elapsed_seconds\":2.2561885830946267,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"durations\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\"],\"consecutive_weeks\":1},{\"operation\":\"weekly\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1674,\"output_tokens\":243,\"cost_usd\":0.0010584000000000001},\"planner_elapsed_seconds\":2.2561885830946267,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "answer.metrics_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "answer.metrics_1.minutes.values",
+          "passed": true,
+          "expected": "[585, 595]",
+          "observed": "[585, 595]"
+        },
+        {
+          "name": "answer.metrics_1.minutes.exact",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "answer.metrics_1.minutes.lower_bound",
+          "passed": true,
+          "expected": "585",
+          "observed": "585"
+        },
+        {
+          "name": "answer.metrics_1.minutes.upper_bound",
+          "passed": true,
+          "expected": "595",
+          "observed": "595"
+        },
+        {
+          "name": "answer.metrics_1.weekly_minutes",
+          "passed": true,
+          "expected": "[[140], [120], [180], [145, 155]]",
+          "observed": "[[140], [120], [180], [145, 155]]"
+        },
+        {
+          "name": "answer.metrics_2.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_2.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "answer.metrics_2.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "answer.metrics_2.minutes.values",
+          "passed": true,
+          "expected": "[585, 595]",
+          "observed": "[585, 595]"
+        },
+        {
+          "name": "answer.metrics_2.minutes.exact",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "answer.metrics_2.minutes.lower_bound",
+          "passed": true,
+          "expected": "585",
+          "observed": "585"
+        },
+        {
+          "name": "answer.metrics_2.minutes.upper_bound",
+          "passed": true,
+          "expected": "595",
+          "observed": "595"
+        },
+        {
+          "name": "answer.metrics_2.weekly_minutes",
+          "passed": true,
+          "expected": "[[140], [120], [180], [145, 155]]",
+          "observed": "[[140], [120], [180], [145, 155]]"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-02",
+      "repeat": 3,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1674,
+        "output_tokens": 243,
+        "cost_usd": 0.0010584000000000001
+      },
+      "timings": {
+        "database_load_seconds": 0.00315024983137846,
+        "planning_seconds": 1.9444915410131216,
+        "execution_render_seconds": 0.006529250182211399,
+        "end_to_end_seconds": 1.9541710410267115
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.",
+          "observed": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle."
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.",
+          "observed": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle."
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1674 output_tokens=243 cost_usd=0.0010584000000000001",
+          "observed": "input_tokens=1674 output_tokens=243 cost_usd=0.0010584000000000001"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.required_task",
+          "passed": true,
+          "expected": "durations",
+          "observed": "durations"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_1.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "plan.task_2.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_2.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_2.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_2.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_2.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_2.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.",
+          "observed": "How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle."
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"durations\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\"],\"consecutive_weeks\":1},{\"operation\":\"weekly\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1674,\"output_tokens\":243,\"cost_usd\":0.0010584000000000001},\"planner_elapsed_seconds\":1.944384915754199,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"How many therapy minutes and hours did Rowan actually receive during the review period, overall and for each Monday–Sunday week? Show calculations or supporting detail, and report any conclusion the available documents do not settle.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"durations\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\"],\"consecutive_weeks\":1},{\"operation\":\"weekly\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1674,\"output_tokens\":243,\"cost_usd\":0.0010584000000000001},\"planner_elapsed_seconds\":1.944384915754199,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "answer.metrics_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "answer.metrics_1.minutes.values",
+          "passed": true,
+          "expected": "[585, 595]",
+          "observed": "[585, 595]"
+        },
+        {
+          "name": "answer.metrics_1.minutes.exact",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "answer.metrics_1.minutes.lower_bound",
+          "passed": true,
+          "expected": "585",
+          "observed": "585"
+        },
+        {
+          "name": "answer.metrics_1.minutes.upper_bound",
+          "passed": true,
+          "expected": "595",
+          "observed": "595"
+        },
+        {
+          "name": "answer.metrics_1.weekly_minutes",
+          "passed": true,
+          "expected": "[[140], [120], [180], [145, 155]]",
+          "observed": "[[140], [120], [180], [145, 155]]"
+        },
+        {
+          "name": "answer.metrics_2.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_2.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "answer.metrics_2.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "answer.metrics_2.minutes.values",
+          "passed": true,
+          "expected": "[585, 595]",
+          "observed": "[585, 595]"
+        },
+        {
+          "name": "answer.metrics_2.minutes.exact",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "answer.metrics_2.minutes.lower_bound",
+          "passed": true,
+          "expected": "585",
+          "observed": "585"
+        },
+        {
+          "name": "answer.metrics_2.minutes.upper_bound",
+          "passed": true,
+          "expected": "595",
+          "observed": "595"
+        },
+        {
+          "name": "answer.metrics_2.weekly_minutes",
+          "passed": true,
+          "expected": "[[140], [120], [180], [145, 155]]",
+          "observed": "[[140], [120], [180], [145, 155]]"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-03",
+      "repeat": 1,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1681,
+        "output_tokens": 133,
+        "cost_usd": 0.0008852
+      },
+      "timings": {
+        "database_load_seconds": 0.003550916910171509,
+        "planning_seconds": 1.3524170410819352,
+        "execution_render_seconds": 0.004866667091846466,
+        "end_to_end_seconds": 1.3608346250839531
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.",
+          "observed": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record."
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.",
+          "observed": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record."
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1681 output_tokens=133 cost_usd=0.0008852",
+          "observed": "input_tokens=1681 output_tokens=133 cost_usd=0.0008852"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.required_task",
+          "passed": true,
+          "expected": "weekly",
+          "observed": "weekly"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_1.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.",
+          "observed": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record."
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"weekly\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"sessions\",\"distinct_days\",\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1681,\"output_tokens\":133,\"cost_usd\":0.0008852},\"planner_elapsed_seconds\":1.352203665766865,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"weekly\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"sessions\",\"distinct_days\",\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1681,\"output_tokens\":133,\"cost_usd\":0.0008852},\"planner_elapsed_seconds\":1.352203665766865,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "answer.metrics_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "answer.metrics_1.weekly_days",
+          "passed": true,
+          "expected": "[3, 2, 3, 3]",
+          "observed": "[3, 2, 3, 3]"
+        },
+        {
+          "name": "answer.metrics_1.weekly_decisions",
+          "passed": true,
+          "expected": "['not_met', 'not_met', 'met', 'indeterminate']",
+          "observed": "['not_met', 'not_met', 'met', 'indeterminate']"
+        },
+        {
+          "name": "answer.metrics_1.weekly_goals",
+          "passed": true,
+          "expected": "[(3, 150), (3, 150), (3, 150), (3, 150)]",
+          "observed": "[(3, 150), (3, 150), (3, 150), (3, 150)]"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-03",
+      "repeat": 2,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1681,
+        "output_tokens": 130,
+        "cost_usd": 0.0008804
+      },
+      "timings": {
+        "database_load_seconds": 0.0033969171345233917,
+        "planning_seconds": 1.4700087918899953,
+        "execution_render_seconds": 0.0051064579747617245,
+        "end_to_end_seconds": 1.4785121669992805
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.",
+          "observed": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record."
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.",
+          "observed": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record."
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1681 output_tokens=130 cost_usd=0.0008804",
+          "observed": "input_tokens=1681 output_tokens=130 cost_usd=0.0008804"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.required_task",
+          "passed": true,
+          "expected": "weekly",
+          "observed": "weekly"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_1.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.",
+          "observed": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record."
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"weekly\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\",\"distinct_days\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1681,\"output_tokens\":130,\"cost_usd\":0.0008804},\"planner_elapsed_seconds\":1.4696459169499576,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"weekly\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"minutes\",\"distinct_days\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1681,\"output_tokens\":130,\"cost_usd\":0.0008804},\"planner_elapsed_seconds\":1.4696459169499576,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "answer.metrics_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "answer.metrics_1.weekly_days",
+          "passed": true,
+          "expected": "[3, 2, 3, 3]",
+          "observed": "[3, 2, 3, 3]"
+        },
+        {
+          "name": "answer.metrics_1.weekly_decisions",
+          "passed": true,
+          "expected": "['not_met', 'not_met', 'met', 'indeterminate']",
+          "observed": "['not_met', 'not_met', 'met', 'indeterminate']"
+        },
+        {
+          "name": "answer.metrics_1.weekly_goals",
+          "passed": true,
+          "expected": "[(3, 150), (3, 150), (3, 150), (3, 150)]",
+          "observed": "[(3, 150), (3, 150), (3, 150), (3, 150)]"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-03",
+      "repeat": 3,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1681,
+        "output_tokens": 131,
+        "cost_usd": 0.0008820000000000001
+      },
+      "timings": {
+        "database_load_seconds": 0.003249333705753088,
+        "planning_seconds": 1.491308500058949,
+        "execution_render_seconds": 0.00629170797765255,
+        "end_to_end_seconds": 1.5008495417423546
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.",
+          "observed": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record."
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.",
+          "observed": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record."
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1681 output_tokens=131 cost_usd=0.0008820000000000001",
+          "observed": "input_tokens=1681 output_tokens=131 cost_usd=0.0008820000000000001"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.required_task",
+          "passed": true,
+          "expected": "weekly",
+          "observed": "weekly"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_1.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.",
+          "observed": "For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record."
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"weekly\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"distinct_days\",\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1681,\"output_tokens\":131,\"cost_usd\":0.0008820000000000001},\"planner_elapsed_seconds\":1.490997042041272,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"For each week, did the delivered therapy meet the goal documented in Rowan’s treatment plan? State the goal, the relevant therapy-day and minute totals, and whether it was met, not met, or cannot be determined from the current record.\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"weekly\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"distinct_days\",\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1681,\"output_tokens\":131,\"cost_usd\":0.0008820000000000001},\"planner_elapsed_seconds\":1.490997042041272,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "answer.metrics_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "answer.metrics_1.weekly_days",
+          "passed": true,
+          "expected": "[3, 2, 3, 3]",
+          "observed": "[3, 2, 3, 3]"
+        },
+        {
+          "name": "answer.metrics_1.weekly_decisions",
+          "passed": true,
+          "expected": "['not_met', 'not_met', 'met', 'indeterminate']",
+          "observed": "['not_met', 'not_met', 'met', 'indeterminate']"
+        },
+        {
+          "name": "answer.metrics_1.weekly_goals",
+          "passed": true,
+          "expected": "[(3, 150), (3, 150), (3, 150), (3, 150)]",
+          "observed": "[(3, 150), (3, 150), (3, 150), (3, 150)]"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-04",
+      "repeat": 1,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1680,
+        "output_tokens": 133,
+        "cost_usd": 0.0008847999999999999
+      },
+      "timings": {
+        "database_load_seconds": 0.0032021249644458294,
+        "planning_seconds": 1.450752291828394,
+        "execution_render_seconds": 0.0025941249914467335,
+        "end_to_end_seconds": 1.4565485417842865
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?",
+          "observed": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?"
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?",
+          "observed": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?"
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1680 output_tokens=133 cost_usd=0.0008847999999999999",
+          "observed": "input_tokens=1680 output_tokens=133 cost_usd=0.0008847999999999999"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.explicit_dates",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.task_1.dates_in_requested_set",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-19",
+          "observed": "2026-01-19"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-21",
+          "observed": "2026-01-21"
+        },
+        {
+          "name": "plan.requested_dates",
+          "passed": true,
+          "expected": "[datetime.date(2026, 1, 19), datetime.date(2026, 1, 21)]",
+          "observed": "[datetime.date(2026, 1, 19), datetime.date(2026, 1, 21)]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?",
+          "observed": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?"
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"day\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-19\",\"end\":\"2026-01-21\",\"change_date\":null,\"selected_dates\":[\"2026-01-19\",\"2026-01-21\"],\"metrics\":[\"sessions\",\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1680,\"output_tokens\":133,\"cost_usd\":0.0008847999999999999},\"planner_elapsed_seconds\":1.4505885001271963,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"day\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-19\",\"end\":\"2026-01-21\",\"change_date\":null,\"selected_dates\":[\"2026-01-19\",\"2026-01-21\"],\"metrics\":[\"sessions\",\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1680,\"output_tokens\":133,\"cost_usd\":0.0008847999999999999},\"planner_elapsed_seconds\":1.4505885001271963,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_1.requested_date",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.end",
+          "passed": true,
+          "expected": "2026-01-19",
+          "observed": "2026-01-19"
+        },
+        {
+          "name": "answer.metrics_1.sessions",
+          "passed": true,
+          "expected": "2",
+          "observed": "2"
+        },
+        {
+          "name": "answer.metrics_1.minutes",
+          "passed": true,
+          "expected": "90",
+          "observed": "90"
+        },
+        {
+          "name": "answer.metrics_2.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_2.requested_date",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_2.end",
+          "passed": true,
+          "expected": "2026-01-21",
+          "observed": "2026-01-21"
+        },
+        {
+          "name": "answer.metrics_2.sessions",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.metrics_2.minutes",
+          "passed": true,
+          "expected": "45",
+          "observed": "45"
+        },
+        {
+          "name": "answer.requested_dates",
+          "passed": true,
+          "expected": "[datetime.date(2026, 1, 19), datetime.date(2026, 1, 21)]",
+          "observed": "[datetime.date(2026, 1, 19), datetime.date(2026, 1, 21)]"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-04",
+      "repeat": 2,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1680,
+        "output_tokens": 134,
+        "cost_usd": 0.0008864
+      },
+      "timings": {
+        "database_load_seconds": 0.004485249985009432,
+        "planning_seconds": 1.5138455829583108,
+        "execution_render_seconds": 0.0029858341440558434,
+        "end_to_end_seconds": 1.5213166670873761
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?",
+          "observed": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?"
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?",
+          "observed": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?"
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1680 output_tokens=134 cost_usd=0.0008864",
+          "observed": "input_tokens=1680 output_tokens=134 cost_usd=0.0008864"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.explicit_dates",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.task_1.dates_in_requested_set",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-19",
+          "observed": "2026-01-19"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-21",
+          "observed": "2026-01-21"
+        },
+        {
+          "name": "plan.requested_dates",
+          "passed": true,
+          "expected": "[datetime.date(2026, 1, 19), datetime.date(2026, 1, 21)]",
+          "observed": "[datetime.date(2026, 1, 19), datetime.date(2026, 1, 21)]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?",
+          "observed": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?"
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"day\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-19\",\"end\":\"2026-01-21\",\"change_date\":null,\"selected_dates\":[\"2026-01-19\",\"2026-01-21\"],\"metrics\":[\"sessions\",\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1680,\"output_tokens\":134,\"cost_usd\":0.0008864},\"planner_elapsed_seconds\":1.5136569999158382,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"day\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-19\",\"end\":\"2026-01-21\",\"change_date\":null,\"selected_dates\":[\"2026-01-19\",\"2026-01-21\"],\"metrics\":[\"sessions\",\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1680,\"output_tokens\":134,\"cost_usd\":0.0008864},\"planner_elapsed_seconds\":1.5136569999158382,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_1.requested_date",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.end",
+          "passed": true,
+          "expected": "2026-01-19",
+          "observed": "2026-01-19"
+        },
+        {
+          "name": "answer.metrics_1.sessions",
+          "passed": true,
+          "expected": "2",
+          "observed": "2"
+        },
+        {
+          "name": "answer.metrics_1.minutes",
+          "passed": true,
+          "expected": "90",
+          "observed": "90"
+        },
+        {
+          "name": "answer.metrics_2.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_2.requested_date",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_2.end",
+          "passed": true,
+          "expected": "2026-01-21",
+          "observed": "2026-01-21"
+        },
+        {
+          "name": "answer.metrics_2.sessions",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.metrics_2.minutes",
+          "passed": true,
+          "expected": "45",
+          "observed": "45"
+        },
+        {
+          "name": "answer.requested_dates",
+          "passed": true,
+          "expected": "[datetime.date(2026, 1, 19), datetime.date(2026, 1, 21)]",
+          "observed": "[datetime.date(2026, 1, 19), datetime.date(2026, 1, 21)]"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-04",
+      "repeat": 3,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1680,
+        "output_tokens": 133,
+        "cost_usd": 0.0008847999999999999
+      },
+      "timings": {
+        "database_load_seconds": 0.003769666887819767,
+        "planning_seconds": 1.2848178748972714,
+        "execution_render_seconds": 0.0025922502391040325,
+        "end_to_end_seconds": 1.2911797920241952
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?",
+          "observed": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?"
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?",
+          "observed": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?"
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1680 output_tokens=133 cost_usd=0.0008847999999999999",
+          "observed": "input_tokens=1680 output_tokens=133 cost_usd=0.0008847999999999999"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.explicit_dates",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.task_1.dates_in_requested_set",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-19",
+          "observed": "2026-01-19"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-21",
+          "observed": "2026-01-21"
+        },
+        {
+          "name": "plan.requested_dates",
+          "passed": true,
+          "expected": "[datetime.date(2026, 1, 19), datetime.date(2026, 1, 21)]",
+          "observed": "[datetime.date(2026, 1, 19), datetime.date(2026, 1, 21)]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?",
+          "observed": "Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?"
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"day\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-19\",\"end\":\"2026-01-21\",\"change_date\":null,\"selected_dates\":[\"2026-01-19\",\"2026-01-21\"],\"metrics\":[\"sessions\",\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1680,\"output_tokens\":133,\"cost_usd\":0.0008847999999999999},\"planner_elapsed_seconds\":1.2846822501160204,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"Reconstruct the care on January 19 and January 21. How many therapy contacts and patient therapy minutes occurred on each date, and how do the attendance records, clinical notes, later documents, and telehealth records affect your answer?\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"day\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-19\",\"end\":\"2026-01-21\",\"change_date\":null,\"selected_dates\":[\"2026-01-19\",\"2026-01-21\"],\"metrics\":[\"sessions\",\"minutes\"],\"consecutive_weeks\":1}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1680,\"output_tokens\":133,\"cost_usd\":0.0008847999999999999},\"planner_elapsed_seconds\":1.2846822501160204,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_1.requested_date",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_1.end",
+          "passed": true,
+          "expected": "2026-01-19",
+          "observed": "2026-01-19"
+        },
+        {
+          "name": "answer.metrics_1.sessions",
+          "passed": true,
+          "expected": "2",
+          "observed": "2"
+        },
+        {
+          "name": "answer.metrics_1.minutes",
+          "passed": true,
+          "expected": "90",
+          "observed": "90"
+        },
+        {
+          "name": "answer.metrics_2.patient_id",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "answer.metrics_2.requested_date",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.metrics_2.end",
+          "passed": true,
+          "expected": "2026-01-21",
+          "observed": "2026-01-21"
+        },
+        {
+          "name": "answer.metrics_2.sessions",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.metrics_2.minutes",
+          "passed": true,
+          "expected": "45",
+          "observed": "45"
+        },
+        {
+          "name": "answer.requested_dates",
+          "passed": true,
+          "expected": "[datetime.date(2026, 1, 19), datetime.date(2026, 1, 21)]",
+          "observed": "[datetime.date(2026, 1, 19), datetime.date(2026, 1, 21)]"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-05",
+      "repeat": 1,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1673,
+        "output_tokens": 135,
+        "cost_usd": 0.0008852
+      },
+      "timings": {
+        "database_load_seconds": 0.025944833178073168,
+        "planning_seconds": 1.4188127499073744,
+        "execution_render_seconds": 0.0038262498565018177,
+        "end_to_end_seconds": 1.4485838329419494
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?",
+          "observed": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?"
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?",
+          "observed": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?"
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1673 output_tokens=135 cost_usd=0.0008852",
+          "observed": "input_tokens=1673 output_tokens=135 cost_usd=0.0008852"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.required_task",
+          "passed": true,
+          "expected": "symptoms",
+          "observed": "symptoms"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_1.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?",
+          "observed": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?"
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"symptoms\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"sessions\"],\"consecutive_weeks\":2}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1673,\"output_tokens\":135,\"cost_usd\":0.0008852},\"planner_elapsed_seconds\":1.4184987088665366,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"symptoms\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"sessions\"],\"consecutive_weeks\":2}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1673,\"output_tokens\":135,\"cost_usd\":0.0008852},\"planner_elapsed_seconds\":1.4184987088665366,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.assessment_dates",
+          "passed": true,
+          "expected": "[datetime.date(2026, 1, 5), datetime.date(2026, 1, 16), datetime.date(2026, 1, 30)]",
+          "observed": "[datetime.date(2026, 1, 5), datetime.date(2026, 1, 16), datetime.date(2026, 1, 30)]"
+        },
+        {
+          "name": "answer.assessment_scores",
+          "passed": true,
+          "expected": "[18.0, 14.0, 10.0]",
+          "observed": "[18.0, 14.0, 10.0]"
+        },
+        {
+          "name": "answer.january_19_reason_for_contact",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-05",
+      "repeat": 2,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1673,
+        "output_tokens": 135,
+        "cost_usd": 0.0008852
+      },
+      "timings": {
+        "database_load_seconds": 0.0038943327963352203,
+        "planning_seconds": 1.4953242084011436,
+        "execution_render_seconds": 0.004175083711743355,
+        "end_to_end_seconds": 1.5033936249092221
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?",
+          "observed": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?"
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?",
+          "observed": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?"
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1673 output_tokens=135 cost_usd=0.0008852",
+          "observed": "input_tokens=1673 output_tokens=135 cost_usd=0.0008852"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.required_task",
+          "passed": true,
+          "expected": "symptoms",
+          "observed": "symptoms"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_1.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?",
+          "observed": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?"
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"symptoms\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"sessions\"],\"consecutive_weeks\":2}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1673,\"output_tokens\":135,\"cost_usd\":0.0008852},\"planner_elapsed_seconds\":1.494858750142157,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"symptoms\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"sessions\"],\"consecutive_weeks\":2}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1673,\"output_tokens\":135,\"cost_usd\":0.0008852},\"planner_elapsed_seconds\":1.494858750142157,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.assessment_dates",
+          "passed": true,
+          "expected": "[datetime.date(2026, 1, 5), datetime.date(2026, 1, 16), datetime.date(2026, 1, 30)]",
+          "observed": "[datetime.date(2026, 1, 5), datetime.date(2026, 1, 16), datetime.date(2026, 1, 30)]"
+        },
+        {
+          "name": "answer.assessment_scores",
+          "passed": true,
+          "expected": "[18.0, 14.0, 10.0]",
+          "observed": "[18.0, 14.0, 10.0]"
+        },
+        {
+          "name": "answer.january_19_reason_for_contact",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    },
+    {
+      "id": "DEV-05",
+      "repeat": 3,
+      "passed": true,
+      "planner_model": "gpt-4.1-mini-2025-04-14",
+      "model_calls": 1,
+      "usage": {
+        "input_tokens": 1673,
+        "output_tokens": 137,
+        "cost_usd": 0.0008884000000000001
+      },
+      "timings": {
+        "database_load_seconds": 0.0039858752861619,
+        "planning_seconds": 1.5536485416814685,
+        "execution_render_seconds": 0.006054291035979986,
+        "end_to_end_seconds": 1.5636887080036104
+      },
+      "checks": [
+        {
+          "name": "run.known_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "question.original_text",
+          "passed": true,
+          "expected": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?",
+          "observed": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?"
+        },
+        {
+          "name": "run.error",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "planner.called_for_fresh_question",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.plan_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "execution.answer_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.original_question",
+          "passed": true,
+          "expected": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?",
+          "observed": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?"
+        },
+        {
+          "name": "planner.model_recorded",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "planner.calls_recorded",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "planner.usage_recorded",
+          "passed": true,
+          "expected": "input_tokens=1673 output_tokens=137 cost_usd=0.0008884000000000001",
+          "observed": "input_tokens=1673 output_tokens=137 cost_usd=0.0008884000000000001"
+        },
+        {
+          "name": "plan.supported_tasks",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "plan.required_task",
+          "passed": true,
+          "expected": "symptoms",
+          "observed": "symptoms"
+        },
+        {
+          "name": "plan.task_1.patient",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.patient_ids",
+          "passed": true,
+          "expected": "harbor grove behavioral health::HG-M042",
+          "observed": "harbor grove behavioral health::HG-M042"
+        },
+        {
+          "name": "plan.task_1.change_date",
+          "passed": true,
+          "expected": "None",
+          "observed": "None"
+        },
+        {
+          "name": "plan.task_1.start",
+          "passed": true,
+          "expected": "2026-01-05",
+          "observed": "2026-01-05"
+        },
+        {
+          "name": "plan.task_1.end",
+          "passed": true,
+          "expected": "2026-01-30",
+          "observed": "2026-01-30"
+        },
+        {
+          "name": "plan.task_1.selected_dates",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        },
+        {
+          "name": "answer.original_question",
+          "passed": true,
+          "expected": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?",
+          "observed": "Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?"
+        },
+        {
+          "name": "answer.snapshot_id",
+          "passed": true,
+          "expected": "1",
+          "observed": "1"
+        },
+        {
+          "name": "answer.executed_fresh_plan",
+          "passed": true,
+          "expected": "{\"question\":\"Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"symptoms\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"distinct_days\"],\"consecutive_weeks\":2}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1673,\"output_tokens\":137,\"cost_usd\":0.0008884000000000001},\"planner_elapsed_seconds\":1.553297916892916,\"planner_model_calls\":1}",
+          "observed": "{\"question\":\"Summarize the documented symptom course during the episode and the reason for the additional individual contact on January 19. Which symptom assessments are distinct, and what conclusions about progress can and cannot be supported?\",\"snapshot_id\":1,\"tasks\":[{\"operation\":\"symptoms\",\"patient\":\"harbor grove behavioral health::HG-M042\",\"patient_ids\":[\"harbor grove behavioral health::HG-M042\"],\"start\":\"2026-01-05\",\"end\":\"2026-01-30\",\"change_date\":null,\"selected_dates\":[],\"metrics\":[\"distinct_days\"],\"consecutive_weeks\":2}],\"planner_model\":\"gpt-4.1-mini-2025-04-14\",\"planner_usage\":{\"input_tokens\":1673,\"output_tokens\":137,\"cost_usd\":0.0008884000000000001},\"planner_elapsed_seconds\":1.553297916892916,\"planner_model_calls\":1}"
+        },
+        {
+          "name": "answer.coverage",
+          "passed": true,
+          "expected": "available_records",
+          "observed": "available_records"
+        },
+        {
+          "name": "answer.text_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.sources_available",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.assessment_dates",
+          "passed": true,
+          "expected": "[datetime.date(2026, 1, 5), datetime.date(2026, 1, 16), datetime.date(2026, 1, 30)]",
+          "observed": "[datetime.date(2026, 1, 5), datetime.date(2026, 1, 16), datetime.date(2026, 1, 30)]"
+        },
+        {
+          "name": "answer.assessment_scores",
+          "passed": true,
+          "expected": "[18.0, 14.0, 10.0]",
+          "observed": "[18.0, 14.0, 10.0]"
+        },
+        {
+          "name": "answer.january_19_reason_for_contact",
+          "passed": true,
+          "expected": "True",
+          "observed": "True"
+        },
+        {
+          "name": "answer.source_locations_verbatim",
+          "passed": true,
+          "expected": "[]",
+          "observed": "[]"
+        }
+      ]
+    }
+  ]
+}

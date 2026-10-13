@@ -61,5 +61,6 @@
     "Query benchmarks cover one patient and 31 source documents; they do not measure capacity at 500K or one million documents.",
     "Snapshot loading currently decodes published patient JSON and cached source records; query-only latency excludes it."
   ],
-  "size_measurement_context": "Current export after query-plan migration; initial processing times and token usage describe the earlier extraction run."
+  "size_measurement_context": "Earlier export after rule-plan migration; these sizes, initial processing times and token usage describe that earlier extraction run.",
+  "benchmark_context": "benchmark.json now contains refreshed saved-plan calculation timings for the current submitted abstraction."
 }

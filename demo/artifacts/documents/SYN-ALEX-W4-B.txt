@@ -1,0 +1,11 @@
+Document ID: SYN-ALEX-W4-B
+Data kind: SYNTHETIC authored demonstration; not a supplied clinical record.
+Organization: Synthetic Review Clinic
+Patient: Alex Demo; MRN: SYN-ALEX
+Treatment episode: 2027-03-01 through 2027-03-28.
+Final patient-contact note for SYN-ALEX.
+Encounter ID: SYN-ALEX-E5.
+Service date: 2027-03-23.
+Attendance: attended. Patient present: yes.
+Patient-present individual psychotherapy duration: 60 minutes.
+This is an independently signed final note, not a copy or a correction.

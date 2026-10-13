@@ -1,0 +1,51 @@
+{
+  "data_kind": "synthetic",
+  "extraction_kind": "authored_fixture",
+  "planning_kind": "authored_saved_plans",
+  "model_calls": 0,
+  "database_path": "/private/tmp/backbone-submission-20261013/verification/synthetic-demo/review.sqlite3",
+  "patient_count": 3,
+  "document_count": 15,
+  "processing": {
+    "ingestion": {
+      "files_seen": 15,
+      "new_documents": 15,
+      "duplicate_documents": 0,
+      "document_hashes": [
+        "36aac948b48de9277bb83adb740d5e4ccd20912ffad71101fb6f2193c8c15145",
+        "32470f3e07d821079ed2f9ecff6e8f604656c6cb83970264fb86892541373766",
+        "ada90ff5a46410a8f8aabb6a89a8d5de452ca194a872e27a332d351c3e0cd3fc",
+        "1f039a4bf83f7d8a6631dbfc39c0e02e74af5518dc18d205c92a7c28050190b3",
+        "95b3db5e9456b7134f7b99d874c7b7e5b6afd9ef41e9ab3fbdfbe19160434431",
+        "2e13bfea21c70bb2af0945b70aa19d95222ff1f1342b103104b6e7ffe45f1dc3",
+        "9015dab770adee07a29b7e9ce6f61ee4efdafb8ba5570173e1f49f4e3d8a2b7b",
+        "0eb0ed16b3afb7095ebf4ad038be2f28e920cea8d076ca71821b2e361cead9df",
+        "6a8a8aeeea668a992b12e2a319523d19b99d1475704c0caca66bcad1b5e9a29a",
+        "ebd52207abf1acd8d7f6c631569052c7279a9a6d834b555b9521ba1e13bfef04",
+        "0100191b3b87167f648cecd90f0ca7afa15364fbd07631795bf0731c8a0a7865",
+        "675224e61958817e8b83712c4166659ad377db55eda53acb87c4dfa8e198ee6d",
+        "1187cfff3689327c64982bbbb36938dce421dccfc34aee12c7c38e3ba3ae8e8c",
+        "f286aa648f5eb142e47f4df0ea302785b84e9099b16f065c81df4a910a83b796",
+        "f730c4ccc8ff828a275f9dd13ab858e347cbaaacb0f38e48711b7a2d43b1e714"
+      ]
+    },
+    "extracted_documents": 15,
+    "cached_documents": 0,
+    "failed_documents": {},
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "usage_incomplete": false,
+    "estimated_cost_usd": 0.0,
+    "elapsed_seconds": 0.05073283286765218,
+    "snapshot_id": 1
+  },
+  "export": {
+    "snapshot_id": 1,
+    "answer_count": 3,
+    "abstraction_bytes": 74415,
+    "abstraction_path": "/private/tmp/backbone-submission-20261013/verification/synthetic-demo/abstraction.json",
+    "answers_json_path": "/private/tmp/backbone-submission-20261013/verification/synthetic-demo/answers.json",
+    "answers_markdown_path": "/private/tmp/backbone-submission-20261013/verification/synthetic-demo/answers.md",
+    "plans_path": "/private/tmp/backbone-submission-20261013/verification/synthetic-demo/plans.json"
+  }
+}
