@@ -37,6 +37,28 @@ Use `ask --snapshot N` to select a published version. `rebuild` recomputes the
 abstraction from saved claims without API calls. `--db PATH` precedes the
 subcommand and selects a separate database.
 
+Browse updates for a stored patient ID, then select a revision or publication time:
+
+```sh
+uv run backbone history "harbor grove behavioral health::HG-M042"
+uv run backbone patient "harbor grove behavioral health::HG-M042" --snapshot 2
+uv run backbone patient "harbor grove behavioral health::HG-M042" \
+  --as-of "2026-10-13T17:26:00-04:00"
+uv run backbone ask "How many therapy sessions did Rowan attend?" \
+  --as-of "2026-10-13T17:26:00-04:00"
+```
+
+History lists patient updates and removals with UTC publication timestamps.
+`patient` returns the record and both its last update and the selected global
+snapshot. An unchanged patient can have an earlier update than the snapshot.
+`--as-of` selects the latest published revision at or before the timestamp;
+it is independent of treatment dates in the question. Include Z or a UTC offset.
+`--snapshot` and `--as-of` are mutually exclusive and also work for batch queries.
+Before a patient's first publication, its state is `not_recorded`; a removal
+returns `removed` rather than its previous record. These metadata commands do
+not call a model. `Store.patient_history()` and `Store.patient_at()` expose the
+same lookup in Python.
+
 To reproduce the submitted answers without an API key or database:
 
 ```sh

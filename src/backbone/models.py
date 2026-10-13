@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, JsonValue
@@ -173,6 +173,25 @@ class PatientRecord(BaseModel):
     plans: list[PlanClaim]
     assessments: list[AssessmentClaim]
     observations: list[Observation]
+
+
+class RevisionInfo(BaseModel):
+    revision_id: int
+    published_at: datetime
+
+
+class PatientHistoryEntry(RevisionInfo):
+    state: Literal["updated", "removed"]
+
+
+class HistoricalPatientState(BaseModel):
+    patient_id: str
+    snapshot_id: int
+    snapshot_published_at: datetime | None
+    patient_revision_id: int | None
+    patient_published_at: datetime | None
+    state: Literal["present", "removed", "not_recorded"]
+    patient: PatientRecord | None
 
 
 class SourceCoverage(BaseModel):

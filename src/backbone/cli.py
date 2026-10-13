@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import os
+from datetime import UTC, datetime
 from pathlib import Path
 from time import perf_counter
 
@@ -10,10 +11,10 @@ from pydantic import BaseModel, TypeAdapter
 
 from backbone.benchmarking import ReviewQuestion, benchmark, export_submission
 from backbone.ingestion import ingest
-from backbone.models import ClinicalSnapshot, ModelUsage, QueryPlan
+from backbone.models import ClinicalSnapshot, ModelUsage, PatientHistoryEntry, QueryPlan
 from backbone.planning import OpenAIQueryPlanner
 from backbone.query import AnswerBundle, answer_question
-from backbone.storage import Store
+from backbone.storage import Store, publication_timestamp
 
 __all__ = ["ReviewQuestion", "ReviewAnswer", "main"]
 
@@ -50,6 +51,8 @@ class Options(argparse.Namespace):
     plan: str | None
     save_plan: str | None
     context: str | None
+    patient_id: str
+    as_of: datetime | None
 
 
 def read_questions(path: str) -> list[ReviewQuestion]:
@@ -60,6 +63,40 @@ def read_plans(path: str | None) -> list[QueryPlan] | None:
     if path is None:
         return None
     return TypeAdapter(list[QueryPlan]).validate_json(Path(path).read_bytes())
+
+
+def parse_publication_time(value: str) -> datetime:
+    try:
+        parsed: datetime = datetime.fromisoformat(value)
+        publication_timestamp(parsed)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError(
+            "Use an ISO publication timestamp with Z or a UTC offset, "
+            "for example 2026-10-13T17:26:00-04:00."
+        ) from error
+    return parsed
+
+
+def add_revision_options(parser: argparse.ArgumentParser) -> None:
+    selector = parser.add_mutually_exclusive_group()
+    selector.add_argument("--snapshot", type=int)
+    selector.add_argument("--as-of", type=parse_publication_time)
+
+
+def render_patient_history(patient_id: str, entries: list[PatientHistoryEntry]) -> str:
+    if not entries:
+        return f"No published history for patient ID {patient_id}."
+    lines: list[str] = [
+        f"Patient: {patient_id}",
+        "Publication time records when this system published the data, not when care occurred.",
+        "",
+        "| Revision | Published at (UTC) | State |",
+        "| --- | --- | --- |",
+    ]
+    for entry in entries:
+        published = entry.published_at.astimezone(UTC).isoformat(timespec="microseconds")
+        lines.append(f"| {entry.revision_id} | {published} | {entry.state} |")
+    return "\n".join(lines)
 
 
 def main() -> None:
@@ -79,7 +116,7 @@ def main() -> None:
     for command in ("ask", "answer-file", "export", "benchmark"):
         question_parser = commands.add_parser(command)
         question_parser.add_argument("question" if command == "ask" else "questions")
-        question_parser.add_argument("--snapshot", type=int)
+        add_revision_options(question_parser)
         question_parser.add_argument("--scenario-budget", type=int, default=10000)
         question_parser.add_argument(
             "--model",
@@ -99,6 +136,12 @@ def main() -> None:
             question_parser.add_argument("--output", default="artifacts")
     commands.add_parser("status")
     commands.add_parser("rebuild")
+    history = commands.add_parser("history")
+    history.add_argument("patient_id")
+    history.add_argument("--json", action="store_true")
+    patient_view = commands.add_parser("patient")
+    patient_view.add_argument("patient_id")
+    add_revision_options(patient_view)
     replay = commands.add_parser("replay")
     replay.add_argument("abstraction")
     replay.add_argument("questions")
@@ -136,8 +179,12 @@ def main() -> None:
         if report.failed_documents:
             raise SystemExit(1)
     elif options.command in {"ask", "answer-file", "export", "benchmark"}:
-        snapshot = store.snapshot(options.snapshot)
         try:
+            snapshot = (
+                store.snapshot_at(options.as_of)
+                if options.as_of is not None
+                else store.snapshot(options.snapshot)
+            )
             if options.command == "ask":
                 started = perf_counter()
                 saved = (
@@ -220,6 +267,23 @@ def main() -> None:
                 print(f"Saved {result.answer_count} answers to {output}.")
         except ValueError as error:
             parser.error(str(error))
+    elif options.command == "history":
+        entries = store.patient_history(options.patient_id)
+        print(
+            TypeAdapter(list[PatientHistoryEntry]).dump_json(entries, indent=2).decode()
+            if options.json
+            else render_patient_history(options.patient_id, entries)
+        )
+    elif options.command == "patient":
+        try:
+            state = store.patient_at(
+                options.patient_id,
+                as_of=options.as_of,
+                revision_id=options.snapshot,
+            )
+        except ValueError as error:
+            parser.error(str(error))
+        print(state.model_dump_json(indent=2))
     elif options.command == "rebuild":
         from backbone.workflow import rebuild_saved
 

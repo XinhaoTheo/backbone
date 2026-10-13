@@ -16,8 +16,11 @@ from backbone.models import (
     DocumentRecord,
     ExecutionRecord,
     ExtractionResult,
+    HistoricalPatientState,
     NonContactRecord,
+    PatientHistoryEntry,
     PatientRecord,
+    RevisionInfo,
     SourceCoverage,
     SourceRef,
 )
@@ -33,6 +36,12 @@ def fetch_rows(cursor: sqlite3.Cursor) -> list[sqlite3.Row]:
 
 def fetch_row(cursor: sqlite3.Cursor) -> sqlite3.Row | None:
     return cast(sqlite3.Row | None, cursor.fetchone())
+
+
+def publication_timestamp(value: datetime) -> str:
+    if value.utcoffset() is None:
+        raise ValueError("Publication time must include a timezone offset.")
+    return value.astimezone(UTC).isoformat(timespec="microseconds")
 
 
 @dataclass
@@ -72,6 +81,8 @@ class Store:
                 CREATE TABLE IF NOT EXISTS revisions (
                     id INTEGER PRIMARY KEY AUTOINCREMENT, created_at TEXT NOT NULL
                 );
+                CREATE INDEX IF NOT EXISTS revision_publication
+                    ON revisions (created_at, id);
                 CREATE TABLE IF NOT EXISTS patient_versions (
                     patient_id TEXT NOT NULL, revision_id INTEGER NOT NULL REFERENCES revisions,
                     payload TEXT NOT NULL, PRIMARY KEY (patient_id, revision_id)
@@ -154,6 +165,116 @@ class Store:
                 fetch_row(connection.execute("SELECT COALESCE(MAX(id), 0) FROM revisions")),
             )
             return int(row[0])
+
+    def patient_history(self, patient_id: str) -> list[PatientHistoryEntry]:
+        with closing(self.connect()) as connection:
+            rows: list[sqlite3.Row] = fetch_rows(
+                connection.execute(
+                    "SELECT p.revision_id, r.created_at, "
+                    "CASE WHEN p.payload = 'null' THEN 'removed' ELSE 'updated' END AS state "
+                    "FROM patient_versions p "
+                    "JOIN revisions r ON r.id = p.revision_id WHERE p.patient_id = ? "
+                    "ORDER BY p.revision_id DESC",
+                    (patient_id,),
+                )
+            )
+            return [
+                PatientHistoryEntry(
+                    revision_id=int(row["revision_id"]),
+                    published_at=datetime.fromisoformat(str(row["created_at"])),
+                    state="removed" if str(row["state"]) == "removed" else "updated",
+                )
+                for row in rows
+            ]
+
+    def revision_at(self, as_of: datetime) -> RevisionInfo | None:
+        timestamp: str = publication_timestamp(as_of)
+        with closing(self.connect()) as connection:
+            row: sqlite3.Row | None = fetch_row(
+                connection.execute(
+                    "SELECT id, created_at FROM revisions WHERE created_at <= ? "
+                    "ORDER BY created_at DESC, id DESC LIMIT 1",
+                    (timestamp,),
+                )
+            )
+            return (
+                None
+                if row is None
+                else RevisionInfo(
+                    revision_id=int(row["id"]),
+                    published_at=datetime.fromisoformat(str(row["created_at"])),
+                )
+            )
+
+    def snapshot_at(self, as_of: datetime) -> ClinicalSnapshot:
+        revision: RevisionInfo | None = self.revision_at(as_of)
+        return self.snapshot(0 if revision is None else revision.revision_id)
+
+    def patient_at(
+        self,
+        patient_id: str,
+        *,
+        as_of: datetime | None = None,
+        revision_id: int | None = None,
+    ) -> HistoricalPatientState:
+        if as_of is not None and revision_id is not None:
+            raise ValueError("Choose a publication time or a snapshot revision, not both.")
+        timestamp: str | None = None if as_of is None else publication_timestamp(as_of)
+        with closing(self.connect()) as connection, connection:
+            connection.execute("BEGIN")
+            revision: sqlite3.Row | None
+            if timestamp is not None:
+                revision = fetch_row(
+                    connection.execute(
+                        "SELECT id, created_at FROM revisions WHERE created_at <= ? "
+                        "ORDER BY created_at DESC, id DESC LIMIT 1",
+                        (timestamp,),
+                    )
+                )
+            elif revision_id is None:
+                revision = fetch_row(
+                    connection.execute(
+                        "SELECT id, created_at FROM revisions ORDER BY id DESC LIMIT 1"
+                    )
+                )
+            else:
+                revision = fetch_row(
+                    connection.execute(
+                        "SELECT id, created_at FROM revisions WHERE id = ?", (revision_id,)
+                    )
+                )
+                if revision is None and revision_id != 0:
+                    raise ValueError(f"Snapshot {revision_id} does not exist.")
+            selected_id: int = 0 if revision is None else int(revision["id"])
+            row: sqlite3.Row | None = fetch_row(
+                connection.execute(
+                    "SELECT p.revision_id, p.payload, r.created_at FROM patient_versions p "
+                    "JOIN revisions r ON r.id = p.revision_id "
+                    "WHERE p.patient_id = ? AND p.revision_id <= ? "
+                    "ORDER BY p.revision_id DESC LIMIT 1",
+                    (patient_id, selected_id),
+                )
+            )
+            payload: str | None = None if row is None else str(row["payload"])
+            return HistoricalPatientState(
+                patient_id=patient_id,
+                snapshot_id=selected_id,
+                snapshot_published_at=None
+                if revision is None
+                else datetime.fromisoformat(str(revision["created_at"])),
+                patient_revision_id=None if row is None else int(row["revision_id"]),
+                patient_published_at=None
+                if row is None
+                else datetime.fromisoformat(str(row["created_at"])),
+                state="not_recorded"
+                if row is None
+                else "removed"
+                if payload == "null"
+                else "present",
+                patient=None
+                if payload is None or payload == "null"
+                else PatientRecord.model_validate_json(payload),
+            )
 
     def reconciliation_version(self) -> str | None:
         with closing(self.connect()) as connection:
@@ -320,12 +441,10 @@ class Store:
                         for patient in patients
                     ],
                     assessment_claims=sum(
-                        claim.patient_id in patient_ids
-                        for claim in evidence.assessments
+                        claim.patient_id in patient_ids for claim in evidence.assessments
                     ),
                     observation_claims=sum(
-                        claim.patient_id in patient_ids
-                        for claim in evidence.observations
+                        claim.patient_id in patient_ids for claim in evidence.observations
                     ),
                     source=SourceRef(
                         content_hash=str(row["content_hash"]),
@@ -361,7 +480,8 @@ class Store:
                     "The snapshot changed during processing; retry using cached evidence."
                 )
             cursor: sqlite3.Cursor = connection.execute(
-                "INSERT INTO revisions (created_at) VALUES (?)", (datetime.now(UTC).isoformat(),)
+                "INSERT INTO revisions (created_at) VALUES (?)",
+                (publication_timestamp(datetime.now(UTC)),),
             )
             revision_id: int = cast(int, cursor.lastrowid)
             for patient in patients:

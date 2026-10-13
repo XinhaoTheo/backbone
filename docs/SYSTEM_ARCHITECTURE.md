@@ -242,6 +242,14 @@ pending status until matching results are ready.
 
 Pin each answer to a published snapshot and matching calculation-rule version.
 Collection queries need a consistent snapshot of published patient revisions.
+Patient history joins `patient_versions` to publication timestamps in `revisions`.
+History includes removals and records only that patient's versions. A timestamp
+lookup selects the latest published revision at or before an aware UTC instant;
+the patient lookup then carries forward its latest version in that snapshot.
+Publication time and clinical event time are distinct. The publication-time
+index supports the global cutoff; the patient/revision primary key supports
+patient history and state lookup. These APIs do not invoke query planning.
+
 Fetch the necessary evidence and results before narrative rendering rather than
 holding a database read transaction open throughout a model call. Retained
 revision references allow audit and reproduction after subsequent updates.
