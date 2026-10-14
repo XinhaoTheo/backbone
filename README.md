@@ -221,23 +221,23 @@ Synthetic records and outputs stay separate from the original five answers.
 
 ## Measurements and model
 
-The isolated wheel run at `396ed6b` processed 31 new records in **36.043 seconds**,
-including database initialization, ingestion, extraction, reconciliation, and
-publication. It used `gpt-4.1-2025-04-14`, 134,470 input / 25,265 output tokens,
-and an estimated **$0.47106**. A preceding 40.096-second attempt rejected one
-non-verbatim quotation and published no snapshot; its report is retained in
-[initial-processing-failed.json](artifacts/initial-processing-failed.json).
-The successful measurement uses another empty database, without extraction caches.
+### Initial processing
 
-Extraction uses Responses structured outputs, temperature 0, 12,000 maximum
-output tokens, and four workers. A failed local evidence check gets one retry.
-Code attaches exact quotation locations. Planning uses structured outputs,
-5,000 maximum output tokens, and provider-default sampling.
-See [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs).
+- **Scope:** 31 new records, using an isolated wheel built from `396ed6b`,
+  an empty database, and no extraction cache.
+- **Time:** **36.043 seconds**, including database initialization, ingestion,
+  extraction, reconciliation, and publication.
+- **Usage:** 134,470 input / 25,265 output tokens; estimated **$0.47106**.
+  See the [successful run](artifacts/initial-processing.json).
+- **Earlier failed attempt:** 40.096 seconds; one non-verbatim quotation was
+  rejected and no snapshot was published. The successful run used a separate
+  empty database. See the [failure report](artifacts/initial-processing-failed.json).
 
-Fresh query measurements use `gpt-4.1-mini-2025-04-14` and three repeats per
-question. Every repeat calls the planner and reloads the SQLite snapshot.
-Each table cell is its stage median; separate medians need not sum.
+### Query latency
+
+- Each question runs three times. Every fresh run calls the planner and reloads
+  the SQLite snapshot.
+- Table cells show stage medians; separate medians need not sum to the end-to-end median.
 
 | Query | Database (ms) | Planning (s) | Calculation/render (ms) | End to end (s) | Saved-plan replay (ms) |
 | --- | --- | --- | --- | --- | --- |
@@ -251,38 +251,65 @@ Each table cell is its stage median; separate medians need not sum.
 | SYN-02: three-patient cohort | 1.708 | 1.394 | 3.572 | 1.398 | 5.906 |
 | SYN-03: plan comparison | 1.515 | 1.339 | 1.538 | 1.342 | 5.517 |
 
-The original workload used 18 calls, 30,147 input / 2,667 output tokens, estimated
-$0.016326. The synthetic workload used nine calls, 16,440 input / 1,105 output
-tokens, estimated $0.008344. All 27 saved-plan replays match their corresponding
-fresh answers without model calls. Independent gold checks pass all 15 original
-five-question runs and all nine synthetic runs. One weekly answer varies whether
-it also displays the session count; its totals and goal decisions agree.
+- Fresh-query timing excludes CLI startup, report serialization, and output writes.
+- Saved-plan replay includes database loading but excludes reading the plan file.
 
-Prices are standard uncached estimates at [$2/$8 per million input/output tokens
-for gpt-4.1](https://developers.openai.com/api/docs/models/gpt-4.1) and
-[$0.40/$1.60 for gpt-4.1-mini](https://developers.openai.com/api/docs/models/gpt-4.1-mini).
-Actual billing, cache discounts, the failed attempt, and other development probes
-are excluded from each successful workload estimate. Unconfigured prices yield
-null costs. Reports retain stage samples, model names, tokens, rates, and scope.
-Query timing excludes CLI startup, report serialization, and output writes;
-replay includes database loading but excludes reading the saved-plan file.
-These small samples do not establish tail latency or large-collection capacity.
+### Model settings
 
-[Clean-environment verification](artifacts/clean_environment.json) records the
-wheel hash, source commit, locked dependencies, source hashes, and identical
-exports/replays with an empty API key and a nonexistent database path.
-[performance.json](artifacts/performance.json) retains the earlier separate-stage
-processing measurement. Earlier synthetic planning/grounding probes are in
-[query_planning_checks.json](artifacts/query_planning_checks.json).
+- **Extraction:** `gpt-4.1-2025-04-14`, Responses structured outputs, temperature
+  `0`, 12,000 maximum output tokens, and four workers. A failed local evidence
+  check triggers one extraction retry. Code attaches exact quotation locations.
+- **Planning:** `gpt-4.1-mini-2025-04-14`, structured outputs, 5,000 maximum
+  output tokens, and provider-default sampling.
 
-Exact quotations do not establish semantic correctness. Verification covers
-these supplied and synthetic questions; it is not a broader accuracy estimate.
-Next, test unseen records against labeled contact times and record statuses, and
-test question paraphrases against expected patient, date, and task selections.
-Earlier miniature-model extraction trials misclassified timing and altered
-quotations, so extraction and planning use different models here.
-OpenAI Codex and collaborating coding agents assisted implementation and review.
-No coding-assistant sampling settings were configured in the repository.
+See [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs).
+
+### Usage and cost
+
+- **Original workload:** 18 calls, 30,147 input / 2,667 output tokens;
+  estimated **$0.016326**.
+- **Synthetic workload:** nine calls, 16,440 input / 1,105 output tokens;
+  estimated **$0.008344**.
+- **Estimate rates:** standard uncached input/output rates per million tokens:
+  [gpt-4.1: $2/$8](https://developers.openai.com/api/docs/models/gpt-4.1) and
+  [gpt-4.1-mini: $0.40/$1.60](https://developers.openai.com/api/docs/models/gpt-4.1-mini).
+- **Scope:** each estimate covers only its successful workload. Failed attempts
+  and other development probes are excluded; actual billing and cache discounts
+  are not measured. Unconfigured rates produce `null` costs.
+
+### Validation and limitations
+
+- **Replay:** all 27 saved-plan replays match their corresponding fresh answers
+  without model calls.
+- **Reference checks:** all 15 runs of the original five questions and all nine
+  synthetic runs pass independent expected-answer checks.
+- **Observed variation:** one weekly answer sometimes includes the session count;
+  its totals and goal decisions agree across runs.
+- **Accuracy scope:** exact quotations do not prove correct interpretation.
+  These questions do not establish broader accuracy, tail latency, or capacity
+  for large collections.
+- **Next checks:** test unseen records against labeled contact times and record
+  statuses; test question paraphrases against expected patients, dates, and tasks.
+
+### Reproducibility records
+
+- [Clean-environment verification](artifacts/clean_environment.json): wheel hash,
+  source commit, locked dependencies, source hashes, and identical exports and
+  offline replays. Offline replay used an empty API key and a nonexistent database path.
+- [Fresh-query reports](artifacts/full-query-benchmark.json) and
+  [synthetic-query reports](demo/artifacts/full-query-benchmark.json): stage
+  samples, model names, tokens, rates, and workload scope.
+- [Earlier processing measurement](artifacts/performance.json): processing stages
+  measured separately. [Earlier planning and grounding probes](artifacts/query_planning_checks.json):
+  synthetic live-model checks.
+- [Submitted abstraction](artifacts/abstraction.json): **381,799 bytes** of exported JSON.
+
+### Design choice and coding assistance
+
+- Earlier smaller-model extraction trials misclassified timing and altered
+  quotations, so extraction and planning use different models.
+- OpenAI Codex and collaborating coding agents assisted implementation and review.
+  No coding-assistant sampling settings were configured in the repository.
 
 ## Scale
 
