@@ -110,37 +110,97 @@ A valid plan can still misinterpret a question; correct JSON alone does not prov
 
 ## Evidence and uncertainty
 
-Content hashes deduplicate identical files. Document IDs and exact quotation
-line ranges identify sources. Encounter/appointment IDs link complementary
-records; unresolved identity stays explicit. Scoped corrections affect only
-their named fields, and later copies do not undo them. New extractions require
-separate source quotes for plan thresholds/effective dates and stated patient
-minutes. Numeric checks use the relevant field quote. Legacy caches remain
-readable; changed extraction settings use a new cache key.
+### How are documents deduplicated, linked, and traced to their sources?
 
-Code intersects patient attendance with group activity, removes nontherapeutic
-breaks and connection gaps, and applies effective participation rules. Conflicting
-final records retain discrete, source-linked alternatives. Feasible scenarios
-preserve shared choices; exceeding the scenario budget reports incomplete
-analysis. Partial weeks and unspecified plan transitions remain qualified.
+- Identical file contents are stored once. Extraction results are reused when
+  the content and extraction settings match; earlier caches remain readable.
+- Records describing the same encounter are linked using encounter or appointment
+  IDs. Ambiguous matches remain unresolved.
+- Each claim retains its document ID, filename, line range, and exact source quote.
+  New extractions require separate quotes for plan goals, effective dates, and stated minutes.
+- An explicit correction changes only the fields it names. Later copies of an
+  earlier record do not undo that correction.
 
-The supplied records yield 12 eligible sessions on 11 days and 585 or 595
-minutes. The last week's plan status remains indeterminate because the January
-26 contact has unresolved 40/50-minute alternatives. Production code contains
-no patient-specific rules or answers.
+```mermaid
+flowchart TD
+    D[Documents] --> H[Deduplicate identical content]
+    H --> E[Extract claims or reuse cached results]
+    E --> R[Link and reconcile encounter records]
+    R --> S[(SQLite patient abstraction)]
+    E --> Q[Source quotes and line numbers]
+    Q --> S
+```
 
-Answers identify additional evidence needed by patient, event, date, and field.
-For January 26, they request an identified correction or actual contact intervals
-and breaks to resolve the 40/50-minute dispute. Processing, computation-budget,
-and partial-week limitations instead name the operational step needed.
-Symptom answers separate distinct forms, numerical score changes, attributed
-observations, and additional-contact reasons; score reduction does not establish recovery.
+### How are therapy minutes calculated when records disagree?
 
-The separate [synthetic demonstration](demo/README.md) contains three patients,
-confirmed/possible/excluded cohort membership, and a documented plan change.
-`backbone demo` processes authored source-grounded fixtures without API calls.
-[Its live benchmark](demo/artifacts/full-query-benchmark.json) tests the current
-model planner separately. Synthetic records never enter the original five answers.
+Include contacts that qualify under the effective treatment plan. Calculate the
+overlap between patient attendance and therapy activity, excluding documented
+nontherapeutic breaks and connection gaps.
+
+For example, the [January 21 telehealth record](documents/BH-D106_telehealth_2026-01-21.txt)
+supports 45 therapy minutes:
+
+```mermaid
+flowchart LR
+    A["13:00-13:20: 20 minutes"] --> T["Total: 45 therapy minutes"]
+    B["13:30-13:55: 25 minutes"] --> T
+    G["13:20-13:30: connection gap"] --> X["Excluded: 10 minutes"]
+```
+
+Conflicting final records retain all supported alternatives. Each calculation
+scenario uses consistent choices across events and weeks. Exceeding the scenario
+budget reports incomplete analysis. Partial-week coverage and unclear plan
+transitions retain qualified goal decisions.
+
+### What do the supplied records establish?
+
+| Finding | Result |
+| --- | --- |
+| Eligible therapy sessions | 12 |
+| Distinct therapy days | 11 |
+| Total therapy minutes | 585 or 595 |
+| Final week's therapy minutes | 145 or 155 |
+| Final week's plan compliance | Indeterminate |
+
+Two final records report [40 minutes](documents/BH-D111_individual_second_record_2026-01-26.txt)
+and [50 minutes](documents/BH-D110_individual_primary_record_2026-01-26.txt) for the
+same January 26 encounter. The alternatives put the final week below or above its
+150-minute goal. Both interpretations meet the three-day goal, so duration prevents
+a definitive compliance answer. These results are calculated from evidence;
+production code contains no patient-specific facts or answers.
+
+### What is needed to resolve an uncertain answer?
+
+Clinical documentation requests identify the patient, dates, and disputed or
+missing field, with event or assessment IDs where available.
+January 26 needs an explicit duration correction identifying the assertion it
+replaces, or actual patient-contact start/end times and a break record.
+
+| Limitation | Next step |
+| --- | --- |
+| Conflicting or missing clinical evidence | Obtain documentation for the identified event and field. |
+| Failed or pending source processing | Complete processing of the existing documents, then rerun the question. |
+| Scenario budget exceeded | Increase the analysis budget and rerun the calculation. |
+| Query covers only part of a week | Expand the query range before judging the whole week's goal. |
+
+Symptom answers separate distinct assessments, numerical score changes, attributed
+observations, and reasons for additional contacts. A lower score alone does not
+establish recovery.
+
+### How are multi-patient queries and plan changes demonstrated?
+
+The separate [synthetic demo](demo/README.md) contains three patients:
+
+| Patient | Demonstration |
+| --- | --- |
+| Casey Demo | Confirmed member of the consecutive two-week shortfall cohort. |
+| Morgan Demo | Possible member because conflicting durations change goal decisions. |
+| Alex Demo | Excluded from that cohort; has a documented treatment-plan change. |
+
+`backbone demo` uses authored extraction fixtures and saved plans to exercise
+processing, reconciliation, and calculation without API calls. A separate
+[live benchmark](demo/artifacts/full-query-benchmark.json) checks model planning.
+Synthetic records and outputs stay separate from the original five answers.
 
 ## Submission
 
