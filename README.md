@@ -141,23 +141,18 @@ Conflicting final records remain separate alternatives. Each scenario keeps
 shared evidence choices consistent across events and weeks.
 
 ```mermaid
-flowchart TD
-    A["Conflicting final records"] --> B["Retain all supported alternatives"]
-    B --> C["Build compatible scenarios<br/>Keep shared choices fixed across events and weeks"]
-    C --> D{"Within scenario budget?"}
-    D -->|No| E["Analysis incomplete<br/>No definitive result"]
-    D -->|Yes| F["Calculate totals and weekly results for each scenario"]
-    F --> G["Report numerical results<br/>Keep all supported values"]
-    F --> H["Evaluate weekly goals<br/>Check effective plan and date coverage"]
-    H --> I{"Every scenario agrees<br/>on a conclusive goal decision?"}
-    I -->|Yes| J["Goal met or not met"]
-    I -->|No| K["Goal indeterminate<br/>Conflicting decisions, missing evidence,<br/>insufficient week coverage, or unclear plan transition"]
+flowchart LR
+    A["Jan 26 encounter<br/>Two conflicting final records"] -->|40 min| B["Week: 145 min<br/>Below 150-min goal"]
+    A -->|50 min| C["Week: 155 min<br/>Meets 150-min goal"]
+    B --> D["Weekly compliance<br/>Indeterminate"]
+    C --> D
 ```
 
-- Partial-week evidence can establish that full goals were met. An apparent
-  shortfall requires coverage of all days in that week within the treatment episode.
-- An unclear plan transition can leave goal compliance indeterminate even when
-  therapy minutes are exact; the system does not invent or prorate a weekly goal.
+Both scenarios meet the three-day goal; the duration conflict prevents a
+definitive weekly compliance decision.
+
+Budget exhaustion reports incomplete analysis; insufficient week coverage or
+unclear plan transitions can leave goal decisions indeterminate.
 
 ### What do the supplied records establish?
 
