@@ -72,12 +72,15 @@ uv run backbone ask "How many therapy sessions did Rowan attend?" \
 - `patient --snapshot 2`: Show the patient's record in system version 2.
 - `patient --as-of "TIMESTAMP"`: Show the patient's record saved by that time.
 
-To reproduce the submitted answers without an API key or database:
+The repository includes processed data and plans for the five submitted questions.
+Use `replay` to recalculate those answers without an API key or SQLite database:
 
 ```sh
 uv run backbone replay artifacts/abstraction.json questions.json \
   --plans artifacts/plans.json --output .backbone/replay
 ```
+
+For your own documents and new questions, use `process` and `ask` with an API key.
 
 `OPENAI_QUERY_MODEL` selects the query model, falling back to `OPENAI_MODEL`.
 The planner receives patient IDs, names, organizations, documented date anchors,
