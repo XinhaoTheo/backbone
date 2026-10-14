@@ -6,6 +6,11 @@ symptom timelines. SQLite retains immutable sources, extraction caches, and
 published patient revisions. One structured LLM call plans each new question;
 code calculates answers from saved evidence. Saved plans execute without model calls.
 
+- `process` saves source documents, extracted evidence, and the patient abstraction in SQLite.
+- `ask` and `answer-file` read the saved abstraction from SQLite.
+- `answer-file` and `export` also write JSON copies of the abstraction and plans for review.
+- `replay` reads those exported JSON files without accessing SQLite or calling a model.
+
 ## Run
 
 Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).
@@ -18,7 +23,7 @@ cp .env.example .env
 Set `OPENAI_API_KEY` in `.env`, then:
 
 ```sh
-# Build the saved abstraction from ./documents using gpt-4.1 and four workers.
+# Build and save the abstraction in SQLite using gpt-4.1 and four workers.
 uv run backbone process documents --model gpt-4.1 --workers 4
 
 # Answer every question in ./questions.json and save the results in ./artifacts.
@@ -82,26 +87,26 @@ uv run backbone replay artifacts/abstraction.json questions.json \
 
 For your own documents and new questions, use `process` and `ask` with an API key.
 
-`OPENAI_QUERY_MODEL` selects the query model, falling back to `OPENAI_MODEL`.
-The planner receives patient IDs, names, organizations, documented date anchors,
-and optional previous-plan context; it does not receive clinical passages.
-It supports multiple patients/tasks, whole months, relative periods, and a
-requested positive count of consecutive below-goal weeks. Code binds patient
-references, resolves date arithmetic, validates supported tasks, and executes them.
-Ambiguous or unsupported requests return an actionable error.
+- `OPENAI_MODEL`: Model used to extract evidence from documents.
+- `OPENAI_QUERY_MODEL`: Model used to understand new questions; defaults to `OPENAI_MODEL`.
+- The query model receives patient names, IDs, organizations, and available dates.
+  Code checks its plan and calculates answers from the saved abstraction.
+- Questions can cover multiple patients and tasks. Ambiguous requests need clarification;
+  unsupported requests return an error.
 
-Use `ask --plan PATH` for one saved plan or `--context PATH` for a previous plan.
-Batch commands accept `--plans PATH`; export writes `plans.json`. A saved plan
-must match the exact question and snapshot. Replay requires saved plans and
-makes no API calls. The submitted plans come from recorded fresh LLM runs of
-the original questions. [Planner validation](artifacts/planner_validation.json)
-checks their patient/date/task scopes, numerical results, and source locations.
+Saved plan options:
 
-No vector RAG is implemented. Numerical questions require complete scoped event
-sets. Symptom answers use saved assessments and attributed observations. Semantic
-retrieval can support source enrichment when a new question needs missing fields.
-A model-generated plan still needs review: schema validation cannot establish
-that the question was interpreted correctly.
+- `ask --plan PATH`: Reuse one saved plan without another planning call.
+- `ask --context PATH`: Give the model a previous plan to interpret a follow-up question.
+- `--plans PATH`: Reuse saved plans for batch questions.
+- `answer-file` and `export` save generated plans in `plans.json`.
+
+Saved plans must match the exact question and snapshot. The submitted plans came
+from live model calls; [validation](artifacts/planner_validation.json) checks the
+patient, dates, task, results, and source locations.
+
+Answers use saved patient data and source references. Vector search is not implemented.
+A valid plan can still misinterpret a question; correct JSON alone does not prove correct intent.
 
 ## Evidence and uncertainty
 
@@ -210,6 +215,8 @@ processing measurement. Earlier synthetic planning/grounding probes are in
 
 Exact quotations do not establish semantic correctness. Verification covers
 these supplied and synthetic questions; it is not a broader accuracy estimate.
+Next, test unseen records against labeled contact times and record statuses, and
+test question paraphrases against expected patient, date, and task selections.
 Earlier miniature-model extraction trials misclassified timing and altered
 quotations, so extraction and planning use different models here.
 OpenAI Codex and collaborating coding agents assisted implementation and review.
