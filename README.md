@@ -304,12 +304,51 @@ See [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/st
   synthetic live-model checks.
 - [Submitted abstraction](artifacts/abstraction.json): **381,799 bytes** of exported JSON.
 
-### Design choice and coding assistance
+## Tested design decision: check capabilities before asking for clarification
 
-- Earlier smaller-model extraction trials misclassified timing and altered
-  quotations, so extraction and planning use different models.
-- OpenAI Codex and collaborating coding agents assisted implementation and review.
-  No coding-assistant sampling settings were configured in the repository.
+### What did we test?
+
+The LLM translates questions into structured tasks; Python validates and executes
+those tasks. The planner must distinguish a missing patient or date from an
+operation the executor cannot perform. Asking for more information should only
+happen when that information can make the request executable.
+
+We tested `gpt-4.1-mini-2025-04-14` on ten synthetic questions covering whole
+months, relative dates, plan changes, multiple patients, compound tasks, and
+unsupported or ambiguous requests. The [recorded checks](artifacts/query_planning_checks.json)
+include the returned plans, errors, and token usage.
+
+### What failed, and what changed?
+
+Nine of the ten initial checks passed. For a question requesting Casey Example's
+average session duration, the planner asked whether to use the whole episode or
+another period. The executor does not support averages, so supplying dates would
+not solve the problem.
+
+We changed the [planning instructions](src/backbone/query_prompt.txt) to check
+capabilities first and return `unsupported` before asking for missing scope.
+Supported requests then proceed to patient and date resolution.
+
+| Check | Before the instruction change | Targeted retry after the change |
+| --- | --- | --- |
+| Average session duration | `clarification_required`: asks for a time period | `unsupported`: identifies the unsupported metric and lists supported metrics |
+
+### What did we learn, and what remains unverified?
+
+The targeted retry passed. A valid structured response can still choose the
+wrong action: both statuses fit the schema, but only one correctly describes
+the system's capabilities. Planning tests therefore need expected behavior for
+unsupported requests as well as expected patients, dates, and operations.
+
+This was one targeted retry with provider-default sampling, not a repeated
+before/after comparison of all ten cases. Next, test paraphrases of supported
+and unsupported requests with both complete and missing scope, repeat each
+case, and check rejection and clarification decisions against labeled results.
+
+## Coding assistance
+
+OpenAI Codex and collaborating coding agents assisted implementation and review.
+No coding-assistant sampling settings were configured in the repository.
 
 ## Scale
 
