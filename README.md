@@ -122,7 +122,7 @@ A valid plan can still misinterpret a question; correct JSON alone does not prov
   earlier record do not undo that correction.
 
 ```mermaid
-flowchart TD
+flowchart LR
     D[Documents] --> H[Deduplicate identical content]
     H --> E[Extract claims or reuse cached results]
     E --> R[Link and reconcile encounter records]
