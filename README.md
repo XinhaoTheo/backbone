@@ -313,21 +313,25 @@ See [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/st
 
 ## Scale
 
-The first expected cold-processing bottleneck at one million documents is model
-token volume and rate limits in `workflow.extract_documents`. Use bounded queue
-workers, persistent jobs, batch requests, and incremental source discovery.
-Current ingestion and futures are held in memory; they need streaming batches.
+- **Document processing:** When first processing one million documents, model
+  token volume and rate limits in `workflow.extract_documents` are the expected first bottleneck.
+  Ingestion and pending tasks currently stay in memory. Use streaming batches,
+  bounded worker queues, persistent jobs, batch requests, and incremental file discovery.
+- **Patient selection:** The planner currently receives the full patient catalog
+  to identify patient references. For larger collections, retrieve patient
+  candidates for individual queries and resolve complete cohort scopes in the database.
+- **Query execution:** `Store.snapshot` loads patient JSON and cached source
+  contexts; collection-wide queries calculate scenarios for each selected patient
+  in memory. Store events and patient-week aggregates separately, and index patient/date filters.
+- **Incremental updates:** After adding weekly aggregates, invalidate and recompute
+  affected weeks when publishing new evidence.
+- **Concurrent writes:** SQLite allows one writer at a time. When concurrent
+  publishers are needed, use a shared database with concurrent writes and
+  transactional revision publication.
+- **Measured scope:** Measurements cover 31 documents for one patient and a three-patient
+  synthetic collection. These measurements do not establish 500K-document or
+  million-document capacity.
 
-Query planning currently sends the patient catalog to the model; at larger
-patient counts, retrieve entity candidates and resolve cohort scopes in the
-database before planning. Queries currently load patient JSON and cached source contexts through
-`Store.snapshot`; collection-wide queries run scenarios for every selected
-patient in memory. Normalize events and
-patient-week aggregates, index date/patient filters, and invalidate affected
-weeks on publication. SQLite has one writer; move revision publication to a
-transactional shared store when concurrent writers are needed. The 31-document,
-one-patient measurement and the three-patient synthetic measurement do not establish
-500K-document or million-document capacity.
 See [architecture](docs/SYSTEM_ARCHITECTURE.md) for the expansion path.
 
 ## Verify
