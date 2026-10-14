@@ -137,16 +137,6 @@ Include contacts that qualify under the effective treatment plan. Calculate the
 overlap between patient attendance and therapy activity, excluding documented
 nontherapeutic breaks and connection gaps.
 
-For example, the [January 21 telehealth record](documents/BH-D106_telehealth_2026-01-21.txt)
-supports 45 therapy minutes:
-
-```mermaid
-flowchart LR
-    A["13:00-13:20: 20 minutes"] --> T["Total: 45 therapy minutes"]
-    B["13:30-13:55: 25 minutes"] --> T
-    G["13:20-13:30: connection gap"] --> X["Excluded: 10 minutes"]
-```
-
 Conflicting final records retain all supported alternatives. Each calculation
 scenario uses consistent choices across events and weeks. Exceeding the scenario
 budget reports incomplete analysis. Partial-week coverage and unclear plan
