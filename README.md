@@ -18,17 +18,32 @@ cp .env.example .env
 Set `OPENAI_API_KEY` in `.env`, then:
 
 ```sh
+# Build the saved abstraction from ./documents using gpt-4.1 and four workers.
 uv run backbone process documents --model gpt-4.1 --workers 4
+
+# Answer every question in ./questions.json and save the results in ./artifacts.
 uv run backbone answer-file questions.json --output artifacts
+
+# Display one answer in the terminal and save its plan for offline replay.
 uv run backbone ask "How many therapy minutes did Rowan receive on January 21, 2026?" \
   --save-plan .backbone/query-plan.json
+
+# Identify patients with two consecutive weeks below their treatment requirements.
 uv run backbone ask "Which patients had two consecutive weeks below their treatment requirements?"
+
+# Export answers, abstraction, plans, extractions, and logs for review.
 uv run backbone export questions.json --output artifacts
+
+# Repeat each saved plan ten times to measure calculation and rendering latency.
 uv run backbone benchmark artifacts/benchmark_questions.json \
   --plans artifacts/benchmark_plans.json --repeats 10
+
+# Measure end-to-end queries, zero-model replay, token usage, and estimated cost.
 uv run backbone benchmark-live artifacts/benchmark_questions.json \
   --model gpt-4.1-mini --repeats 3 \
   --input-rate-per-million 0.4 --output-rate-per-million 1.6
+
+# Use a new database to measure initial processing time, token usage, and estimated cost.
 uv run backbone --db .backbone/initial-measurement.sqlite3 benchmark-process documents \
   --model gpt-4.1 --workers 4 --input-rate-per-million 2 --output-rate-per-million 8
 ```
